@@ -1,12 +1,40 @@
-import { AppShell, Group, Header, Image, Navbar, Text } from '@mantine/core';
+import { AppShell, Button, Group, Header, Image, Navbar, Text } from '@mantine/core';
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/svg/db.svg';
 import MainLinks from '../MainLinks';
 import User from '../User';
+import { IconCheck, IconLogout } from '@tabler/icons-react';
+import ROUTER from '../../config/router';
+import { notifications } from '@mantine/notifications';
+import { modals } from '@mantine/modals';
 
 export default function AppLayout() {
   const [opened, setOpened] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    modals.openConfirmModal({
+      title: 'Xác Nhận Rời Khỏi',
+      centered: true,
+      children: <Text size="sm">Bạn có chắc muốn đăng xuất không?</Text>,
+      labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
+      confirmProps: { color: 'red' },
+      onCancel: () => {},
+      onConfirm: () => {
+        navigate(ROUTER.AUTH.LOGIN);
+        notifications.show({
+          withCloseButton: true,
+          title: 'Thông báo',
+          message: 'Bạn đã đăng xuất thành công!',
+          color: 'green',
+          icon: <IconCheck size={16} />,
+          autoClose: 1200,
+        });
+      },
+    });
+  };
+
   return (
     <AppShell
       navbarOffsetBreakpoint="sm"
@@ -23,11 +51,16 @@ export default function AppLayout() {
       }
       header={
         <Header height={60}>
-          <Group sx={{ height: '100%' }} px={20}>
-            <Image src={logo} height={32} width={32} />
-            <Text fw={600} fz="lg">
-              Hệ Thống Quản Lý Nhà Hàng
-            </Text>
+          <Group position="apart" sx={{ height: '100%' }} px={20}>
+            <Group>
+              <Image src={logo} height={32} width={32} />
+              <Text fw={600} fz="lg">
+                Hệ Thống Quản Lý Nhà Hàng
+              </Text>
+            </Group>
+            <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
+              Đăng xuất
+            </Button>
           </Group>
         </Header>
       }

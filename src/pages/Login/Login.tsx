@@ -12,6 +12,7 @@ const Login = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    console.log(e);
     // handle user authentication logic here
   };
 

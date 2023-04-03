@@ -18,7 +18,10 @@ const Menu = () => {
 
   return (
     <Stack>
-      <Group position="right">
+      <Group position="apart">
+        <Text fw={700} fz="xl">
+          Menu
+        </Text>
         <Button leftIcon={<IconPlus />} onClick={openAddProductModal}>
           Thêm
         </Button>
