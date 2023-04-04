@@ -27,13 +27,13 @@ const Menu = () => {
         </Button>
       </Group>
       <Grid>
-        {randomArray(5).map(() => (
+        {randomArray(10).map(() => (
           <Grid.Col span={4}>
             <ProductCard
               name={faker.commerce.productName()}
               imgSrc={faker.image.food(undefined, undefined, true)}
               price={faker.datatype.number({
-                precision: 0.01,
+                precision: 1000,
               })}
               description={faker.commerce.productDescription()}
             />

@@ -63,7 +63,7 @@ const ProductCard: React.FC<Props> = (props) => {
         </Badge>
       </Group>
 
-      <Text size="sm" color="dimmed">
+      <Text size="sm" color="dimmed" lineClamp={2}>
         {description}
       </Text>
 
