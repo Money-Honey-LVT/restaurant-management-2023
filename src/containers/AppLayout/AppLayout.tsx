@@ -1,4 +1,4 @@
-import { AppShell, Button, Group, Header, Image, Navbar, Text } from '@mantine/core';
+import { Anchor, AppShell, Button, Group, Header, Image, Navbar, Text } from '@mantine/core';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/svg/db.svg';
@@ -53,7 +53,9 @@ export default function AppLayout() {
         <Header height={60}>
           <Group position="apart" sx={{ height: '100%' }} px={20}>
             <Group>
-              <Image src={logo} height={32} width={32} />
+              <Anchor href={ROUTER.HOME.INDEX}>
+                <Image src={logo} height={32} width={32} />
+              </Anchor>
               <Text fw={600} fz="lg">
                 Hệ Thống Quản Lý Nhà Hàng
               </Text>
