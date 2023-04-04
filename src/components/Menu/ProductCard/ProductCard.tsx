@@ -2,17 +2,13 @@ import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconCheck, IconEdit, IconTrash } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
+import { Product } from '../../../types/models/product';
 
 interface Props {
-  name: string;
-  imgSrc?: string;
-  description?: string;
-  price: number;
+  item: Product | null;
 }
 
-const ProductCard: React.FC<Props> = (props) => {
-  const { name, price, description, imgSrc } = props;
-
+const ProductCard: React.FC<Props> = ({ item }) => {
   const openDeleteProductModal = () =>
     modals.openConfirmModal({
       title: 'Xác Nhận Xoá Món Ăn',
@@ -21,7 +17,7 @@ const ProductCard: React.FC<Props> = (props) => {
         <Text size="sm">
           Bạn có chắc muốn xoá món{' '}
           <Text color="blue.9" span inherit>
-            {name}
+            {item?.name}
           </Text>{' '}
           ra khỏi thực đơn không?
         </Text>
@@ -53,18 +49,18 @@ const ProductCard: React.FC<Props> = (props) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section>
-        <Image src={imgSrc || ''} height={160} alt={`Product: ${name}`} />
+        <Image withPlaceholder src={item?.imgSrc || ''} height={160} alt={`Product: ${name}`} />
       </Card.Section>
 
       <Group position="apart" mt="md" mb="xs">
-        <Text weight={500}>{name}</Text>
+        <Text weight={500}>{item?.name}</Text>
         <Badge color="pink" size="lg" variant="light">
-          {price}
+          {item?.price}
         </Badge>
       </Group>
 
       <Text size="sm" color="dimmed" lineClamp={2}>
-        {description}
+        {item?.description}
       </Text>
 
       <Group position="right">
