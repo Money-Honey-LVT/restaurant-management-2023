@@ -1,4 +1,6 @@
-export interface Product {
+import { BaseModel } from '.';
+
+export interface Product extends BaseModel {
   name?: string;
   description?: string;
   imgSrc?: string;

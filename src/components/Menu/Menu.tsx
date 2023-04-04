@@ -1,13 +1,12 @@
 import { faker } from '@faker-js/faker/locale/vi';
 import { Button, Grid, Group, Modal, Stack, Text } from '@mantine/core';
-import { modals } from '@mantine/modals';
+import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { Product } from '../../types/models/product';
 import { randomArray } from '../../utils/helpers';
 import AddProductModal from './AddProductModal';
 import ProductCard from './ProductCard';
-import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
-import { Product } from '../../types/models/product';
 
 const Menu = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -31,7 +30,7 @@ const Menu = () => {
       <Stack>
         <Group position="apart">
           <Text fw={700} fz="xl">
-            Menu
+            Thực đơn nhà hàng
           </Text>
           <Button leftIcon={<IconPlus />} onClick={open}>
             Thêm
