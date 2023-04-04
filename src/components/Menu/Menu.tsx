@@ -30,12 +30,12 @@ const Menu = () => {
         {randomArray(5).map(() => (
           <Grid.Col span={4}>
             <ProductCard
-              name={faker.address.cityName()}
-              imgSrc={faker.image.food()}
+              name={faker.commerce.productName()}
+              imgSrc={faker.image.food(undefined, undefined, true)}
               price={faker.datatype.number({
                 precision: 0.01,
               })}
-              description={faker.git.branch()}
+              description={faker.commerce.productDescription()}
             />
           </Grid.Col>
         ))}
