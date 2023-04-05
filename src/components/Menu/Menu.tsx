@@ -44,6 +44,8 @@ const Menu = () => {
           ))}
         </Grid>
       </Stack>
+
+      {/*  */}
       <Modal centered opened={opened} onClose={close} title="Thêm Món Ăn">
         <AddFoodModal close={close} />
       </Modal>
