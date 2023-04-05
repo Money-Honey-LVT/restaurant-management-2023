@@ -1,14 +1,25 @@
-import { Card, Image, Text, Badge, Button, Group, Menu, ActionIcon, rem } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, Menu, ActionIcon, rem, Modal } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { IconCheck, IconDots, IconEdit, IconShoppingCartPlus, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconDots, IconEdit, IconMinus, IconPlus, IconShoppingCartPlus, IconTrash } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import { Food } from '../../../types/models/food';
+import { useCartContext } from '../../../hooks/use-cart-context';
+import { useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
 
 interface Props {
   item: Food | null;
 }
 
 const FoodCard: React.FC<Props> = ({ item }) => {
+  const {
+    addCartItem,
+    state: { items },
+  } = useCartContext();
+
+  const [quantity, setQuantity] = useState(0);
+  const [opened, { open, close }] = useDisclosure(false);
+
   const openDeleteFoodModal = () =>
     modals.openConfirmModal({
       title: 'Xác Nhận Xoá Món Ăn',
@@ -47,56 +58,80 @@ const FoodCard: React.FC<Props> = ({ item }) => {
     });
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <Card.Section withBorder inheritPadding py="xs">
-        <Group position="apart">
-          <Text weight={500}>Bàn {item?.name}</Text>
-          <Menu withinPortal position="bottom-end" shadow="sm">
-            <Menu.Target>
-              <ActionIcon>
-                <IconDots size="1rem" />
-              </ActionIcon>
-            </Menu.Target>
+    <>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card.Section withBorder inheritPadding py="xs">
+          <Group position="apart">
+            <Text weight={500}>{item?.name}</Text>
+            <Menu withinPortal position="bottom-end" shadow="sm">
+              <Menu.Target>
+                <ActionIcon>
+                  <IconDots size="1rem" />
+                </ActionIcon>
+              </Menu.Target>
 
-            <Menu.Dropdown>
-              <Menu.Item onClick={openEditFoodModal} icon={<IconEdit size={rem(14)} />}>
-                Sửa thông tin
-              </Menu.Item>
-              <Menu.Item onClick={openDeleteFoodModal} icon={<IconTrash size={rem(14)} />} color="red">
-                Xoá món ăn
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+              <Menu.Dropdown>
+                <Menu.Item onClick={openEditFoodModal} icon={<IconEdit size={rem(14)} />}>
+                  Sửa thông tin
+                </Menu.Item>
+                <Menu.Item onClick={openDeleteFoodModal} icon={<IconTrash size={rem(14)} />} color="red">
+                  Xoá món ăn
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
+        </Card.Section>
+        <Card.Section>
+          <Image withPlaceholder src={item?.image || ''} height={160} alt={`Food: ${name}`} />
+        </Card.Section>
+
+        <Group position="apart" mt="md" mb="xs">
+          <Text weight={500}>{item?.name}</Text>
+          <Badge color="pink" size="lg" variant="light">
+            {item?.price}
+          </Badge>
         </Group>
-      </Card.Section>
-      <Card.Section>
-        <Image withPlaceholder src={item?.image || ''} height={160} alt={`Food: ${name}`} />
-      </Card.Section>
 
-      <Group position="apart" mt="md" mb="xs">
-        <Text weight={500}>{item?.name}</Text>
-        <Badge color="pink" size="lg" variant="light">
-          {item?.price}
-        </Badge>
-      </Group>
+        <Text size="sm" color="dimmed" lineClamp={2}>
+          {item?.description}
+        </Text>
 
-      <Text size="sm" color="dimmed" lineClamp={2}>
-        {item?.description}
-      </Text>
+        <Group position="right">
+          <Button
+            onClick={open}
+            leftIcon={<IconShoppingCartPlus size={16} />}
+            variant="filled"
+            color="green"
+            mt="md"
+            radius="md"
+          >
+            Thêm vào đơn
+          </Button>
+        </Group>
+      </Card>
 
-      <Group position="right">
-        <Button
-          onClick={openDeleteFoodModal}
-          leftIcon={<IconShoppingCartPlus size={16} />}
-          variant="filled"
-          color="green"
-          mt="md"
-          radius="md"
-        >
-          Thêm vào đơn
-        </Button>
-      </Group>
-    </Card>
+      <Modal centered opened={opened} onClose={close} title="Nhập số lượng">
+        <Group grow>
+          <Group grow>
+            <ActionIcon disabled={quantity <= 0} onClick={() => setQuantity((prev) => prev - 1)}>
+              <IconMinus />
+            </ActionIcon>
+            <Text align="center">{quantity}</Text>
+            <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
+              <IconPlus />
+            </ActionIcon>
+          </Group>
+          <Button
+            disabled={quantity <= 0}
+            onClick={() => {
+              addCartItem({ quantity, name: item?.name });
+            }}
+          >
+            Xác nhận
+          </Button>
+        </Group>
+      </Modal>
+    </>
   );
 };
 
