@@ -7,7 +7,7 @@ interface Props {
   close: () => void;
 }
 
-const AddProductModal: React.FC<Props> = ({ close }) => {
+const AddFoodModal: React.FC<Props> = ({ close }) => {
   const theme = useMantineTheme();
 
   const form = useForm({
@@ -19,7 +19,7 @@ const AddProductModal: React.FC<Props> = ({ close }) => {
   });
 
   return (
-    <form id="form-add-product" onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form id="form-add-food" onSubmit={form.onSubmit((values) => console.log(values))}>
       <Flex direction="column" gap="sm">
         <TextInput withAsterisk label="Tên món ăn" placeholder="Nhập tên món ăn" {...form.getInputProps('name')} />
 
@@ -88,4 +88,4 @@ const AddProductModal: React.FC<Props> = ({ close }) => {
   );
 };
 
-export default AddProductModal;
+export default AddFoodModal;

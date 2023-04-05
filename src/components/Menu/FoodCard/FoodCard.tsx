@@ -2,14 +2,14 @@ import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconCheck, IconEdit, IconTrash } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
-import { Product } from '../../../types/models/product';
+import { Food } from '../../../types/models/food';
 
 interface Props {
-  item: Product | null;
+  item: Food | null;
 }
 
-const ProductCard: React.FC<Props> = ({ item }) => {
-  const openDeleteProductModal = () =>
+const FoodCard: React.FC<Props> = ({ item }) => {
+  const openDeleteFoodModal = () =>
     modals.openConfirmModal({
       title: 'Xác Nhận Xoá Món Ăn',
       centered: true,
@@ -36,7 +36,7 @@ const ProductCard: React.FC<Props> = ({ item }) => {
         }),
     });
 
-  const openEditProductModal = () =>
+  const openEditFoodModal = () =>
     modals.openConfirmModal({
       title: 'Sửa Món Ăn',
       centered: true,
@@ -49,7 +49,7 @@ const ProductCard: React.FC<Props> = ({ item }) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section>
-        <Image withPlaceholder src={item?.imgSrc || ''} height={160} alt={`Product: ${name}`} />
+        <Image withPlaceholder src={item?.image || ''} height={160} alt={`Food: ${name}`} />
       </Card.Section>
 
       <Group position="apart" mt="md" mb="xs">
@@ -65,7 +65,7 @@ const ProductCard: React.FC<Props> = ({ item }) => {
 
       <Group position="right">
         <Button
-          onClick={openEditProductModal}
+          onClick={openEditFoodModal}
           leftIcon={<IconEdit size={16} />}
           variant="light"
           color="yellow"
@@ -75,7 +75,7 @@ const ProductCard: React.FC<Props> = ({ item }) => {
           Sửa
         </Button>
         <Button
-          onClick={openDeleteProductModal}
+          onClick={openDeleteFoodModal}
           leftIcon={<IconTrash size={16} />}
           variant="filled"
           color="red"
@@ -89,4 +89,4 @@ const ProductCard: React.FC<Props> = ({ item }) => {
   );
 };
 
-export default ProductCard;
+export default FoodCard;

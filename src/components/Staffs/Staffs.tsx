@@ -13,12 +13,12 @@ const Staffs = () => {
   const [fake, setFake] = useState<Staff | null>(null);
 
   useEffect(() => {
-    const fakeProduct: Staff = {
+    const fakeFood: Staff = {
       name: faker.helpers.fake('{{name.firstName}} {{name.lastName}}'),
       imgSrc: faker.image.people(),
       salary: faker.datatype.number({ max: 50000000, min: 3000000, precision: 5000 }),
     };
-    setFake(fakeProduct);
+    setFake(fakeFood);
   }, []);
 
   return (
@@ -34,7 +34,7 @@ const Staffs = () => {
         </Group>
         <Grid>
           {randomArray(5).map((_, index) => (
-            <Grid.Col key={`product-card-${index}`} span={4}>
+            <Grid.Col key={`food-card-${index}`} span={4}>
               <StaffCard item={fake} />
             </Grid.Col>
           ))}
