@@ -33,7 +33,7 @@ const Menu = () => {
             Thực đơn nhà hàng
           </Text>
           <Button leftIcon={<IconPlus />} onClick={open}>
-            Thêm
+            Thêm món ăn
           </Button>
         </Group>
         <Grid>

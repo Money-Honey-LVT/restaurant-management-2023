@@ -1,6 +1,6 @@
-import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, Menu, ActionIcon, rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { IconCheck, IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconDots, IconEdit, IconShoppingCartPlus, IconTrash } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import { Food } from '../../../types/models/food';
 
@@ -48,6 +48,27 @@ const FoodCard: React.FC<Props> = ({ item }) => {
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card.Section withBorder inheritPadding py="xs">
+        <Group position="apart">
+          <Text weight={500}>Bàn {item?.name}</Text>
+          <Menu withinPortal position="bottom-end" shadow="sm">
+            <Menu.Target>
+              <ActionIcon>
+                <IconDots size="1rem" />
+              </ActionIcon>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item onClick={openEditFoodModal} icon={<IconEdit size={rem(14)} />}>
+                Sửa thông tin
+              </Menu.Item>
+              <Menu.Item onClick={openDeleteFoodModal} icon={<IconTrash size={rem(14)} />} color="red">
+                Xoá món ăn
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
+      </Card.Section>
       <Card.Section>
         <Image withPlaceholder src={item?.image || ''} height={160} alt={`Food: ${name}`} />
       </Card.Section>
@@ -65,24 +86,14 @@ const FoodCard: React.FC<Props> = ({ item }) => {
 
       <Group position="right">
         <Button
-          onClick={openEditFoodModal}
-          leftIcon={<IconEdit size={16} />}
-          variant="light"
-          color="yellow"
-          mt="md"
-          radius="md"
-        >
-          Sửa
-        </Button>
-        <Button
           onClick={openDeleteFoodModal}
-          leftIcon={<IconTrash size={16} />}
+          leftIcon={<IconShoppingCartPlus size={16} />}
           variant="filled"
-          color="red"
+          color="green"
           mt="md"
           radius="md"
         >
-          Xoá
+          Thêm vào đơn
         </Button>
       </Group>
     </Card>
