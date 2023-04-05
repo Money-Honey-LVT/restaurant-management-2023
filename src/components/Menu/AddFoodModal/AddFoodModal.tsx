@@ -37,6 +37,7 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
             step={1000}
             withAsterisk
             {...form.getInputProps('price')}
+            min={0}
           />
         </Group>
 

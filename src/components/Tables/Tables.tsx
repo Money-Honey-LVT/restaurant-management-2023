@@ -6,6 +6,7 @@ import { Button, Grid, Group, Modal, Stack, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { randomArray } from '../../utils/helpers';
 import TableCard from './TableCard/TableCard';
+import AddTableModal from './AddTableModal';
 
 const Tables = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -40,7 +41,9 @@ const Tables = () => {
           ))}
         </Grid>
       </Stack>
-      <Modal centered opened={opened} onClose={close} title="Thêm Bàn"></Modal>
+      <Modal centered opened={opened} onClose={close} title="Thêm Bàn">
+        <AddTableModal close={close} />
+      </Modal>
     </>
   );
 };
