@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from 'react';
-import { CartAction, CartActionType } from './action';
-import { Order } from '../../types/models/order';
 import { Food } from '../../types/models/food';
+import { CartAction, CartActionType } from './action';
 
 export type CartItem = Food & { quantity: number };
 
@@ -20,6 +19,14 @@ function CartReducer(state = initialState, action: CartActionType): CartState {
         ...state,
         items: [action.payload, ...state.items],
       };
+    case CartAction.DELETE_CART_ITEM:
+      return {
+        ...state,
+      };
+    case CartAction.DELETE_MULTIPLE_CART_ITEMS:
+      return {
+        ...state,
+      };
     default:
       return state;
   }
@@ -35,12 +42,18 @@ function useCartReducer(_state = initialState) {
     });
   };
 
-  return { state, addCartItem };
+  const deleteCartItem = () => {};
+
+  const deleteMultipleCartItems = () => {};
+
+  return { state, addCartItem, deleteCartItem, deleteMultipleCartItems };
 }
 
 export const CartContext = createContext<ReturnType<typeof useCartReducer>>({
   state: initialState,
   addCartItem: () => {},
+  deleteCartItem: () => {},
+  deleteMultipleCartItems: () => {},
 });
 
 interface Props {
