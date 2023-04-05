@@ -1,37 +1,18 @@
-import {
-  ActionIcon,
-  Affix,
-  Anchor,
-  AppShell,
-  Box,
-  Button,
-  Card,
-  Group,
-  Header,
-  Image,
-  Navbar,
-  Stack,
-  Text,
-  Transition,
-} from '@mantine/core';
+import { Anchor, AppShell, Button, Group, Header, Image, Navbar, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconLogout, IconShoppingCart, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconLogout } from '@tabler/icons-react';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/svg/db.svg';
 import ROUTER from '../../config/router';
 import MainLinks from '../MainLinks';
 import User from '../User';
-import { useCartContext } from '../../hooks/use-cart-context';
 
 export default function AppLayout() {
   const [opened, setOpened] = useState(false);
-  const [openCart, setOpenCart] = useState(false);
 
   const navigate = useNavigate();
-
-  const { state } = useCartContext();
 
   const handleLogout = () => {
     modals.openConfirmModal({
@@ -90,47 +71,6 @@ export default function AppLayout() {
       >
         <Outlet />
       </AppShell>
-      {/*  */}
-      <Affix onClick={() => setOpenCart((prev) => !prev)} position={{ bottom: 22, right: 24 }}>
-        <ActionIcon size={40} radius={8} variant="filled" color="primary.9">
-          <IconShoppingCart size="20px" />
-        </ActionIcon>
-      </Affix>
-
-      <Affix position={{ bottom: 0, right: 80 }}>
-        <Transition transition="slide-up" mounted={openCart}>
-          {(transitionStyles) => (
-            <Card
-              sx={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
-              pos="relative"
-              miw={290}
-              style={transitionStyles}
-              shadow="sm"
-              padding="lg"
-              radius="md"
-              withBorder
-            >
-              <Stack>
-                {state.items.length !== 0 ? (
-                  state.items.map((item) => (
-                    <Group position="apart">
-                      <Group position="apart">
-                        <Text>{item.name}</Text>
-                        <Text>x {item.quantity}</Text>
-                      </Group>
-                      <ActionIcon>
-                        <IconTrash color="red" size={20} />
-                      </ActionIcon>
-                    </Group>
-                  ))
-                ) : (
-                  <Text color="red">Danh sách trống</Text>
-                )}
-              </Stack>
-            </Card>
-          )}
-        </Transition>
-      </Affix>
     </>
   );
 }
