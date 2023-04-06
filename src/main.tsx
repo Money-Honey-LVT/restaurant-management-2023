@@ -22,7 +22,7 @@ function App() {
             <MantineProvider theme={customTheme}>
               <ModalsProvider>
                 <CartProvider>
-                  <Notifications />
+                  <Notifications position="top-right" />
                   <AppRoutes />
                 </CartProvider>
               </ModalsProvider>
@@ -34,4 +34,6 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<App />);
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <App />
+);

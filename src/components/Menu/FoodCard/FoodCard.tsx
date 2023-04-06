@@ -152,6 +152,14 @@ const FoodCard: React.FC<Props> = ({ item }) => {
             disabled={quantity <= 0}
             onClick={() => {
               addCartItem({ quantity, name: item?.name });
+              notifications.show({
+                withCloseButton: true,
+                title: 'Thông báo',
+                message: 'Thêm sản phẩm vào đơn hàng thành công!!',
+                color: 'green',
+                icon: <IconCheck size={16} />,
+                autoClose: 1200,
+              });
             }}
           >
             Xác nhận
