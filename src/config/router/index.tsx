@@ -4,6 +4,7 @@ const ROUTER = {
   },
   AUTH: {
     LOGIN: '/login',
+    PROFILE: '/profile',
   },
   NAV: {
     MENU: {

@@ -1,8 +1,8 @@
-import { Anchor, AppShell, Button, Group, Header, Image, Navbar, Text } from '@mantine/core';
+import { Anchor, AppShell, Button, Group, Header, Image, Loader, LoadingOverlay, Navbar, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconLogout } from '@tabler/icons-react';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/svg/db.svg';
 import ROUTER from '../../config/router';
@@ -69,7 +69,9 @@ export default function AppLayout() {
           </Header>
         }
       >
-        <Outlet />
+        <Suspense fallback={<LoadingOverlay visible />}>
+          <Outlet />
+        </Suspense>
       </AppShell>
     </>
   );
