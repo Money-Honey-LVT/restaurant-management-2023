@@ -10,6 +10,8 @@ import {
   Text,
   rem,
   Space,
+  Stack,
+  Modal,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react";
@@ -20,12 +22,25 @@ import {
   formatDateFromISOString,
   getColorByRole,
 } from "../../../utils/helpers";
+import EditStaffModal from "../EditStaffModal/EditStaffModal";
+import { useDisclosure } from "@mantine/hooks";
 
 interface Props {
   staff: Staff | null;
 }
 
+const renderLabel = (string: string) => (
+  <Text fz="md" fw={600}>
+    {string}
+  </Text>
+);
+
+const renderField = (children: string) => <Text fz="md">{children}</Text>;
+
 const StaffCard: React.FC<Props> = ({ staff }) => {
+  const [editOpened, { close: closeEditModal, open: openEditModal }] =
+    useDisclosure();
+
   const handleClickDeleteStaff = () =>
     modals.openConfirmModal({
       title: `Xác nhận xoá nhân viên`,
@@ -37,6 +52,7 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
     });
 
   return (
+    <>
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
         <Group position="apart">
@@ -49,7 +65,7 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item icon={<IconEdit size={rem(14)} />}>
+              <Menu.Item icon={<IconEdit size={rem(14)} />} onClick={openEditModal}>
                 Sửa thông tin
               </Menu.Item>
               <Menu.Item
@@ -67,39 +83,34 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
       <Group mt="md" mb="xs">
         <Avatar src={staff?.imgSrc || ""} size={150} />
 
-        <Container px={0} ml={15} style={{ flex: 1 }}>
-          <Grid style={{ width: "100%" }}>
-            <Grid.Col span={4} c={"blue"} fw={"bold"}>
-              <Text>Họ tên</Text>
-              <Space h="sm" />
-              <Text>Chức vụ</Text>
-              <Space h="sm" />
-              <Text>Ngày làm việc</Text>
-              <Space h="sm" />
-              <Text>Lương</Text>
-              <Space h="sm" />
-            </Grid.Col>
-            <Grid.Col span={8}>
-              <Text>{staff?.fullName}</Text>
-              <Space h="sm" />
-              {/* <Text>{staff?.role}</Text> */}
-              <Badge
-                color={getColorByRole(staff?.role)}
-                size="lg"
-                variant="light"
-              >
-                {staff?.role}
-              </Badge>
-              <Space h="sm" />
-              <Text>{formatDateFromISOString(staff?.hiredDate)}</Text>
-              <Space h="sm" />
-              <Text> {formatCurrency(staff?.salary)}</Text>
-              <Space h="sm" />
-            </Grid.Col>
-          </Grid>
-        </Container>
+        <Grid m="xs" gutter={32} style={{ flex: "1" }}>
+          <Grid.Col span={5}>
+            <Stack spacing={"sm"}>
+              {renderLabel("Họ tên")}
+              {renderLabel("Chức vụ")}
+              {renderLabel("Ngày vào làm")}
+              {renderLabel("Lương")}
+            </Stack>
+          </Grid.Col>
+
+          <Grid.Col span={7} px={0}>
+            <Stack spacing={"sm"}>
+              {renderField(staff?.fullName || "")}
+              {renderField(staff?.role || "")}
+              {renderField(formatDateFromISOString(staff?.hiredDate))}
+              {renderField(formatCurrency(staff?.salary))}
+            </Stack>
+          </Grid.Col>
+        </Grid>
       </Group>
     </Card>
+    
+    {
+      staff ? <Modal centered opened={editOpened} onClose={closeEditModal} title="Sửa thông tin nhan viên">
+        <EditStaffModal close={closeEditModal} staff={staff}/>
+      </Modal> :"asd"
+    }
+    </>
   );
 };
 

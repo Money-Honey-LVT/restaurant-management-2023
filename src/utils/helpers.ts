@@ -12,7 +12,7 @@ export const formatCurrency = (number: number | undefined) => {
 };
 
 export const formatDateFromISOString = (string: string | undefined) => {
-  if (!string) return;
+  if (!string) return "";
   return string.split("T")[0];
 };
 
