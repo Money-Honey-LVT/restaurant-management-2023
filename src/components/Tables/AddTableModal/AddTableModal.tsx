@@ -1,7 +1,12 @@
-import { Button, Flex, Group, NumberInput, Select, Stack, Text, TextInput, Textarea, useMantineTheme } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
+import {
+  Button,
+  Flex,
+  Group,
+  NumberInput,
+  TextInput,
+  useMantineTheme,
+} from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 
 interface Props {
   close: () => void;
@@ -19,9 +24,17 @@ const AddTableModal: React.FC<Props> = ({ close }) => {
   });
 
   return (
-    <form id="form-add-table" onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form
+      id="form-add-table"
+      onSubmit={form.onSubmit((values) => console.log(values))}
+    >
       <Flex direction="column" gap="sm">
-        <TextInput withAsterisk label="Tên bàn" placeholder="Nhập tên bàn" {...form.getInputProps('name')} />
+        <TextInput
+          withAsterisk
+          label="Tên bàn"
+          placeholder="Nhập tên bàn"
+          {...form.getInputProps('name')}
+        />
 
         <NumberInput
           defaultValue={0}
