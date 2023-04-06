@@ -82,7 +82,7 @@ const EditStaffModal: React.FC<Props> = ({staff, close}) => {
 
         <Stack spacing={0}>
           <Text fw={600} fz="sm">
-            Ảnh món ăn
+            Ảnh đại điện
           </Text>
           <Dropzone
             onDrop={(files) => form.setFieldValue("image", files)}
