@@ -1,3 +1,5 @@
+import { method } from 'lodash';
+
 export const HEADERS = {
   header: () => ({
     accept: 'application/json',
@@ -8,4 +10,14 @@ export const HEADERS = {
   }),
 };
 
-export const API_URLS = {};
+const StaffSchema = 'Staffs';
+
+export const API_URLS = {
+  AUTH: {
+    LOGIN: () => ({
+      endPoint: `${StaffSchema}/login`,
+      method: 'POST',
+      headers: HEADERS.header(),
+    }),
+  },
+};

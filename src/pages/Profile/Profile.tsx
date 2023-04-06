@@ -1,4 +1,14 @@
-import { ActionIcon, Badge, Card, Grid, Group, Image, Stack, Text, Tooltip } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Grid,
+  Group,
+  Image,
+  Stack,
+  Text,
+  Tooltip,
+} from '@mantine/core';
 import { IconEdit } from '@tabler/icons-react';
 import React from 'react';
 
@@ -11,6 +21,8 @@ const renderHeading = (children: string) => (
 const renderField = (children: string) => <Text fz="md">{children}</Text>;
 
 const Profile = () => {
+  const profileData = JSON.parse(localStorage.getItem('authUser') || '');
+
   return (
     <Stack>
       <Group position="apart">

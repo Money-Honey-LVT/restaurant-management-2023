@@ -1,4 +1,15 @@
-import { Anchor, AppShell, Button, Group, Header, Image, Loader, LoadingOverlay, Navbar, Text } from '@mantine/core';
+import {
+  Anchor,
+  AppShell,
+  Button,
+  Group,
+  Header,
+  Image,
+  Loader,
+  LoadingOverlay,
+  Navbar,
+  Text,
+} from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconLogout } from '@tabler/icons-react';
@@ -8,6 +19,7 @@ import logo from '../../assets/svg/db.svg';
 import ROUTER from '../../config/router';
 import MainLinks from '../MainLinks';
 import User from '../User';
+import AuthRoutes from '../../pages/AuthRoutes/AuthRoutes';
 
 export default function AppLayout() {
   const [opened, setOpened] = useState(false);
@@ -42,7 +54,12 @@ export default function AppLayout() {
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
         navbar={
-          <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
+          <Navbar
+            p="md"
+            hiddenBreakpoint="sm"
+            hidden={!opened}
+            width={{ sm: 200, lg: 300 }}
+          >
             <Navbar.Section grow mt="0">
               <MainLinks />
             </Navbar.Section>
@@ -62,7 +79,12 @@ export default function AppLayout() {
                   Hệ Thống Quản Lý Nhà Hàng
                 </Text>
               </Group>
-              <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
+              <Button
+                onClick={handleLogout}
+                variant="subtle"
+                color="red"
+                leftIcon={<IconLogout size={20} />}
+              >
                 Đăng xuất
               </Button>
             </Group>
@@ -70,7 +92,9 @@ export default function AppLayout() {
         }
       >
         <Suspense fallback={<LoadingOverlay visible />}>
-          <Outlet />
+          <AuthRoutes>
+            <Outlet />
+          </AuthRoutes>
         </Suspense>
       </AppShell>
     </>

@@ -33,6 +33,9 @@ export interface LoginActionFailure {
   type: AuthActionType.LOGIN_FAILURE;
 }
 
-export type AuthAction = LoginActionPending | LoginActionSuccess | LoginActionFailure;
+export type AuthAction =
+  | LoginActionPending
+  | LoginActionSuccess
+  | LoginActionFailure;
 
 export type AuthThunkAction = ThunkAction<void, RootState, any, AuthAction>;
