@@ -4,31 +4,33 @@ import {
   Group,
   NumberInput,
   Select,
-  Stack,
-  Text,
   TextInput,
   Textarea,
-  useMantineTheme,
 } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
+import React from 'react';
+import { Food } from '../../../types/models/food';
+import lodash from 'lodash';
+import { notifications } from '@mantine/notifications';
+import { IconX } from '@tabler/icons-react';
 
 interface Props {
+  item: Food;
   close: () => void;
 }
 
-const AddFoodModal: React.FC<Props> = ({ close }) => {
-  const theme = useMantineTheme();
+const EditFoodModal: React.FC<Props> = ({ close, item }) => {
+  const { description, id, image, isBuffet, name, price, type } = item;
+
+  const initialValues = {
+    name,
+    type,
+    description,
+    price,
+  };
 
   const form = useForm({
-    initialValues: {
-      name: '',
-      image: [] as FileWithPath[],
-      type: null,
-      description: '',
-      price: 0,
-    },
+    initialValues,
     validate: {
       name: isNotEmpty('Bạn chưa nhập tên sản phẩm!'),
       type: isNotEmpty('Bạn chưa chọn loại sản phẩm!'),
@@ -38,8 +40,22 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
 
   return (
     <form
-      id="form-add-food"
-      onSubmit={form.onSubmit((values) => console.log(values))}
+      id="form-edit-food"
+      onSubmit={form.onSubmit((values) => {
+        if (lodash.isEqual(values, initialValues)) {
+          notifications.show({
+            withCloseButton: true,
+            title: 'Thông báo',
+            message: 'Bạn chưa thay đổi thông tin của sản phẩm!',
+            color: 'red',
+            icon: <IconX size={16} />,
+            autoClose: 1200,
+          });
+          return;
+        }
+        console.log(values);
+        close();
+      })}
     >
       <Flex direction="column" gap="sm">
         <TextInput
@@ -68,7 +84,7 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
           />
         </Group>
 
-        <Stack spacing={0}>
+        {/* <Stack spacing={0}>
           <Text fw={600} fz="sm">
             Ảnh món ăn
           </Text>
@@ -109,7 +125,7 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
               </Stack>
             </Group>
           </Dropzone>
-        </Stack>
+        </Stack> */}
 
         <Textarea
           placeholder="Nhập mô tả..."
@@ -129,4 +145,4 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
   );
 };
 
-export default AddFoodModal;
+export default EditFoodModal;
