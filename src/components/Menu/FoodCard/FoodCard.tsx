@@ -1,11 +1,31 @@
-import { Card, Image, Text, Badge, Button, Group, Menu, ActionIcon, rem, Modal } from '@mantine/core';
-import { modals } from '@mantine/modals';
-import { IconCheck, IconDots, IconEdit, IconMinus, IconPlus, IconShoppingCartPlus, IconTrash } from '@tabler/icons-react';
-import { notifications } from '@mantine/notifications';
-import { Food } from '../../../types/models/food';
-import { useCartContext } from '../../../hooks/use-cart-context';
-import { useState } from 'react';
+import {
+  ActionIcon,
+  Badge,
+  Button,
+  Card,
+  Group,
+  Image,
+  Menu,
+  Modal,
+  Text,
+  rem,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
+import {
+  IconCheck,
+  IconDots,
+  IconEdit,
+  IconMinus,
+  IconPlus,
+  IconShoppingCartPlus,
+  IconTrash,
+} from '@tabler/icons-react';
+import { useState } from 'react';
+import { useCartContext } from '../../../hooks/use-cart-context';
+import { Food } from '../../../types/models/food';
+import EditFoodModal from '../EditFoodModal';
 
 interface Props {
   item: Food | null;
@@ -19,6 +39,8 @@ const FoodCard: React.FC<Props> = ({ item }) => {
 
   const [quantity, setQuantity] = useState(0);
   const [opened, { open, close }] = useDisclosure(false);
+  const [editOpened, { close: closeEditModal, open: openEditModal }] =
+    useDisclosure();
 
   const openDeleteFoodModal = () =>
     modals.openConfirmModal({
@@ -47,16 +69,6 @@ const FoodCard: React.FC<Props> = ({ item }) => {
         }),
     });
 
-  const openEditFoodModal = () =>
-    modals.openConfirmModal({
-      title: 'Sửa Món Ăn',
-      centered: true,
-      children: <Text size="sm"></Text>,
-      labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
-      onCancel: () => console.log('Cancel'),
-      onConfirm: () => console.log('Confirmed'),
-    });
-
   return (
     <>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -71,10 +83,17 @@ const FoodCard: React.FC<Props> = ({ item }) => {
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item onClick={openEditFoodModal} icon={<IconEdit size={rem(14)} />}>
+                <Menu.Item
+                  onClick={openEditModal}
+                  icon={<IconEdit size={rem(14)} />}
+                >
                   Sửa thông tin
                 </Menu.Item>
-                <Menu.Item onClick={openDeleteFoodModal} icon={<IconTrash size={rem(14)} />} color="red">
+                <Menu.Item
+                  onClick={openDeleteFoodModal}
+                  icon={<IconTrash size={rem(14)} />}
+                  color="red"
+                >
                   Xoá món ăn
                 </Menu.Item>
               </Menu.Dropdown>
@@ -82,7 +101,12 @@ const FoodCard: React.FC<Props> = ({ item }) => {
           </Group>
         </Card.Section>
         <Card.Section>
-          <Image withPlaceholder src={item?.image || ''} height={160} alt={`Food: ${name}`} />
+          <Image
+            withPlaceholder
+            src={item?.image || ''}
+            height={160}
+            alt={`Food: ${name}`}
+          />
         </Card.Section>
 
         <Group position="apart" mt="md" mb="xs">
@@ -113,7 +137,10 @@ const FoodCard: React.FC<Props> = ({ item }) => {
       <Modal centered opened={opened} onClose={close} title="Nhập số lượng">
         <Group grow>
           <Group grow>
-            <ActionIcon disabled={quantity <= 0} onClick={() => setQuantity((prev) => prev - 1)}>
+            <ActionIcon
+              disabled={quantity <= 0}
+              onClick={() => setQuantity((prev) => prev - 1)}
+            >
               <IconMinus />
             </ActionIcon>
             <Text align="center">{quantity}</Text>
@@ -131,6 +158,17 @@ const FoodCard: React.FC<Props> = ({ item }) => {
           </Button>
         </Group>
       </Modal>
+
+      {item ? (
+        <Modal
+          centered
+          opened={editOpened}
+          onClose={closeEditModal}
+          title="Sửa Món Ăn"
+        >
+          <EditFoodModal close={closeEditModal} item={item} />
+        </Modal>
+      ) : null}
     </>
   );
 };

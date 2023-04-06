@@ -1,5 +1,16 @@
 import { faker } from '@faker-js/faker/locale/vi';
-import { ActionIcon, Affix, Button, Card, Grid, Group, Modal, Stack, Text, Transition } from '@mantine/core';
+import {
+  ActionIcon,
+  Affix,
+  Button,
+  Card,
+  Grid,
+  Group,
+  Modal,
+  Stack,
+  Text,
+  Transition,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus, IconShoppingCart, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -8,6 +19,7 @@ import { randomArray } from '../../utils/helpers';
 import AddFoodModal from './AddFoodModal';
 import FoodCard from './FoodCard';
 import { useCartContext } from '../../hooks/use-cart-context';
+import { FoodType } from '../../types/models/food';
 
 const Menu = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -24,6 +36,7 @@ const Menu = () => {
         precision: 1000,
       }),
       description: faker.commerce.productDescription(),
+      type: FoodType.hotpot,
     };
     setFake(fakeFood);
   }, []);
@@ -54,7 +67,10 @@ const Menu = () => {
       </Modal>
 
       {/*  */}
-      <Affix onClick={() => setOpenCart((prev) => !prev)} position={{ bottom: 22, right: 24 }}>
+      <Affix
+        onClick={() => setOpenCart((prev) => !prev)}
+        position={{ bottom: 22, right: 24 }}
+      >
         <ActionIcon size={40} radius={8} variant="filled" color="primary.9">
           <IconShoppingCart size="20px" />
         </ActionIcon>

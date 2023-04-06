@@ -13,6 +13,7 @@ interface Props {
 
 const EditTableModal: React.FC<Props> = ({ item, close }) => {
   const initialValues = { name: item.name, capacity: item.capacity };
+
   const form = useForm({
     initialValues,
     validate: {
