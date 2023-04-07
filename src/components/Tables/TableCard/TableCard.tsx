@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Card, Group, Menu, Modal, Text, rem } from '@mantine/core';
+import { ActionIcon, Badge, Card, DefaultMantineColor, Group, Menu, Modal, Text, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
@@ -6,6 +6,7 @@ import { IconCheck, IconDots, IconEdit, IconTrash } from '@tabler/icons-react';
 import React from 'react';
 import { Table } from '../../../types/models/table';
 import EditTableModal from '../EditTableModal';
+import { TableDict } from '../../../utils/helpers';
 
 interface Props {
   item: Table | null;
@@ -68,8 +69,12 @@ const TableCard: React.FC<Props> = ({ item }) => {
 
         <Group position="apart" mt="md" mb="xs">
           <Text>{item?.capacity} chỗ ngồi</Text>
-          <Badge color={item && item.status === 0 ? 'green' : 'red'} size="lg" variant="light">
-            {item && item.status === 0 ? 'Trống' : 'Đã đặt'}
+          <Badge
+            color={item && !isNaN(item.status) ? (TableDict[item.status].badgeColor as any) : undefined}
+            size="lg"
+            variant="light"
+          >
+            {item && !isNaN(item.status) ? TableDict[item.status].localeStatus : null}
           </Badge>
         </Group>
       </Card>

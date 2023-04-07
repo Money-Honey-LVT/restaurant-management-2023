@@ -3,11 +3,11 @@ import { AppDispatch } from '../../redux/store';
 import { Callback } from '../../types/helpers/callback';
 import { Table } from '../../types/models/table';
 import { useCallApi } from '../../utils/api';
-import { apiCallErrorNotitification } from '../../utils/helpers';
+import { apiCallErrorNotitification, apiCallSuccessNotitification } from '../../utils/helpers';
 import { TableActionType, TableThunkAction } from './table.types';
 
 const addTable =
-  (payload: Table, cb?: Callback): TableThunkAction =>
+  (payload: Partial<Table>, cb?: Callback): TableThunkAction =>
   async (dispatch: AppDispatch) => {
     dispatch({ type: TableActionType.ADD_TABLE_PENDING });
 
@@ -20,6 +20,7 @@ const addTable =
         type: TableActionType.ADD_TABLE_SUCCESS,
         payload: response.data,
       });
+      apiCallSuccessNotitification();
       cb?.onSuccess?.(response.data);
     } else {
       dispatch({ type: TableActionType.ADD_TABLE_FAILURE });
@@ -49,7 +50,7 @@ const getAllTables =
   };
 
 const editTable =
-  (payload: Table, cb?: Callback): TableThunkAction =>
+  (payload: Partial<Table>, cb?: Callback): TableThunkAction =>
   async (dispatch: AppDispatch) => {
     dispatch({ type: TableActionType.EDIT_TABLE_PENDING });
 
@@ -62,6 +63,7 @@ const editTable =
         type: TableActionType.EDIT_TABLE_SUCCESS,
         payload: response.data,
       });
+      apiCallSuccessNotitification();
       cb?.onSuccess?.(response.data);
     } else {
       dispatch({ type: TableActionType.EDIT_TABLE_FAILURE });

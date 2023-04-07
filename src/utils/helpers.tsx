@@ -7,6 +7,7 @@ import { storage } from '../config/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 import { v4 as uuidv4 } from 'uuid';
+import { TableStatus } from '../types/models/table';
 
 export const randomArray = (number: number): number[] => Array.from({ length: number }, (_, i) => i + 1);
 
@@ -124,3 +125,28 @@ export const apiCallErrorNotitification = (error: any) =>
     icon: <IconExclamationMark size={16} />,
     autoClose: 1200,
   });
+
+export const apiCallSuccessNotitification = () =>
+  notifications.show({
+    withCloseButton: true,
+    title: 'Thông báo',
+    message: 'Cập nhật thành công',
+    color: 'green',
+    icon: <IconCheck size={16} />,
+    autoClose: 1200,
+  });
+
+export const TableDict = {
+  0: {
+    badgeColor: 'green',
+    localeStatus: 'Trống',
+  },
+  1: {
+    badgeColor: 'orange',
+    localeStatus: 'Đã đặt',
+  },
+  2: {
+    badgeColor: 'red',
+    localeStatus: 'Bị khoá',
+  },
+};

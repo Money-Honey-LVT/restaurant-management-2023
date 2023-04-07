@@ -1,13 +1,12 @@
-import React from 'react';
-import { Table } from '../../../types/models/table';
-import { isNotEmpty, useForm } from '@mantine/form';
 import { Button, Flex, Group, NumberInput, TextInput } from '@mantine/core';
-import lodash from 'lodash';
+import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
-import { useDispatch } from 'react-redux';
-import { tableActions } from '../../../reducers/table/table.action';
+import lodash from 'lodash';
+import React from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { tableActions } from '../../../reducers/table/table.action';
+import { Table } from '../../../types/models/table';
 
 interface Props {
   item: Table;
