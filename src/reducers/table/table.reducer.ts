@@ -28,6 +28,8 @@ const tableReducer: Reducer<TableState, TableAction> = (state = initialState, ac
       return { ...state, isFetching: false, tables: [action.payload, ...state.tables] };
     case TableActionType.GET_ALL_TABLES_SUCCESS:
       return { ...state, isFetching: false, tables: action.payload };
+    case TableActionType.EDIT_TABLE_SUCCESS:
+      return { ...state, isFetching: false };
     default:
       return state;
   }
