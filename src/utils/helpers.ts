@@ -3,6 +3,10 @@ import consts from '../config/constants';
 import { Icon, IconCheck, IconX } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import jwt_decode from 'jwt-decode';
+import { storage } from '../config/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+
+import { v4 as uuidv4 } from 'uuid';
 
 export const randomArray = (number: number): number[] => Array.from({ length: number }, (_, i) => i + 1);
 
@@ -76,13 +80,37 @@ interface DecodedToken {
   Role: string;
 }
 
-export const decodeToke = (): DecodedToken => {
+export const decodeToken = (): DecodedToken => {
   const token = localStorage.getItem('token')?.replace('Bearer ', '') || '';
   return jwt_decode(token);
 };
 
 export const isManager = () => {
-  const decodedToken: DecodedToken | undefined = decodeToke();
+  const decodedToken: DecodedToken | undefined = decodeToken();
   const role = decodedToken?.Role;
   return role === consts.ROLE_ADMIN ? true : false;
+};
+
+export const handleUploadImageOnFirebase = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const imageRef = ref(storage, `staffImages/${file.name} + ${uuidv4()}`);
+    uploadBytes(imageRef, file)
+      .then((snapshot) => {
+        return getDownloadURL(snapshot.ref);
+      })
+      .then((url) => {
+        console.log(url); // Log the URL when it becomes available
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = (event) => {
+          const blob = xhr.response;
+        };
+        xhr.open('GET', url);
+        xhr.send();
+        resolve(url);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 };
