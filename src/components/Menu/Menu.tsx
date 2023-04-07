@@ -1,16 +1,5 @@
 import { faker } from '@faker-js/faker/locale/vi';
-import {
-  ActionIcon,
-  Affix,
-  Button,
-  Card,
-  Grid,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  Transition,
-} from '@mantine/core';
+import { ActionIcon, Affix, Button, Card, Grid, Group, Modal, Stack, Text, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus, IconShoppingCart, IconTrash } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
@@ -20,10 +9,13 @@ import AddFoodModal from './AddFoodModal';
 import FoodCard from './FoodCard';
 import { useCartContext } from '../../hooks/use-cart-context';
 import { FoodType } from '../../types/models/food';
+import { useNavigate } from 'react-router-dom';
+import ROUTER from '../../config/router';
 
 const Menu = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const navigate = useNavigate();
   const { state } = useCartContext();
   const [openCart, setOpenCart] = useState(false);
   const [fake, setFake] = useState<Food | null>(null);
@@ -67,10 +59,7 @@ const Menu = () => {
       </Modal>
 
       {/*  */}
-      <Affix
-        onClick={() => setOpenCart((prev) => !prev)}
-        position={{ bottom: 22, right: 24 }}
-      >
+      <Affix onClick={() => setOpenCart((prev) => !prev)} position={{ bottom: 22, right: 24 }}>
         <ActionIcon size={40} radius={8} variant="filled" color="primary.9">
           <IconShoppingCart size="20px" />
         </ActionIcon>
@@ -91,17 +80,20 @@ const Menu = () => {
             >
               <Stack>
                 {state.items.length !== 0 ? (
-                  state.items.map((item) => (
-                    <Group position="apart">
+                  <>
+                    {state.items.map((item) => (
                       <Group position="apart">
-                        <Text>{item.name}</Text>
-                        <Text>x {item.quantity}</Text>
+                        <Group position="apart">
+                          <Text>{item.name}</Text>
+                          <Text>x {item.quantity}</Text>
+                        </Group>
+                        <ActionIcon>
+                          <IconTrash color="red" size={20} />
+                        </ActionIcon>
                       </Group>
-                      <ActionIcon>
-                        <IconTrash color="red" size={20} />
-                      </ActionIcon>
-                    </Group>
-                  ))
+                    ))}
+                    <Button onClick={() => navigate(ROUTER.HOME.CHECKOUT)}>Thanh toán</Button>
+                  </>
                 ) : (
                   <Text color="red">Đơn hàng trống</Text>
                 )}

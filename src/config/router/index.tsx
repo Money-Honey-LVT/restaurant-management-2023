@@ -1,6 +1,7 @@
 const ROUTER = {
   HOME: {
     INDEX: '/',
+    CHECKOUT: '/checkout',
   },
   AUTH: {
     LOGIN: '/login',
