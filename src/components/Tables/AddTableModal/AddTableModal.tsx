@@ -18,12 +18,16 @@ const AddTableModal: React.FC<Props> = ({ close }) => {
     },
   });
 
-  const handleAddTable = () => {
-    dispatch(tableActions.addTable({ name: '11', capacity: 8 }));
-  };
+  const handleAddTable = () => {};
 
   return (
-    <form id="form-add-table" onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form
+      id="form-add-table"
+      onSubmit={form.onSubmit((values) => {
+        const { name, capacity } = values;
+        dispatch(tableActions.addTable({ name, capacity }, { onSuccess: close }));
+      })}
+    >
       <Flex direction="column" gap="sm">
         <TextInput withAsterisk label="Tên bàn" placeholder="Nhập tên bàn" {...form.getInputProps('name')} />
 

@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Group,
-  Menu,
-  Modal,
-  Text,
-  rem,
-} from '@mantine/core';
+import { ActionIcon, Badge, Card, Group, Menu, Modal, Text, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
@@ -21,8 +12,7 @@ interface Props {
 }
 
 const TableCard: React.FC<Props> = ({ item }) => {
-  const [editOpened, { close: closeEditModal, open: openEditModal }] =
-    useDisclosure();
+  const [editOpened, { close: closeEditModal, open: openEditModal }] = useDisclosure();
 
   const openDeleteTableModal = () =>
     modals.openConfirmModal({
@@ -65,17 +55,10 @@ const TableCard: React.FC<Props> = ({ item }) => {
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item
-                  onClick={openEditModal}
-                  icon={<IconEdit size={rem(14)} />}
-                >
+                <Menu.Item onClick={openEditModal} icon={<IconEdit size={rem(14)} />}>
                   Sửa thông tin
                 </Menu.Item>
-                <Menu.Item
-                  onClick={openDeleteTableModal}
-                  icon={<IconTrash size={rem(14)} />}
-                  color="red"
-                >
+                <Menu.Item onClick={openDeleteTableModal} icon={<IconTrash size={rem(14)} />} color="red">
                   Xoá bàn
                 </Menu.Item>
               </Menu.Dropdown>
@@ -85,17 +68,12 @@ const TableCard: React.FC<Props> = ({ item }) => {
 
         <Group position="apart" mt="md" mb="xs">
           <Text>{item?.capacity} chỗ ngồi</Text>
-          <Badge color="pink" size="lg" variant="light">
-            {item?.status?.toUpperCase()}
+          <Badge color={item && item.status === 0 ? 'green' : 'red'} size="lg" variant="light">
+            {item && item.status === 0 ? 'Trống' : 'Đã đặt'}
           </Badge>
         </Group>
       </Card>
-      <Modal
-        centered
-        opened={editOpened}
-        onClose={closeEditModal}
-        title="Sửa Thông Tin Bàn"
-      >
+      <Modal centered opened={editOpened} onClose={closeEditModal} title="Sửa Thông Tin Bàn">
         {item ? <EditTableModal close={closeEditModal} item={item} /> : null}
       </Modal>
     </>
