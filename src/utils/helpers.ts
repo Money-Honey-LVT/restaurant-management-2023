@@ -1,16 +1,13 @@
 import _ from 'lodash';
-import consts from '../config/constants/consts';
+import consts from '../config/constants';
 import { Icon, IconCheck, IconX } from '@tabler/icons-react';
-import { Notification } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 
-export const randomArray = (number: number): number[] =>
-  Array.from({ length: number }, (_, i) => i + 1);
+export const randomArray = (number: number): number[] => Array.from({ length: number }, (_, i) => i + 1);
 
 export const formatCurrency = (number: number | undefined) => {
   if (!number) return '0';
-  const formattedNumber =
-    _.replace(_.round(number, 0).toString(), /\B(?=(\d{3})+(?!\d))/g, '.') +
-    ' đ';
+  const formattedNumber = _.replace(_.round(number, 0).toString(), /\B(?=(\d{3})+(?!\d))/g, '.') + ' đ';
   return formattedNumber;
 };
 
@@ -51,13 +48,28 @@ export enum notiType {
   ERROR = 'ERROR',
 }
 
-export const showNotification = (
-  title: string,
-  description: string,
-  type: string
-) => {
-  Notification({
+export const renderNotification = (title: string, description: string, type: notiType) => {
+  notifications.show({
     title: title,
-    children: description,
+    message: description,
+    color: getColorByType(type),
   });
+};
+
+const getIconByType = (type: notiType): React.ReactNode => {
+  switch (type) {
+    case notiType.SUCCESS:
+      return 'asd';
+    case notiType.ERROR:
+      return '';
+  }
+};
+
+const getColorByType = (type: notiType) => {
+  switch (type) {
+    case notiType.SUCCESS:
+      return 'green';
+    case notiType.ERROR:
+      return 'red';
+  }
 };

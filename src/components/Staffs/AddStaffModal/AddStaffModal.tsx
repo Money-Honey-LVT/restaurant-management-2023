@@ -77,7 +77,7 @@ const AddStaffModal: React.FC<Props> = ({ close }) => {
 
         <Stack spacing={0}>
           <Text fw={600} fz="sm">
-            Ảnh món ăn
+            Ảnh đại diện
           </Text>
           <Dropzone
             onDrop={(files) => form.setFieldValue("image", files)}

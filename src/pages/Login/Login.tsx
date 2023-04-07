@@ -30,13 +30,13 @@ const Login = () => {
     },
   });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (value: LoginValues) => {
+    console.log(value);
     dispatch(
       authActions.Login(
         {
-          username: e.target[0].value,
-          password: e.target[1].value,
+          username: value.username,
+          password: value.password,
         },
         navigate
       )
@@ -71,16 +71,18 @@ const Login = () => {
           </Text>
           <Center mt="sm">
             <Card shadow="md" w={360}>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <Stack>
                   <TextInput
                     label="Tên đăng nhập"
                     placeholder="Nhập tên tài khoản"
+                    {...form.getInputProps('username')}
                   />
                   <TextInput
                     label="Mật khẩu"
                     type="password"
                     icon={<IconLock size={14} />}
+                    {...form.getInputProps('password')}
                   />
                   <Button variant="filled" fullWidth type="submit">
                     Đăng nhập
