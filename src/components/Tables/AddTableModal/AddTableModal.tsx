@@ -1,19 +1,14 @@
-import {
-  Button,
-  Flex,
-  Group,
-  NumberInput,
-  TextInput,
-  useMantineTheme,
-} from '@mantine/core';
+import { Button, Flex, Group, NumberInput, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { tableActions } from '../../../reducers/table/table.action';
 
 interface Props {
   close: () => void;
 }
 
 const AddTableModal: React.FC<Props> = ({ close }) => {
-  const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     initialValues: { name: '', capacity: 0 },
@@ -23,18 +18,14 @@ const AddTableModal: React.FC<Props> = ({ close }) => {
     },
   });
 
+  const handleAddTable = () => {
+    dispatch(tableActions.addTable({ name: '11', capacity: 8 }));
+  };
+
   return (
-    <form
-      id="form-add-table"
-      onSubmit={form.onSubmit((values) => console.log(values))}
-    >
+    <form id="form-add-table" onSubmit={form.onSubmit((values) => console.log(values))}>
       <Flex direction="column" gap="sm">
-        <TextInput
-          withAsterisk
-          label="Tên bàn"
-          placeholder="Nhập tên bàn"
-          {...form.getInputProps('name')}
-        />
+        <TextInput withAsterisk label="Tên bàn" placeholder="Nhập tên bàn" {...form.getInputProps('name')} />
 
         <NumberInput
           defaultValue={0}
@@ -50,7 +41,9 @@ const AddTableModal: React.FC<Props> = ({ close }) => {
           <Button variant="light" onClick={close}>
             Huỷ bỏ
           </Button>
-          <Button type="submit">Thêm mới</Button>
+          <Button onClick={handleAddTable} type="submit">
+            Thêm mới
+          </Button>
         </Group>
       </Flex>
     </form>

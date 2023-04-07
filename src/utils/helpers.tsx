@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import consts from '../config/constants';
-import { Icon, IconCheck, IconX } from '@tabler/icons-react';
+import { Icon, IconCheck, IconExclamationMark, IconX } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import jwt_decode from 'jwt-decode';
 
@@ -86,3 +86,13 @@ export const isManager = () => {
   const role = decodedToken?.Role;
   return role === consts.ROLE_ADMIN ? true : false;
 };
+
+export const apiCallErrorNotitification = (error: any) =>
+  notifications.show({
+    withCloseButton: true,
+    title: 'Thông báo',
+    message: error.response.data.devMsg,
+    color: 'red',
+    icon: <IconExclamationMark size={16} />,
+    autoClose: 1200,
+  });
