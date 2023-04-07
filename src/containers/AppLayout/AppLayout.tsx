@@ -1,15 +1,4 @@
-import {
-  Anchor,
-  AppShell,
-  Button,
-  Group,
-  Header,
-  Image,
-  Loader,
-  LoadingOverlay,
-  Navbar,
-  Text,
-} from '@mantine/core';
+import { Anchor, AppShell, Button, Group, Header, Image, Loader, LoadingOverlay, Navbar, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconLogout } from '@tabler/icons-react';
@@ -35,6 +24,7 @@ export default function AppLayout() {
       confirmProps: { color: 'red' },
       onCancel: () => {},
       onConfirm: () => {
+        localStorage.clear();
         navigate(ROUTER.AUTH.LOGIN);
         notifications.show({
           withCloseButton: true,
@@ -54,12 +44,7 @@ export default function AppLayout() {
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
         navbar={
-          <Navbar
-            p="md"
-            hiddenBreakpoint="sm"
-            hidden={!opened}
-            width={{ sm: 200, lg: 300 }}
-          >
+          <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
             <Navbar.Section grow mt="0">
               <MainLinks />
             </Navbar.Section>
@@ -79,12 +64,7 @@ export default function AppLayout() {
                   Hệ Thống Quản Lý Nhà Hàng
                 </Text>
               </Group>
-              <Button
-                onClick={handleLogout}
-                variant="subtle"
-                color="red"
-                leftIcon={<IconLogout size={20} />}
-              >
+              <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
                 Đăng xuất
               </Button>
             </Group>

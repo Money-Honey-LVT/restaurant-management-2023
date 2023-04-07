@@ -1,7 +1,7 @@
 import { showNotification } from '@mantine/notifications';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { toast } from 'react-toastify';
-import consts from '../config/constants/consts';
+import consts from '../config/constants';
+import { notiType, renderNotification } from './helpers';
 
 const api = axios.create({
   baseURL: 'https://localhost:7119/api',
@@ -53,6 +53,6 @@ export const errorHandler = (err: AxiosError) => {
   if (err.response && err.response.data && typeof err.response.data === 'object' && 'devMsg' in err.response.data) {
     const errMsg = err.response.data.devMsg;
     console.log(errMsg);
-    toast.error(`${errMsg}`, consts.TOAST_CONFIG);
+    renderNotification('Lỗi', `${errMsg}`, notiType.ERROR);
   }
 };

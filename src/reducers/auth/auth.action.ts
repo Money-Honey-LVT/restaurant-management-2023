@@ -3,15 +3,13 @@ import { AuthActionType, AuthThunkAction, LoginValues } from './auth.types';
 import { AppDispatch } from '../../redux/store';
 import { API_URLS } from '../../config/constants/api';
 import { errorHandler, useCallApi } from '../../utils/api';
-import { toast } from 'react-toastify';
 import { data } from '../../components/Home/Home';
 import ROUTER from '../../config/router';
-import consts from '../../config/constants/consts';
+import consts from '../../config/constants';
+import { notiType, renderNotification } from '../../utils/helpers';
 
 const setUser = (data: any) => {
-  localStorage.setItem('authUser', JSON.stringify(data.User));
-  localStorage.setItem('token', data.Token);
-  localStorage.setItem('isManager', data.User.role);
+  localStorage.setItem('token', data.token);
 };
 
 const Login =
@@ -33,7 +31,7 @@ const Login =
       });
       setUser(data);
       navigate(ROUTER.HOME.INDEX);
-      toast.success('Đăng nhập thành công', consts.TOAST_CONFIG);
+      renderNotification('Thông báo', 'Đăng nhập thành công', notiType.SUCCESS);
       dispatch({
         type: AuthActionType.LOGIN_SUCCESS,
         payload: data,
