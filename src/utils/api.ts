@@ -1,6 +1,4 @@
-import { showNotification } from '@mantine/notifications';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import consts from '../config/constants';
 import { notiType, renderNotification } from './helpers';
 
 const api = axios.create({

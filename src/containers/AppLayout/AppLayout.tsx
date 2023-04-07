@@ -1,19 +1,25 @@
-import { Anchor, AppShell, Button, Group, Header, Image, Loader, LoadingOverlay, Navbar, Text } from '@mantine/core';
+import { Anchor, AppShell, Button, Group, Header, Image, LoadingOverlay, Navbar, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconLogout } from '@tabler/icons-react';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/svg/db.svg';
 import ROUTER from '../../config/router';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import AuthRoutes from '../../pages/AuthRoutes/AuthRoutes';
 import MainLinks from '../MainLinks';
 import User from '../User';
-import AuthRoutes from '../../pages/AuthRoutes/AuthRoutes';
+import { tableActions } from '../../reducers/table/table.action';
 
 export default function AppLayout() {
-  const [opened, setOpened] = useState(false);
-
   const navigate = useNavigate();
+  const [opened, setOpened] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(tableActions.getAllTables());
+  }, []);
 
   const handleLogout = () => {
     modals.openConfirmModal({

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import consts from '../config/constants';
-import { Icon, IconCheck, IconX } from '@tabler/icons-react';
+import { Icon, IconCheck, IconExclamationMark, IconX } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import jwt_decode from 'jwt-decode';
 import { storage } from '../config/firebase';
@@ -114,3 +114,13 @@ export const handleUploadImageOnFirebase = (file: File): Promise<string> => {
       });
   });
 };
+
+export const apiCallErrorNotitification = (error: any) =>
+  notifications.show({
+    withCloseButton: true,
+    title: 'Thông báo',
+    message: error.response.data.devMsg,
+    color: 'red',
+    icon: <IconExclamationMark size={16} />,
+    autoClose: 1200,
+  });

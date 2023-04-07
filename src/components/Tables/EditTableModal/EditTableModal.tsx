@@ -5,6 +5,9 @@ import { Button, Flex, Group, NumberInput, TextInput } from '@mantine/core';
 import lodash from 'lodash';
 import { notifications } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
+import { useDispatch } from 'react-redux';
+import { tableActions } from '../../../reducers/table/table.action';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 
 interface Props {
   item: Table;
@@ -13,6 +16,8 @@ interface Props {
 
 const EditTableModal: React.FC<Props> = ({ item, close }) => {
   const initialValues = { name: item.name, capacity: item.capacity };
+
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     initialValues,
@@ -37,17 +42,23 @@ const EditTableModal: React.FC<Props> = ({ item, close }) => {
           });
           return;
         }
-        console.log(values);
+        const { capacity, name } = values;
+        dispatch(
+          tableActions.editTable(
+            { id: item.id, capacity, name },
+            {
+              onSuccess: () => {
+                close();
+                dispatch(tableActions.getAllTables());
+              },
+            }
+          )
+        );
         close();
       })}
     >
       <Flex direction="column" gap="sm">
-        <TextInput
-          withAsterisk
-          label="Tên bàn"
-          placeholder="Nhập tên bàn"
-          {...form.getInputProps('name')}
-        />
+        <TextInput withAsterisk label="Tên bàn" placeholder="Nhập tên bàn" {...form.getInputProps('name')} />
 
         <NumberInput
           defaultValue={0}
