@@ -50,12 +50,7 @@ export const useCallApi = async ({
 
 export const errorHandler = (err: AxiosError) => {
   console.log(err);
-  if (
-    err.response &&
-    err.response.data &&
-    typeof err.response.data === 'object' &&
-    'devMsg' in err.response.data
-  ) {
+  if (err.response && err.response.data && typeof err.response.data === 'object' && 'devMsg' in err.response.data) {
     const errMsg = err.response.data.devMsg;
     console.log(errMsg);
     toast.error(`${errMsg}`, consts.TOAST_CONFIG);
