@@ -1,8 +1,28 @@
-import { BackgroundImage, Box, Button, Card, Center, Grid, Image, MediaQuery, Stack, Text, TextInput } from '@mantine/core';
+import {
+  BackgroundImage,
+  Box,
+  Button,
+  Card,
+  Center,
+  Grid,
+  Image,
+  MediaQuery,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconLock } from '@tabler/icons-react';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { authActions } from '../../reducers/auth/auth.action';
+import { useNavigate } from 'react-router-dom';
+import { LoginValues } from '../../reducers/auth/auth.types';
+import { FormEventHandler } from 'react';
+import { FormEvent } from 'react';
 
 const Login = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
       username: '',
@@ -10,10 +30,17 @@ const Login = () => {
     },
   });
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(e);
-    // handle user authentication logic here
+    dispatch(
+      authActions.Login(
+        {
+          username: e.target[0].value,
+          password: e.target[1].value,
+        },
+        navigate
+      )
+    );
   };
 
   return (
@@ -46,9 +73,16 @@ const Login = () => {
             <Card shadow="md" w={360}>
               <form onSubmit={handleSubmit}>
                 <Stack>
-                  <TextInput label="Tên đăng nhập" placeholder="Nhập tên tài khoản" />
-                  <TextInput label="Mật khẩu" type="password" icon={<IconLock size={14} />} />
-                  <Button variant="filled" fullWidth>
+                  <TextInput
+                    label="Tên đăng nhập"
+                    placeholder="Nhập tên tài khoản"
+                  />
+                  <TextInput
+                    label="Mật khẩu"
+                    type="password"
+                    icon={<IconLock size={14} />}
+                  />
+                  <Button variant="filled" fullWidth type="submit">
                     Đăng nhập
                   </Button>
                 </Stack>

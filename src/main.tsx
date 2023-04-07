@@ -7,15 +7,19 @@ import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 import { CartProvider } from './contexts/CartContext';
 import './index.css';
 import AppRoutes from './pages/routers';
 import store from './redux/store';
 import customTheme from './theme';
 
+import { ToastContainer } from 'react-toastify';
+
 function App() {
   return (
     <React.StrictMode>
+      <ToastContainer />
       <Provider store={store}>
         <CookiesProvider>
           <BrowserRouter>

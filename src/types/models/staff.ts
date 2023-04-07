@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from './user';
 
 export interface Staff extends User {
   salary?: number;
@@ -10,6 +10,6 @@ export interface Staff extends User {
 }
 
 export enum StaffRole {
-  EMPLOYEE = "EMPLOYEE",
-  MANAGER = "MANAGER",
+  EMPLOYEE = 'EMPLOYEE',
+  MANAGER = 'MANAGER',
 }

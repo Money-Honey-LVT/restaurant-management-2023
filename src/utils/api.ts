@@ -1,7 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { showNotification } from '@mantine/notifications';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
+import consts from '../config/constants/consts';
 
 const api = axios.create({
-  baseURL: '/api/v1',
+  baseURL: 'https://localhost:7119/api',
 });
 
 interface UseCallApiProps {
@@ -25,7 +28,7 @@ export const useCallApi = async ({
   payload,
 }: UseCallApiProps): Promise<UseCallApiResponse> => {
   try {
-    const result = await api.request({
+    const result = await api({
       method,
       url: endPoint,
       headers,
@@ -42,5 +45,19 @@ export const useCallApi = async ({
       response: null,
       error,
     };
+  }
+};
+
+export const errorHandler = (err: AxiosError) => {
+  console.log(err);
+  if (
+    err.response &&
+    err.response.data &&
+    typeof err.response.data === 'object' &&
+    'devMsg' in err.response.data
+  ) {
+    const errMsg = err.response.data.devMsg;
+    console.log(errMsg);
+    toast.error(`${errMsg}`, consts.TOAST_CONFIG);
   }
 };
