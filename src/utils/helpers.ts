@@ -2,6 +2,7 @@ import _ from 'lodash';
 import consts from '../config/constants';
 import { Icon, IconCheck, IconX } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
+import jwt_decode from 'jwt-decode';
 
 export const randomArray = (number: number): number[] => Array.from({ length: number }, (_, i) => i + 1);
 
@@ -31,16 +32,11 @@ export const parserRole = (value: string | undefined) => {
   switch (value) {
     case consts.ROLE_ADMIN:
       return 'Manager';
-    case consts.ROLE_EMPLOYEE:
+    case consts.ROLE_STAFF:
       return 'Employee';
     default:
       return '';
   }
-};
-
-export const isManager = () => {
-  const role = localStorage.getItem('isManager');
-  return role === consts.ROLE_ADMIN ? true : false;
 };
 
 export enum notiType {
@@ -53,15 +49,17 @@ export const renderNotification = (title: string, description: string, type: not
     title: title,
     message: description,
     color: getColorByType(type),
+    withCloseButton: true,
+    autoClose: 1200,
   });
 };
 
-const getIconByType = (type: notiType): React.ReactNode => {
+const getIconByType = (type: notiType) => {
   switch (type) {
     case notiType.SUCCESS:
-      return 'asd';
+      return IconCheck;
     case notiType.ERROR:
-      return '';
+      return IconX;
   }
 };
 
@@ -72,4 +70,19 @@ const getColorByType = (type: notiType) => {
     case notiType.ERROR:
       return 'red';
   }
+};
+
+interface DecodedToken {
+  Role: string;
+}
+
+export const decodeToke = (): DecodedToken => {
+  const token = localStorage.getItem('token')?.replace('Bearer ', '') || '';
+  return jwt_decode(token);
+};
+
+export const isManager = () => {
+  const decodedToken: DecodedToken | undefined = decodeToke();
+  const role = decodedToken?.Role;
+  return role === consts.ROLE_ADMIN ? true : false;
 };

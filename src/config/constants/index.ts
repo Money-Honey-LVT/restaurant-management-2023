@@ -1,7 +1,7 @@
-const ROLE_ADMIN = '1';
-const ROLE_EMPLOYEE = '0';
+const ROLE_ADMIN = 'ADMIN';
+const ROLE_STAFF = 'STAFF';
 
 export default {
   ROLE_ADMIN,
-  ROLE_EMPLOYEE,
+  ROLE_STAFF,
 };
