@@ -1,9 +1,11 @@
 import { DataTable } from 'mantine-datatable';
 import { DataTableColumn } from 'mantine-datatable/dist/types';
 
-import { Group, Modal, Stack, Text } from '@mantine/core';
+import { Button, Group, Modal, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Order } from '../../types/models/order';
+import { IconPlus } from '@tabler/icons-react';
+import AddOrderModal from './AddOrderModal';
 
 const Orders = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -23,10 +25,23 @@ const Orders = () => {
           <Text fw={700} fz="xl">
             Danh sách đơn
           </Text>
+          <Button leftIcon={<IconPlus />} onClick={open}>
+            Thêm đơn hàng
+          </Button>
         </Group>
-        <DataTable minHeight={200} withBorder withColumnBorders striped highlightOnHover columns={columns} records={[]} />
+        <DataTable
+          minHeight={200}
+          withBorder
+          withColumnBorders
+          striped
+          highlightOnHover
+          columns={columns}
+          records={[]}
+        />
       </Stack>
-      <Modal centered opened={opened} onClose={close} title="Lên Đơn"></Modal>
+      <Modal zIndex={100} centered opened={opened} onClose={close} title="Lên Đơn">
+        <AddOrderModal close={close} />
+      </Modal>
     </>
   );
 };
