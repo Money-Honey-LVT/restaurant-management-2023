@@ -3,7 +3,7 @@ import { AppDispatch } from '../../redux/store';
 import { Callback } from '../../types/helpers/callback';
 import { Table } from '../../types/models/table';
 import { useCallApi } from '../../utils/api';
-import { apiCallErrorNotitification, apiCallSuccessNotitification } from '../../utils/helpers';
+import { notiType, renderNotification } from '../../utils/helpers';
 import { TableActionType, TableThunkAction } from './table.types';
 
 const addTable =
@@ -20,11 +20,11 @@ const addTable =
         type: TableActionType.ADD_TABLE_SUCCESS,
         payload: response.data,
       });
-      apiCallSuccessNotitification();
+      renderNotification('Thông báo', 'Thêm thành công!', notiType.SUCCESS);
       cb?.onSuccess?.(response.data);
     } else {
       dispatch({ type: TableActionType.ADD_TABLE_FAILURE });
-      apiCallErrorNotitification(error);
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
     }
   };
 
@@ -45,7 +45,7 @@ const getAllTables =
       cb?.onSuccess?.(response.data);
     } else {
       dispatch({ type: TableActionType.GET_ALL_TABLES_FAILURE });
-      apiCallErrorNotitification(error);
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
     }
   };
 
@@ -63,11 +63,11 @@ const editTable =
         type: TableActionType.EDIT_TABLE_SUCCESS,
         payload: response.data,
       });
-      apiCallSuccessNotitification();
+      renderNotification('Thông báo', 'Sửa thành công!', notiType.SUCCESS);
       cb?.onSuccess?.(response.data);
     } else {
       dispatch({ type: TableActionType.EDIT_TABLE_FAILURE });
-      apiCallErrorNotitification(error);
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
     }
   };
 

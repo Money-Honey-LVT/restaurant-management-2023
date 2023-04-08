@@ -1,12 +1,12 @@
-import { ActionIcon, Badge, Card, DefaultMantineColor, Group, Menu, Modal, Text, rem } from '@mantine/core';
+import { ActionIcon, Badge, Card, Group, Menu, Modal, Text, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconDots, IconEdit, IconTrash } from '@tabler/icons-react';
 import React from 'react';
 import { Table } from '../../../types/models/table';
+import { TableDict } from '../../../utils/models/table';
 import EditTableModal from '../EditTableModal';
-import { TableDict } from '../../../utils/helpers';
 
 interface Props {
   item: Table | null;

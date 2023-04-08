@@ -1,10 +1,5 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
-import {
-  IconBrandAirtable,
-  IconListDetails,
-  IconToolsKitchen2,
-  IconUsers,
-} from '@tabler/icons-react';
+import { IconBrandAirtable, IconListDetails, IconToolsKitchen2, IconUsers } from '@tabler/icons-react';
 import React from 'react';
 import ROUTER from '../../config/router';
 import { useNavigate } from 'react-router-dom';
@@ -29,14 +24,10 @@ const MainLink = ({ icon, color, label, to, managerOnly }: MainLinkProps) => {
         width: '100%',
         padding: theme.spacing.xs,
         borderRadius: theme.radius.sm,
-        color:
-          theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
         '&:hover': {
-          backgroundColor:
-            theme.colorScheme === 'dark'
-              ? theme.colors.dark[6]
-              : theme.colors.gray[0],
+          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         },
       })}
     >
@@ -85,9 +76,7 @@ const data = [
 const MainLinks = () => {
   if (!isManager()) {
     const filterData = data.filter((link) => !link.managerOnly);
-    const links = filterData.map((link) => (
-      <MainLink {...link} key={link.label} />
-    ));
+    const links = filterData.map((link) => <MainLink {...link} key={link.label} />);
     return <div>{links}</div>;
   } else {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);

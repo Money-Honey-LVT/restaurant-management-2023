@@ -17,11 +17,7 @@ import { modals } from '@mantine/modals';
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons-react';
 import React from 'react';
 import { Staff } from '../../../types/models/staff';
-import {
-  formatCurrency,
-  formatDateFromISOString,
-  getColorByRole,
-} from '../../../utils/helpers';
+import { formatCurrency, formatDateFromISOString, getColorByRole } from '../../../utils/helpers';
 import EditStaffModal from '../EditStaffModal/EditStaffModal';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -38,8 +34,7 @@ const renderLabel = (string: string) => (
 const renderField = (children: string) => <Text fz="md">{children}</Text>;
 
 const StaffCard: React.FC<Props> = ({ staff }) => {
-  const [editOpened, { close: closeEditModal, open: openEditModal }] =
-    useDisclosure();
+  const [editOpened, { close: closeEditModal, open: openEditModal }] = useDisclosure();
 
   const handleClickDeleteStaff = () =>
     modals.openConfirmModal({
@@ -65,17 +60,10 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item
-                  icon={<IconEdit size={rem(14)} />}
-                  onClick={openEditModal}
-                >
+                <Menu.Item icon={<IconEdit size={rem(14)} />} onClick={openEditModal}>
                   Sửa thông tin
                 </Menu.Item>
-                <Menu.Item
-                  icon={<IconTrash size={rem(14)} />}
-                  color="red"
-                  onClick={handleClickDeleteStaff}
-                >
+                <Menu.Item icon={<IconTrash size={rem(14)} />} color="red" onClick={handleClickDeleteStaff}>
                   Xoá nhân viên
                 </Menu.Item>
               </Menu.Dropdown>
@@ -109,12 +97,7 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
       </Card>
 
       {staff ? (
-        <Modal
-          centered
-          opened={editOpened}
-          onClose={closeEditModal}
-          title="Sửa Thông Tin Nhân Viên"
-        >
+        <Modal centered opened={editOpened} onClose={closeEditModal} title="Sửa Thông Tin Nhân Viên">
           <EditStaffModal close={closeEditModal} staff={staff} />
         </Modal>
       ) : (
