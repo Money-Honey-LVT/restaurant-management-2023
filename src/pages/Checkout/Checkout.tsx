@@ -7,7 +7,7 @@ const Checkout = () => {
   const { items } = state;
   console.log(items);
 
-  return <div>{items[0].name}</div>;
+  return <div>{items[0]?.name ?? null}</div>;
 };
 
 export default Checkout;
