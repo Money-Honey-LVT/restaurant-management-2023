@@ -11,27 +11,15 @@ import { useCartContext } from '../../hooks/use-cart-context';
 import { FoodType } from '../../types/models/food';
 import { useNavigate } from 'react-router-dom';
 import ROUTER from '../../config/router';
+import { RootState } from '../../redux/reducer';
+import { useSelector } from 'react-redux';
 
 const Menu = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-
   const navigate = useNavigate();
   const { state } = useCartContext();
   const [openCart, setOpenCart] = useState(false);
-  const [fake, setFake] = useState<Food | null>(null);
-
-  useEffect(() => {
-    const fakeFood: Food = {
-      name: faker.commerce.productName(),
-      image: faker.image.food(undefined, undefined, true),
-      price: faker.datatype.number({
-        precision: 1000,
-      }),
-      description: faker.commerce.productDescription(),
-      type: FoodType.hotpot,
-    };
-    setFake(fakeFood);
-  }, []);
+  const [opened, { open, close }] = useDisclosure(false);
+  const { foods, isFetching } = useSelector((state: RootState) => state.food);
 
   return (
     <>
@@ -45,9 +33,9 @@ const Menu = () => {
           </Button>
         </Group>
         <Grid>
-          {randomArray(5).map((_, index) => (
+          {foods.map((item, index) => (
             <Grid.Col key={`food-card-${index}`} span={4}>
-              <FoodCard item={fake} />
+              <FoodCard item={item} />
             </Grid.Col>
           ))}
         </Grid>

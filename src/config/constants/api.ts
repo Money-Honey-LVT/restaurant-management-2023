@@ -55,4 +55,31 @@ export const API_URLS = {
       headers: HEADERS.authHeader(),
     }),
   },
+  FOOD: {
+    addFood: () => ({
+      endPoint: `${Schemas.FoodsSchema}`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+    getAllFood: () => ({
+      endPoint: `${Schemas.FoodsSchema}`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
+    editFood: (id: number) => ({
+      endPoint: `${Schemas.FoodsSchema}/${id}`,
+      method: 'PUT',
+      headers: HEADERS.authHeader(),
+    }),
+    getFoodById: (id: number) => ({
+      endPoint: `${Schemas.FoodsSchema}/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
+    deleteFood: (id: number) => ({
+      endPoint: `${Schemas.FoodsSchema}/${id}`,
+      method: 'DELETE',
+      headers: HEADERS.authHeader(),
+    }),
+  },
 };

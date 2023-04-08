@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { Food } from '../../types/models/food';
 import { CartAction, CartActionType } from './action';
 
-export type CartItem = Food & { quantity: number };
+export type CartItem = Partial<Food> & { quantity: number };
 
 type CartState = {
   items: CartItem[];

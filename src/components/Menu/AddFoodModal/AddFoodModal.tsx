@@ -10,9 +10,12 @@ import {
   Textarea,
   useMantineTheme,
 } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { foodActions } from '../../../reducers/food/food.action';
+import { FoodType, foodTypeOptions } from '../../../types/models/food';
 
 interface Props {
   close: () => void;
@@ -20,12 +23,13 @@ interface Props {
 
 const AddFoodModal: React.FC<Props> = ({ close }) => {
   const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     initialValues: {
       name: '',
       image: [] as FileWithPath[],
-      type: null,
+      type: FoodType.hotpot,
       description: '',
       price: 0,
     },
@@ -39,20 +43,28 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
   return (
     <form
       id="form-add-food"
-      onSubmit={form.onSubmit((values) => console.log(values))}
+      onSubmit={form.onSubmit((values) => {
+        const { name, description, image, price, type } = values;
+        dispatch(
+          foodActions.addFood(
+            { name, description, image: '', price, type, isBuffet: true },
+            {
+              onSuccess: () => {
+                close();
+                dispatch(foodActions.getAllFoods());
+              },
+            }
+          )
+        );
+      })}
     >
       <Flex direction="column" gap="sm">
-        <TextInput
-          withAsterisk
-          label="Tên món ăn"
-          placeholder="Nhập tên món ăn"
-          {...form.getInputProps('name')}
-        />
+        <TextInput withAsterisk label="Tên món ăn" placeholder="Nhập tên món ăn" {...form.getInputProps('name')} />
 
         <Group grow>
           <Select
             withAsterisk
-            data={[{ value: 'hot-pot', label: 'Lẩu' }]}
+            data={foodTypeOptions}
             placeholder="Chọn loại"
             label="Chọn loại món ăn"
             {...form.getInputProps('type')}
@@ -80,17 +92,9 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
             multiple={false}
             {...form.getInputProps('image')}
           >
-            <Group
-              position="center"
-              spacing="xs"
-              style={{ pointerEvents: 'none' }}
-            >
+            <Group position="center" spacing="xs" style={{ pointerEvents: 'none' }}>
               <Dropzone.Accept>
-                <IconUpload
-                  size="2rem"
-                  stroke={1.5}
-                  color={theme.colors[theme.primaryColor][6]}
-                />
+                <IconUpload size="2rem" stroke={1.5} color={theme.colors[theme.primaryColor][6]} />
               </Dropzone.Accept>
               <Dropzone.Reject>
                 <IconX size="2rem" stroke={1.5} color={theme.colors.red[6]} />
@@ -111,12 +115,7 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
           </Dropzone>
         </Stack>
 
-        <Textarea
-          placeholder="Nhập mô tả..."
-          label="Mô tả món ăn"
-          {...form.getInputProps('description')}
-          minRows={4}
-        />
+        <Textarea placeholder="Nhập mô tả..." label="Mô tả món ăn" {...form.getInputProps('description')} minRows={4} />
 
         <Group mt="sm" position="right">
           <Button variant="light" onClick={close}>
