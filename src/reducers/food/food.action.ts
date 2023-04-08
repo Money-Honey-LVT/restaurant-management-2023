@@ -70,4 +70,26 @@ const deleteFood =
     }
   };
 
-export const foodActions = { addFood, getAllFoods, deleteFood };
+const editFood =
+  (payload: Partial<Food>, cb?: Callback): FoodThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: FoodActionType.EDIT_FOOD_PENDING });
+
+    const api = API_URLS.FOOD.editFood(payload.id ? payload.id : 0);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: FoodActionType.EDIT_FOOD_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Sửa thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: FoodActionType.EDIT_FOOD_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const foodActions = { addFood, getAllFoods, deleteFood, editFood };

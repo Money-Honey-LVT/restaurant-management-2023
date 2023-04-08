@@ -1,18 +1,12 @@
-import {
-  Button,
-  Flex,
-  Group,
-  NumberInput,
-  Select,
-  TextInput,
-  Textarea,
-} from '@mantine/core';
+import { Button, Flex, Group, NumberInput, Select, TextInput, Textarea } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import React from 'react';
-import { Food } from '../../../types/models/food';
+import { Food, foodTypeOptions } from '../../../types/models/food';
 import lodash from 'lodash';
 import { notifications } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { foodActions } from '../../../reducers/food/food.action';
 
 interface Props {
   item: Food;
@@ -22,10 +16,13 @@ interface Props {
 const EditFoodModal: React.FC<Props> = ({ close, item }) => {
   const { description, id, image, isBuffet, name, price, type } = item;
 
+  const dispatch = useAppDispatch();
+
   const initialValues = {
     name,
     type,
     description,
+    image: '',
     price,
   };
 
@@ -53,22 +50,28 @@ const EditFoodModal: React.FC<Props> = ({ close, item }) => {
           });
           return;
         }
-        console.log(values);
+        const { description, name, price, type, image } = values;
+        dispatch(
+          foodActions.editFood(
+            { id: item.id, description, name, price, type, image },
+            {
+              onSuccess: () => {
+                close();
+                dispatch(foodActions.getAllFoods());
+              },
+            }
+          )
+        );
         close();
       })}
     >
       <Flex direction="column" gap="sm">
-        <TextInput
-          withAsterisk
-          label="Tên món ăn"
-          placeholder="Nhập tên món ăn"
-          {...form.getInputProps('name')}
-        />
+        <TextInput withAsterisk label="Tên món ăn" placeholder="Nhập tên món ăn" {...form.getInputProps('name')} />
 
         <Group grow>
           <Select
             withAsterisk
-            data={[{ value: 'hot-pot', label: 'Lẩu' }]}
+            data={foodTypeOptions}
             placeholder="Chọn loại"
             label="Chọn loại món ăn"
             {...form.getInputProps('type')}
@@ -127,18 +130,13 @@ const EditFoodModal: React.FC<Props> = ({ close, item }) => {
           </Dropzone>
         </Stack> */}
 
-        <Textarea
-          placeholder="Nhập mô tả..."
-          label="Mô tả món ăn"
-          {...form.getInputProps('description')}
-          minRows={4}
-        />
+        <Textarea placeholder="Nhập mô tả..." label="Mô tả món ăn" {...form.getInputProps('description')} minRows={4} />
 
         <Group mt="sm" position="right">
           <Button variant="light" onClick={close}>
             Huỷ bỏ
           </Button>
-          <Button type="submit">Thêm mới</Button>
+          <Button type="submit">Cập nhật</Button>
         </Group>
       </Flex>
     </form>
