@@ -1,5 +1,12 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
-import { IconBrandAirtable, IconListDetails, IconToolsKitchen2, IconUsers } from '@tabler/icons-react';
+import {
+  IconBrandAirtable,
+  IconListDetails,
+  IconToolsKitchen2,
+  IconUserCheck,
+  IconUserShare,
+  IconUsers,
+} from '@tabler/icons-react';
 import React from 'react';
 import ROUTER from '../../config/router';
 import { useNavigate } from 'react-router-dom';
@@ -62,6 +69,13 @@ const data = [
     color: 'violet',
     label: 'Quản Lý Bàn',
     to: ROUTER.NAV.TABLES.INDEX,
+    managerOnly: false,
+  },
+  {
+    icon: <IconUserShare size="1rem" />,
+    color: 'red',
+    label: 'Quản Lý Khách Hàng',
+    to: ROUTER.NAV.CUSTOMERS.INDEX,
     managerOnly: false,
   },
   {

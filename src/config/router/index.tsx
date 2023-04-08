@@ -17,6 +17,9 @@ const ROUTER = {
     TABLES: {
       INDEX: '/tables',
     },
+    CUSTOMERS: {
+      INDEX: '/customers',
+    },
     STAFFS: {
       INDEX: '/staffs',
     },
