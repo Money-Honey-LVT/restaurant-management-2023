@@ -11,6 +11,7 @@ import AuthRoutes from '../../pages/AuthRoutes/AuthRoutes';
 import MainLinks from '../MainLinks';
 import User from '../User';
 import { tableActions } from '../../reducers/table/table.action';
+import { foodActions } from '../../reducers/food/food.action';
 
 export default function AppLayout() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function AppLayout() {
 
   useEffect(() => {
     dispatch(tableActions.getAllTables());
+    dispatch(foodActions.getAllFoods());
   }, []);
 
   const handleLogout = () => {
