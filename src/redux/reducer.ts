@@ -2,11 +2,13 @@ import { Reducer, combineReducers } from 'redux';
 import authReducer from '../reducers/auth/auth.reducer';
 import tableReducer from '../reducers/table/table.reducer';
 import foodReducer from '../reducers/food/food.reducers';
+import orderReducer from '../reducers/order/order.reducers';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   table: tableReducer,
   food: foodReducer,
+  order: orderReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

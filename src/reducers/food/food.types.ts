@@ -104,4 +104,4 @@ export type FoodAction =
   | DeleteFoodPending
   | DeleteFoodSuccess;
 
-export type FoodThunkAction = ThunkAction<void, RootState, ArrayBuffer, FoodAction>;
+export type FoodThunkAction = ThunkAction<void, RootState, any, FoodAction>;
