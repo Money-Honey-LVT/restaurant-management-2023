@@ -77,12 +77,17 @@ const getColorByType = (type: notiType) => {
 };
 
 interface DecodedToken {
-  Role: string;
+  Role?: string;
 }
 
 export const decodeToken = (): DecodedToken => {
-  const token = localStorage.getItem('token')?.replace('Bearer ', '') || '';
-  return jwt_decode(token);
+  const token = localStorage.getItem('token');
+  if (token) {
+    return jwt_decode(token.replace('Bearer ', ''));
+  } else
+    return {
+      Role: '',
+    };
 };
 
 export const isManager = () => {
