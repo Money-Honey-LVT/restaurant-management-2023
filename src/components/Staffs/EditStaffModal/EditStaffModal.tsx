@@ -1,66 +1,87 @@
-import { Button, Flex, Group, Select, Stack, Text, TextInput, useMantineTheme } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Button, Flex, Group, NumberInput, Select, Stack, Text, TextInput, useMantineTheme } from '@mantine/core';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import React from 'react';
 import { Staff, StaffRole } from '../../../types/models/staff';
+import { Modify } from '../../../types/helpers';
+import { handleUploadImageOnFirebase } from '../../../utils/helpers';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { staffActions } from '../../../reducers/staff/staff.action';
+import lodash from 'lodash';
+import { notifications } from '@mantine/notifications';
 
 interface Props {
   staff: Staff;
   close: () => void;
 }
 
-const RoleOption = [
-  {
-    value: StaffRole.EMPLOYEE,
-    label: 'Nhân viên',
-  },
-  {
-    value: StaffRole.MANAGER,
-    label: 'Quản lý',
-  },
-];
-
 const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
   const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
 
-  const initialValues = {
-    fullName: staff.fullname,
+  const initialValues: Partial<Modify<Staff, { image: FileWithPath[] }>> = {
+    fullname: staff.fullname,
     salary: staff.salary,
-    role: staff.role,
     hiredDate: staff.hiredDate,
-    imgSrc: staff.imgSrc,
+    image: [],
   };
   const form = useForm({
     initialValues,
     validate: {
-      fullName: isNotEmpty('Bạn chưa nhập họ tên nhân viên!'),
+      fullname: isNotEmpty('Bạn chưa nhập họ tên nhân viên!'),
       salary: isNotEmpty('Bạn chưa nhập lương!'),
-      role: isNotEmpty('Bạn chưa chọn chức vụ!'),
     },
   });
-  const handleUpdateStaff = (formValue: object) => {
-    console.log(formValue);
+  const handleUpdateStaff = (values: Partial<Modify<Staff, { image: FileWithPath[] }>>) => {
+    console.log(values);
+    if (!values.image) return;
+    if (lodash.isEqual(values, initialValues)) {
+      notifications.show({
+        withCloseButton: true,
+        title: 'Thông báo',
+        message: 'Bạn chưa thay đổi thông tin!',
+        color: 'red',
+        icon: <IconX size={16} />,
+        autoClose: 1200,
+      });
+      return;
+    }
+    handleUploadImageOnFirebase(values.image[0], {
+      onSuccess: (url) => {
+        dispatch(
+          staffActions.editStaff(
+            {
+              fullname: values.fullname,
+              salary: values.salary,
+              image: url,
+            },
+            {
+              onSuccess: () => dispatch(staffActions.getAllStaffs()),
+            }
+          )
+        );
+      },
+    });
   };
 
   return (
-    <form onSubmit={(formValue) => handleUpdateStaff(formValue)}>
+    <form onSubmit={form.onSubmit((values) => handleUpdateStaff(values))}>
       <Flex direction={'column'} gap="sm">
         <TextInput
           withAsterisk
           label="Tên nhân viên"
           placeholder="Nhập tên nhân viên"
-          {...form.getInputProps('fullName')}
+          {...form.getInputProps('fullname')}
         />
 
-        <TextInput withAsterisk label="Mức lương" placeholder="Nhập mức lương" {...form.getInputProps('salary')} />
-
-        <Select
+        <NumberInput
+          defaultValue={0}
+          step={10000}
           withAsterisk
-          data={RoleOption}
-          placeholder="Chọn chức vụ"
-          label="Chức vụ"
-          {...form.getInputProps('role')}
+          label="Mức lương"
+          placeholder="Nhập mức lương"
+          {...form.getInputProps('salary')}
         />
 
         <Stack spacing={0}>

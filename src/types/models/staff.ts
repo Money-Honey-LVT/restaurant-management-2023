@@ -11,6 +11,6 @@ export interface Staff extends User {
 }
 
 export enum StaffRole {
-  EMPLOYEE = 'EMPLOYEE',
-  MANAGER = 'MANAGER',
+  EMPLOYEE = 'STAFF',
+  ADMIN = 'ADMIN',
 }

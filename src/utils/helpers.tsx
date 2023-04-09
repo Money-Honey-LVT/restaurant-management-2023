@@ -7,6 +7,7 @@ import consts from '../config/constants';
 import { storage } from '../config/firebase';
 
 import { v4 as uuidv4 } from 'uuid';
+import { Callback } from '../types/helpers/callback';
 
 export const randomArray = (number: number): number[] => Array.from({ length: number }, (_, i) => i + 1);
 
@@ -103,7 +104,7 @@ export const isManager = () => {
   return role === consts.ROLE_ADMIN ? true : false;
 };
 
-export const handleUploadImageOnFirebase = (file: File): Promise<string> => {
+export const handleUploadImageOnFirebase = (file: File, cb?: Callback): Promise<string> => {
   return new Promise((resolve, reject) => {
     const imageRef = ref(storage, `staffImages/${file.name} + ${uuidv4()}`);
     uploadBytes(imageRef, file)
@@ -112,6 +113,7 @@ export const handleUploadImageOnFirebase = (file: File): Promise<string> => {
       })
       .then((url) => {
         console.log(url); // Log the URL when it becomes available
+        cb?.onSuccess?.(url);
         const xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = (event) => {

@@ -11,18 +11,18 @@ import { StaffActionType, StaffThunkAction } from './staff.types';
 //   async (dispatch: AppDispatch) => {
 //     dispatch({ type: StaffActionType.ADD_STAFF_PENDING });
 
-//     const api = API_URLS.FOOD.addFood();
+//     const api = API_URLS.STAFF.addStaff();
 
 //     const { response, error } = await useCallApi({ ...api, payload });
 //     console.log(response);
 //     if (!error && response?.status === 200) {
 //       dispatch({
-//         type: FoodActionType.ADD_FOOD_SUCCESS,
+//         type: StaffActionType.ADD_STAFF_SUCCESS,
 //       });
 //       renderNotification('Thông báo', 'Thêm thành công!', notiType.SUCCESS);
 //       cb?.onSuccess?.();
 //     } else {
-//       dispatch({ type: FoodActionType.ADD_FOOD_FAILURE });
+//       dispatch({ type: StaffActionType.ADD_STAFF_FAILURE });
 //       renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
 //     }
 //   };
@@ -71,4 +71,26 @@ const deleteStaff =
     }
   };
 
-export const staffActions = { getAllStaffs, deleteStaff };
+const editStaff =
+  (payload: Partial<Staff>, cb?: Callback): StaffThunkAction =>
+  async (dispatch: AppDispatch) => {
+    if (!payload.username) return;
+    dispatch({ type: StaffActionType.EDIT_STAFF_PENDING });
+
+    const api = API_URLS.STAFF.editStaff(payload.username);
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: StaffActionType.EDIT_STAFF_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Sửa thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: StaffActionType.EDIT_STAFF_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const staffActions = { getAllStaffs, deleteStaff, editStaff };
