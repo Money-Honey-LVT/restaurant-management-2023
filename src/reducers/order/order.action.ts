@@ -49,4 +49,24 @@ const getAllOrders =
     }
   };
 
-export const orderActions = { addOrder, getAllOrders };
+const cancelOrder =
+  (id: number, cb?: Callback): OrderThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: OrderActionType.CANCEL_ORDER_PENDING });
+
+    const api = API_URLS.ORDER.cancelOrder(id);
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: OrderActionType.CANCEL_ORDER_SUCCESS,
+        payload: response.data,
+      });
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: OrderActionType.CANCEL_ORDER_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const orderActions = { addOrder, getAllOrders, cancelOrder };

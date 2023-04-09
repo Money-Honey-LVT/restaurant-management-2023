@@ -1,14 +1,18 @@
 import { DataTable } from 'mantine-datatable';
 import { DataTableColumn } from 'mantine-datatable/dist/types';
-import { Badge, Button, Group, Modal, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Button, Group, Modal, Stack, Text, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Order } from '../../types/models/order';
-import { IconPlus } from '@tabler/icons-react';
+import { Order, OrderStatus } from '../../types/models/order';
+import { IconCheck, IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import AddOrderModal from './AddOrderModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducer';
+import { IconEye } from '@tabler/icons-react';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { orderActions } from '../../reducers/order/order.action';
 
 const Orders = () => {
+  const dispatch = useAppDispatch();
   const [opened, { open, close }] = useDisclosure(false);
   const { isFetching, orders } = useSelector((state: RootState) => state.order);
 
@@ -22,12 +26,46 @@ const Orders = () => {
       title: 'Danh Sách Bàn Đặt',
       width: 200,
       render: (record) => {
-        console.log(record);
         return (
           <Group>
-            {record.orderTables.map((table) => (
-              <Badge>{table.name}</Badge>
+            {record.orderTables.map((table, index) => (
+              <Badge key={`order-${record.id}-table-${index}`}>{table.name}</Badge>
             ))}
+          </Group>
+        );
+      },
+    },
+    {
+      accessor: 'actions',
+      title: <Text mr="xs">Hành động</Text>,
+      render: (record) => {
+        return (
+          <Group spacing={0} position="left" noWrap>
+            <Tooltip label="Thêm món">
+              <ActionIcon color="blue" onClick={() => {}}>
+                <IconPlus size={16} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Thanh toán">
+              <ActionIcon color="green" onClick={() => {}}>
+                <IconCheck size={16} />
+              </ActionIcon>
+            </Tooltip>
+
+            {record.status !== OrderStatus.cancelled ? (
+              <ActionIcon
+                color="red"
+                onClick={() =>
+                  dispatch(
+                    orderActions.cancelOrder(record.id, {
+                      onSuccess: () => dispatch(orderActions.getAllOrders()),
+                    })
+                  )
+                }
+              >
+                <IconTrash size={16} />
+              </ActionIcon>
+            ) : null}
           </Group>
         );
       },

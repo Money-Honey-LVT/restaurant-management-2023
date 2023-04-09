@@ -72,11 +72,8 @@ export default function AppLayout() {
             <Group position="apart" sx={{ height: '100%' }} px={20}>
               <Group>
                 <Anchor href={ROUTER.HOME.INDEX}>
-                  <Image src={logo} height={32} width={32} />
+                  <Image src={logo} height={48} />
                 </Anchor>
-                <Text fw={700} color="red" span inherit>
-                  HAIDILAO HOTPOT
-                </Text>
               </Group>
               <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
                 Đăng xuất

@@ -12,4 +12,5 @@ export interface Order extends BaseModel {
 export enum OrderStatus {
   pending = 'PENDING',
   fulfilled = 'FULFILLED',
+  cancelled = 'CANCELLED',
 }

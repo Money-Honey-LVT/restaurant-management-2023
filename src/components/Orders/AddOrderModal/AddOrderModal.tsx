@@ -71,14 +71,22 @@ const AddOrderModal: React.FC<Props> = ({ close }) => {
           const { address, name, phone, tableIDS } = values;
           const ids = tableIDS.map((id) => Number(id));
           dispatch(
-            orderActions.addOrder({
-              customer: {
-                address,
-                name,
-                phone,
+            orderActions.addOrder(
+              {
+                customer: {
+                  address,
+                  name,
+                  phone,
+                },
+                tableIDS: ids,
               },
-              tableIDS: ids,
-            })
+              {
+                onSuccess: () => {
+                  dispatch(orderActions.getAllOrders());
+                  close();
+                },
+              }
+            )
           );
         })}
       >
