@@ -53,8 +53,15 @@ const data = [
   {
     icon: <IconToolsKitchen2 size="1rem" />,
     color: 'blue',
-    label: 'Menu/Tạo Đơn',
+    label: 'Menu Đồ Ăn',
     to: ROUTER.NAV.MENU.INDEX,
+    managerOnly: false,
+  },
+  {
+    icon: <IconBrandAirtable size="1rem" />,
+    color: 'violet',
+    label: 'Danh Sách Bàn',
+    to: ROUTER.NAV.TABLES.INDEX,
     managerOnly: false,
   },
   {
@@ -64,13 +71,7 @@ const data = [
     to: ROUTER.NAV.ORDERS.INDEX,
     managerOnly: false,
   },
-  {
-    icon: <IconBrandAirtable size="1rem" />,
-    color: 'violet',
-    label: 'Quản Lý Bàn',
-    to: ROUTER.NAV.TABLES.INDEX,
-    managerOnly: false,
-  },
+
   {
     icon: <IconUserShare size="1rem" />,
     color: 'red',
