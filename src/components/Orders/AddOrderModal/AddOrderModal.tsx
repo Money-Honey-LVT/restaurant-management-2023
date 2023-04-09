@@ -3,6 +3,7 @@ import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { Avatar, Button, Flex, Group, MultiSelect, Select, Text, TextInput, useMantineTheme } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { OrderStatus } from '../../../types/models/order';
+import { decodeToken } from '../../../utils/helpers';
 
 interface Props {
   close: () => void;
@@ -32,6 +33,9 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ image, label, descri
 const AddOrderModal: React.FC<Props> = ({ close }) => {
   const theme = useMantineTheme();
   const dispatch = useAppDispatch();
+
+  const decodedToken = decodeToken();
+  const { fullname, username } = decodedToken;
 
   const form = useForm({
     initialValues: {
@@ -87,13 +91,13 @@ const AddOrderModal: React.FC<Props> = ({ close }) => {
           {...form.getInputProps('orderTables')}
         />
 
-        <TextInput label="Nhân viên nhận đơn" disabled value={'Nguyễn Văn A Test'} />
+        <TextInput label="Nhân viên nhận đơn" disabled value={fullname ? fullname : username} />
 
         <Group mt="sm" position="right">
           <Button variant="light" onClick={close}>
             Huỷ bỏ
           </Button>
-          <Button type="submit">Thêm mới</Button>
+          <Button type="submit">Lên đơn</Button>
         </Group>
       </Flex>
     </form>

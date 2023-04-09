@@ -80,10 +80,10 @@ const Menu = () => {
                         </ActionIcon>
                       </Group>
                     ))}
-                    <Button onClick={() => navigate(ROUTER.HOME.CHECKOUT)}>Thanh toán</Button>
+                    <Button onClick={() => navigate(ROUTER.HOME.CHECKOUT)}>Cập nhật giỏ hàng</Button>
                   </>
                 ) : (
-                  <Text color="red">Đơn hàng trống</Text>
+                  <Text color="red">Giỏ hàng trống</Text>
                 )}
               </Stack>
             </Card>

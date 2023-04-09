@@ -16,6 +16,7 @@ const Orders = () => {
     { accessor: 'staffId', title: 'Nhân Viên Xác Nhận' },
     { accessor: 'status', title: 'Trạng Thái' },
     { accessor: 'isVoucher', title: 'Mã Giảm Giá' },
+    { accessor: 'orderTables', title: 'Danh Sách Bàn Đặt' },
   ];
 
   return (
@@ -39,7 +40,7 @@ const Orders = () => {
           records={[]}
         />
       </Stack>
-      <Modal zIndex={100} centered opened={opened} onClose={close} title="Lên Đơn">
+      <Modal zIndex={100} centered opened={opened} onClose={close} title="Thêm Đơn Hàng Mới">
         <AddOrderModal close={close} />
       </Modal>
     </>

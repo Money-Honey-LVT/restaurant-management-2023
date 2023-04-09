@@ -107,7 +107,7 @@ const FoodCard: React.FC<Props> = ({ item }) => {
             color="green"
             radius="md"
           >
-            Thêm vào đơn
+            Thêm vào giỏ hàng
           </Button>
         </Group>
       </Card>
@@ -126,7 +126,7 @@ const FoodCard: React.FC<Props> = ({ item }) => {
           <Button
             disabled={quantity <= 0}
             onClick={() => {
-              addCartItem({ quantity, name: item ? item.name : '' });
+              addCartItem({ quantity, name: item ? item.name : '', image: '', price: item ? item.price : 0 });
               notifications.show({
                 withCloseButton: true,
                 title: 'Thông báo',
