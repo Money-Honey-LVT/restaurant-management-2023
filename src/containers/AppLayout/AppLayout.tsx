@@ -4,7 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconLogout } from '@tabler/icons-react';
 import { Suspense, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import logo from '../../assets/svg/db.svg';
+import logo from '../../assets/img/logo.png';
 import ROUTER from '../../config/router';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import AuthRoutes from '../../pages/AuthRoutes/AuthRoutes';
@@ -69,7 +69,10 @@ export default function AppLayout() {
                   <Image src={logo} height={32} width={32} />
                 </Anchor>
                 <Text fw={600} fz="lg">
-                  Hệ Thống Quản Lý Nhà Hàng
+                  <Text color="red" span inherit>
+                    HAIDILAO HOT POT
+                  </Text>{' '}
+                  - Hệ Thống Quản Lý Nhà Hàng
                 </Text>
               </Group>
               <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>

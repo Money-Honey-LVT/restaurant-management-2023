@@ -1,6 +1,7 @@
 import { ActionIcon, Badge, Card, Grid, Group, Image, Stack, Text, Tooltip } from '@mantine/core';
 import { IconEdit } from '@tabler/icons-react';
 import React from 'react';
+import { decodeToken, parserRole } from '../../utils/helpers';
 
 const renderHeading = (children: string) => (
   <Text fz="md" fw={600}>
@@ -11,6 +12,9 @@ const renderHeading = (children: string) => (
 const renderField = (children: string) => <Text fz="md">{children}</Text>;
 
 const Profile = () => {
+  const decodedToken = decodeToken();
+  const { Role, fullname, id, image, iss, username } = decodedToken;
+
   return (
     <Stack>
       <Group position="apart">
@@ -38,23 +42,17 @@ const Profile = () => {
             </Grid.Col>
             <Grid.Col span={7}>
               <Stack h={300} justify="space-between" spacing="sm">
-                {renderField('Khu Đinh')}
-                {renderField('24/08/2001')}
-                {renderField('20/12/2022')}
-                {renderField('khudinh2001')}
-                {renderField('Nhân viên')}
+                {renderField(fullname ? fullname : 'Đang cập nhật...')}
+                {renderField('Đang cập nhật...')}
+                {renderField('Đang cập nhật...')}
+                {renderField(username ? username : 'Đang cập nhật...')}
+                {renderField(Role ? parserRole(Role) : 'Đang cập nhật...')}
               </Stack>
             </Grid.Col>
           </Grid>
         </Grid.Col>
         <Grid.Col span="content">
-          <Image
-            width={300}
-            height={300}
-            src={
-              'https://plus.unsplash.com/premium_photo-1664104028638-57ccb7c1aa31?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80'
-            }
-          />
+          <Image width={300} height={300} src={image} />
         </Grid.Col>
       </Grid>
     </Stack>

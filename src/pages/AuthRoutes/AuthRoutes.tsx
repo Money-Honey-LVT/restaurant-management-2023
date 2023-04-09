@@ -8,7 +8,6 @@ interface Props {
 }
 const AuthRoutes = ({ children }: Props) => {
   const decodedToken = decodeToken();
-  console.log(isObject(decodedToken) && 'id' in decodedToken);
   return !(isObject(decodedToken) && 'id' in decodedToken) ? <Navigate to={ROUTER.AUTH.LOGIN} /> : <>{children}</>;
 };
 

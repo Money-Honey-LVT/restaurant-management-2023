@@ -1,10 +1,13 @@
 import { Avatar, Box, Group, Text, UnstyledButton, rem, useMantineTheme } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import ROUTER from '../../config/router';
+import { decodeToken, parserRole } from '../../utils/helpers';
 
 const User = () => {
   const navigate = useNavigate();
   const theme = useMantineTheme();
+  const decodedToken = decodeToken();
+  const { Role, fullname, id, image, iss, username } = decodedToken;
 
   return (
     <Box
@@ -27,16 +30,13 @@ const User = () => {
         }}
       >
         <Group onClick={() => navigate(ROUTER.AUTH.PROFILE)}>
-          <Avatar
-            src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-            radius="xl"
-          />
+          <Avatar src={image} radius="xl" />
           <Box sx={{ flex: 1 }}>
             <Text size="sm" weight={500}>
-              Nguyễn Văn A
+              {fullname ? fullname : username}
             </Text>
             <Text color="dimmed" size="xs">
-              Quản lý nhà hàng
+              {parserRole(Role)}
             </Text>
           </Box>
         </Group>

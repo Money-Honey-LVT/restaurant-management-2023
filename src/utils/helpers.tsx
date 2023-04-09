@@ -35,9 +35,9 @@ export const getColorByRole = (role: string | undefined) => {
 export const parserRole = (value: string | undefined) => {
   switch (value) {
     case consts.ROLE_ADMIN:
-      return 'Manager';
+      return 'Quản lý';
     case consts.ROLE_STAFF:
-      return 'Employee';
+      return 'Nhân viên';
     default:
       return '';
   }
@@ -78,6 +78,13 @@ const getColorByType = (type: notiType) => {
 
 interface DecodedToken {
   Role?: string;
+  aud?: string;
+  exp?: number;
+  fullname?: string;
+  id?: string;
+  image?: string;
+  iss?: string;
+  username?: string;
 }
 
 export const decodeToken = (): DecodedToken => {

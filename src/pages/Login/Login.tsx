@@ -1,4 +1,16 @@
-import { BackgroundImage, Box, Button, Card, Center, Grid, MediaQuery, Stack, Text, TextInput } from '@mantine/core';
+import {
+  BackgroundImage,
+  Box,
+  Button,
+  Card,
+  Center,
+  Grid,
+  Image,
+  MediaQuery,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconLock } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +18,7 @@ import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { authActions } from '../../reducers/auth/auth.action';
 import { LoginValues } from '../../reducers/auth/auth.types';
 import bg from '../../assets/img/haidilao-bg.jpeg';
+import logo from '../../assets/img/logo.png';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -46,6 +59,9 @@ const Login = () => {
       </MediaQuery>
       <Grid.Col xs={12} md={5}>
         <Stack spacing="xs">
+          <Center>
+            <Image src={logo} height={56} width={56} />
+          </Center>
           <Text align="center" fw="700" fz={28}>
             ĐĂNG NHẬP
           </Text>
@@ -67,7 +83,7 @@ const Login = () => {
                     icon={<IconLock size={14} />}
                     {...form.getInputProps('password')}
                   />
-                  <Button variant="filled" fullWidth type="submit">
+                  <Button color="red" variant="filled" fullWidth type="submit">
                     Đăng nhập
                   </Button>
                 </Stack>
