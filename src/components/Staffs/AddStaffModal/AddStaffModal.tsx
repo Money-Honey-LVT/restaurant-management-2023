@@ -1,74 +1,74 @@
-import { Button, Flex, Group, Select, Stack, Text, TextInput, useMantineTheme } from '@mantine/core';
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Button, Flex, Group, NumberInput, TextInput, useMantineTheme } from '@mantine/core';
+import { FileWithPath } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
-import { StaffRole } from '../../../types/models/staff';
-import { handleUploadImageOnFirebase } from '../../../utils/helpers';
+import { IconLock } from '@tabler/icons-react';
+import { Modify } from '../../../types/helpers';
+import { Staff } from '../../../types/models/staff';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { authActions } from '../../../reducers/auth/auth.action';
 
 interface Props {
   close: () => void;
 }
 
-interface AddStaffFormValue {
-  fullName?: string;
-  salary?: string;
-  role?: null;
-  image: FileWithPath[];
-}
-
-const RoleOption = [
-  {
-    value: StaffRole.EMPLOYEE,
-    label: 'Nhân viên',
-  },
-  {
-    value: StaffRole.MANAGER,
-    label: 'Quản lý',
-  },
-];
-
 const AddStaffModal: React.FC<Props> = ({ close }) => {
+  const dispatch = useAppDispatch();
+
+  const initialValues: Partial<Staff> = {
+    username: '',
+    fullname: '',
+    salary: 0,
+    password: '',
+  };
+
   const form = useForm({
-    initialValues: {
-      fullName: '',
-      salary: '',
-      role: null,
-      image: [] as FileWithPath[],
-    },
+    initialValues,
     validate: {
-      fullName: isNotEmpty('Bạn chưa nhập họ tên nhân viên!'),
+      fullname: isNotEmpty('Bạn chưa nhập họ tên nhân viên!'),
       salary: isNotEmpty('Bạn chưa nhập lương!'),
-      role: isNotEmpty('Bạn chưa chọn chức vụ!'),
     },
   });
-  const theme = useMantineTheme();
 
-  const handleAddNewStaff = async (value: AddStaffFormValue) => {
-    console.log(value);
-    const url = await handleUploadImageOnFirebase(value.image[0]);
-    console.log(url);
+  // const handleAddNewStaff = async (value: AddStaffFormValue) => {
+  //   console.log(value);
+  //   const url = await handleUploadImageOnFirebase(value.image[0]);
+  //   console.log(url);
+  // };
+
+  const handleAddNewStaff = (values: Partial<Staff>) => {
+    console.log(values);
+    dispatch(authActions.signUp(values));
   };
+
   return (
-    <form onSubmit={form.onSubmit((value) => handleAddNewStaff(value))}>
+    <form onSubmit={form.onSubmit((values) => handleAddNewStaff(values))}>
       <Flex direction={'column'} gap="sm">
+        <TextInput
+          withAsterisk
+          label="Tên tài khoản"
+          placeholder="Nhập tên tài khoản"
+          {...form.getInputProps('username')}
+        />
+
+        <TextInput label="Mật khẩu" type="password" icon={<IconLock size={14} />} {...form.getInputProps('password')} />
+
         <TextInput
           withAsterisk
           label="Tên nhân viên"
           placeholder="Nhập tên nhân viên"
-          {...form.getInputProps('fullName')}
+          {...form.getInputProps('fullname')}
         />
 
-        <TextInput withAsterisk label="Mức lương" placeholder="Nhập mức lương" {...form.getInputProps('salary')} />
-
-        <Select
+        <NumberInput
+          defaultValue={0}
           withAsterisk
-          data={RoleOption}
-          placeholder="Chọn chức vụ"
-          label="Chức vụ"
-          {...form.getInputProps('role')}
+          step={10000}
+          label="Mức lương"
+          placeholder="Nhập mức lương"
+          {...form.getInputProps('salary')}
         />
 
-        <Stack spacing={0}>
+        {/* <Stack spacing={0}>
           <Text fw={600} fz="sm">
             Ảnh đại diện
           </Text>
@@ -104,7 +104,7 @@ const AddStaffModal: React.FC<Props> = ({ close }) => {
               </Stack>
             </Group>
           </Dropzone>
-        </Stack>
+        </Stack> */}
 
         <Group mt="sm" position="right">
           <Button variant="light" onClick={close}>

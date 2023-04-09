@@ -8,16 +8,21 @@ const initialState: AuthState = {
 
 const authReducer: Reducer<AuthState, AuthAction> = (state = initialState, action) => {
   switch (action.type) {
-    case AuthActionType.LOGIN_PENDING: {
+    case AuthActionType.LOGIN_PENDING:
+    case AuthActionType.SIGNUP_PENDING: {
       return { ...state, isFetching: true };
     }
     //
-    case AuthActionType.LOGIN_FAILURE: {
+    case AuthActionType.LOGIN_FAILURE:
+    case AuthActionType.SIGNUP_FAILURE: {
       return { ...state, isFetching: false };
     }
     //
     case AuthActionType.LOGIN_SUCCESS: {
       return { ...state, isFetching: false, user: action.payload };
+    }
+    case AuthActionType.SIGNUP_SUCCESS: {
+      return { ...state, isFetching: false };
     }
     //
     default:

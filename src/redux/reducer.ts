@@ -4,12 +4,14 @@ import tableReducer from '../reducers/table/table.reducer';
 import foodReducer from '../reducers/food/food.reducers';
 import orderReducer from '../reducers/order/order.reducers';
 import customerReducer from '../reducers/customer/customer.reducers';
+import staffReducer from '../reducers/staff/staff.reducers';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   table: tableReducer,
   food: foodReducer,
   order: orderReducer,
+  staff: staffReducer,
   customer: customerReducer,
 });
 

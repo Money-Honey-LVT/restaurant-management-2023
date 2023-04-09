@@ -1,83 +1,66 @@
-import React, { FormEvent } from "react";
-import { Staff, StaffRole } from "../../../types/models/staff";
-import { isNotEmpty, useForm } from "@mantine/form";
-import {
-    Button,
-    Flex,
-    Group,
-    NumberInput,
-    Select,
-    Stack,
-    Text,
-    TextInput,
-    Textarea,
-    useMantineTheme,
-  } from "@mantine/core";
-  import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from "@mantine/dropzone";
-  import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
+import { Button, Flex, Group, Select, Stack, Text, TextInput, useMantineTheme } from '@mantine/core';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { isNotEmpty, useForm } from '@mantine/form';
+import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
+import React from 'react';
+import { Staff, StaffRole } from '../../../types/models/staff';
 
 interface Props {
-    staff: Staff,
-    close: () => void;
+  staff: Staff;
+  close: () => void;
 }
 
 const RoleOption = [
-    {
-      value: StaffRole.EMPLOYEE,
-      label: "Nhân viên",
+  {
+    value: StaffRole.EMPLOYEE,
+    label: 'Nhân viên',
+  },
+  {
+    value: StaffRole.MANAGER,
+    label: 'Quản lý',
+  },
+];
+
+const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
+  const theme = useMantineTheme();
+
+  const initialValues = {
+    fullName: staff.fullname,
+    salary: staff.salary,
+    role: staff.role,
+    hiredDate: staff.hiredDate,
+    imgSrc: staff.imgSrc,
+  };
+  const form = useForm({
+    initialValues,
+    validate: {
+      fullName: isNotEmpty('Bạn chưa nhập họ tên nhân viên!'),
+      salary: isNotEmpty('Bạn chưa nhập lương!'),
+      role: isNotEmpty('Bạn chưa chọn chức vụ!'),
     },
-    {
-      value: StaffRole.MANAGER,
-      label: "Quản lý",
-    },
-  ];
+  });
+  const handleUpdateStaff = (formValue: object) => {
+    console.log(formValue);
+  };
 
-const EditStaffModal: React.FC<Props> = ({staff, close}) => {
-    const theme = useMantineTheme();
-
-    const initialValues = {
-        fullName: staff.fullName,
-        salary: staff.salary,
-        role: staff.role,
-        hiredDate: staff.hiredDate,
-        imgSrc: staff.imgSrc,
-    }
-    const form = useForm({
-        initialValues,
-        validate: {
-            fullName: isNotEmpty("Bạn chưa nhập họ tên nhân viên!"),
-            salary: isNotEmpty("Bạn chưa nhập lương!"),
-			role: isNotEmpty("Bạn chưa chọn chức vụ!")
-        }
-    })
-    const handleUpdateStaff = (formValue: object) => {
-
-        console.log(formValue)
-    }
-    
-    return (
-        <form onSubmit={(formValue) => handleUpdateStaff(formValue)}>
-            <Flex direction={"column"} gap="sm">
+  return (
+    <form onSubmit={(formValue) => handleUpdateStaff(formValue)}>
+      <Flex direction={'column'} gap="sm">
         <TextInput
           withAsterisk
           label="Tên nhân viên"
           placeholder="Nhập tên nhân viên"
-          {...form.getInputProps("fullName")}
+          {...form.getInputProps('fullName')}
         />
 
-        <TextInput
-          withAsterisk
-          label="Mức lương"
-          placeholder="Nhập mức lương"
-          {...form.getInputProps("salary")}
-        />
+        <TextInput withAsterisk label="Mức lương" placeholder="Nhập mức lương" {...form.getInputProps('salary')} />
 
         <Select
           withAsterisk
           data={RoleOption}
           placeholder="Chọn chức vụ"
           label="Chức vụ"
-          {...form.getInputProps("role")}
+          {...form.getInputProps('role')}
         />
 
         <Stack spacing={0}>
@@ -85,24 +68,16 @@ const EditStaffModal: React.FC<Props> = ({staff, close}) => {
             Ảnh đại điện
           </Text>
           <Dropzone
-            onDrop={(files) => form.setFieldValue("image", files)}
-            onReject={(files) => console.log("rejected files", files)}
+            onDrop={(files) => form.setFieldValue('image', files)}
+            onReject={(files) => console.log('rejected files', files)}
             maxSize={3 * 1024 ** 2}
             accept={IMAGE_MIME_TYPE}
             multiple={false}
-            {...form.getInputProps("image")}
+            {...form.getInputProps('image')}
           >
-            <Group
-              position="center"
-              spacing="xs"
-              style={{ pointerEvents: "none" }}
-            >
+            <Group position="center" spacing="xs" style={{ pointerEvents: 'none' }}>
               <Dropzone.Accept>
-                <IconUpload
-                  size="2rem"
-                  stroke={1.5}
-                  color={theme.colors[theme.primaryColor][6]}
-                />
+                <IconUpload size="2rem" stroke={1.5} color={theme.colors[theme.primaryColor][6]} />
               </Dropzone.Accept>
               <Dropzone.Reject>
                 <IconX size="2rem" stroke={1.5} color={theme.colors.red[6]} />
@@ -130,8 +105,8 @@ const EditStaffModal: React.FC<Props> = ({staff, close}) => {
           <Button type="submit">Thêm mới</Button>
         </Group>
       </Flex>
-        </form>
-    )
-}
+    </form>
+  );
+};
 
-export default EditStaffModal
+export default EditStaffModal;

@@ -17,6 +17,11 @@ export const HEADERS = {
 
 export const API_URLS = {
   AUTH: {
+    signup: () => ({
+      endPoint: `${Schemas.StaffsSchema}/signup`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
     LOGIN: () => ({
       endPoint: `${Schemas.StaffsSchema}/login`,
       method: 'POST',
@@ -101,6 +106,23 @@ export const API_URLS = {
 
     deleteCustomer: (id: number) => ({
       endPoint: `${Schemas.CustomersSchema}/${id}`,
+      method: 'DELETE',
+      headers: HEADERS.authHeader(),
+    }),
+  },
+  STAFF: {
+    editStaff: (username: string) => ({
+      endPoint: `${Schemas.StaffsSchema}/${username}/profile`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+    getAllStaffs: () => ({
+      endPoint: `${Schemas.StaffsSchema}`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
+    deleteStaff: (id: number) => ({
+      endPoint: `${Schemas.StaffsSchema}/${id}`,
       method: 'DELETE',
       headers: HEADERS.authHeader(),
     }),

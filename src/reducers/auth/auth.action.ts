@@ -7,6 +7,7 @@ import { data } from '../../components/Home/Home';
 import ROUTER from '../../config/router';
 import consts from '../../config/constants';
 import { notiType, renderNotification } from '../../utils/helpers';
+import { Staff } from '../../types/models/staff';
 
 const setUser = (data: any) => {
   localStorage.setItem('token', data.token);
@@ -22,7 +23,7 @@ const Login =
     const api = API_URLS.AUTH.LOGIN();
 
     const { response, error } = await useCallApi({ ...api, payload });
-    console.log(response);
+
     if (!error && response?.status === 200) {
       const data = response.data;
       dispatch({
@@ -44,6 +45,30 @@ const Login =
     }
   };
 
+const signUp =
+  (payload: Partial<Staff>): AuthThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: AuthActionType.SIGNUP_PENDING });
+
+    const api = API_URLS.AUTH.signup();
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      const data = response.data;
+      dispatch({
+        type: AuthActionType.SIGNUP_SUCCESS,
+        payload: data,
+      });
+      renderNotification('Thông báo', 'Đăng nhập thành công', notiType.SUCCESS);
+    } else {
+      dispatch({
+        type: AuthActionType.SIGNUP_FAILURE,
+      });
+      errorHandler(error);
+    }
+  };
+
 export const authActions = {
   Login,
+  signUp,
 };

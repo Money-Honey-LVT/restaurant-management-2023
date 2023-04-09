@@ -1,33 +1,16 @@
 import { Button, Grid, Group, Modal, Stack, Text } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
-import React, { useEffect, useState } from 'react';
-import { randomArray } from '../../utils/helpers';
-import StaffCard from './StaffCard';
 import { useDisclosure } from '@mantine/hooks';
-import { Staff } from '../../types/models/staff';
-import { faker } from '@faker-js/faker';
-import { StaffRole } from '../../types/models/staff';
+import { IconPlus } from '@tabler/icons-react';
+import { randomArray } from '../../utils/helpers';
 import AddStaffModal from './AddStaffModal/AddStaffModal';
+import StaffCard from './StaffCard';
+import { RootState } from '../../redux/reducer';
+import { useSelector } from 'react-redux';
 
 const Staffs = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const [fake, setFake] = useState<Staff | null>(null);
-
-  useEffect(() => {
-    const fakeFood: Staff = {
-      fullName: faker.helpers.fake('{{name.firstName}} {{name.lastName}}'),
-      role: StaffRole.EMPLOYEE,
-      imgSrc: faker.image.people(),
-      salary: faker.datatype.number({
-        max: 50000000,
-        min: 3000000,
-        precision: 5000,
-      }),
-      hiredDate: '2020-01-01T00:00:00.000Z',
-    };
-    setFake(fakeFood);
-  }, []);
+  const { staffs, isFetching } = useSelector((state: RootState) => state.staff);
 
   return (
     <>
@@ -41,9 +24,9 @@ const Staffs = () => {
           </Button>
         </Group>
         <Grid>
-          {randomArray(5).map((_, index) => (
+          {staffs.map((_, index) => (
             <Grid.Col key={`food-card-${index}`} span={6}>
-              <StaffCard staff={fake} />
+              <StaffCard staff={_} />
             </Grid.Col>
           ))}
         </Grid>

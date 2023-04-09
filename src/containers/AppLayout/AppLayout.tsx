@@ -12,6 +12,7 @@ import MainLinks from '../MainLinks';
 import User from '../User';
 import { tableActions } from '../../reducers/table/table.action';
 import { foodActions } from '../../reducers/food/food.action';
+import { staffActions } from '../../reducers/staff/staff.action';
 
 export default function AppLayout() {
   const navigate = useNavigate();
@@ -19,8 +20,9 @@ export default function AppLayout() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(tableActions.getAllTables());
     dispatch(foodActions.getAllFoods());
+    dispatch(tableActions.getAllTables());
+    dispatch(staffActions.getAllStaffs());
   }, []);
 
   const handleLogout = () => {

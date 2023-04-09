@@ -17,7 +17,7 @@ import { modals } from '@mantine/modals';
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons-react';
 import React from 'react';
 import { Staff } from '../../../types/models/staff';
-import { formatCurrency, formatDateFromISOString, getColorByRole } from '../../../utils/helpers';
+import { formatCurrency, formatDateFromISOString, getColorByRole, parserRole } from '../../../utils/helpers';
 import EditStaffModal from '../EditStaffModal/EditStaffModal';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -40,7 +40,7 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
     modals.openConfirmModal({
       title: `Xác nhận xoá nhân viên`,
       centered: true,
-      children: <Text c={'red'}>Xác nhận xoá nhân viên {staff?.fullName}</Text>,
+      children: <Text c={'red'}>Xác nhận xoá nhân viên {staff?.fullname}</Text>,
       labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
       onCancel: () => console.log('Cancel'),
       onConfirm: () => console.log('Xoa nhan vien', staff?.id),
@@ -51,7 +51,7 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section withBorder inheritPadding py="xs">
           <Group position="apart">
-            <Text weight={500}>{staff?.fullName}</Text>
+            <Text weight={500}>{staff?.fullname || '(Đang cập nhật...)'}</Text>
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>
                 <ActionIcon>
@@ -77,19 +77,19 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
           <Grid m="xs" gutter={32} style={{ flex: '1' }}>
             <Grid.Col span={5}>
               <Stack spacing={'sm'}>
-                {renderLabel('Họ tên')}
+                {renderLabel('Tài khoản')}
                 {renderLabel('Chức vụ')}
-                {renderLabel('Ngày vào làm')}
+                {renderLabel('Vào làm')}
                 {renderLabel('Lương')}
               </Stack>
             </Grid.Col>
 
             <Grid.Col span={7} px={0}>
               <Stack spacing={'sm'}>
-                {renderField(staff?.fullName || '')}
-                {renderField(staff?.role || '')}
-                {renderField(formatDateFromISOString(staff?.hiredDate))}
-                {renderField(formatCurrency(staff?.salary))}
+                {renderField(staff?.username || '(Đang cập nhật...)')}
+                {renderField(parserRole(staff?.role) || '(Đang cập nhật...)')}
+                {renderField(formatDateFromISOString(staff?.hiredDate) || '(Đang cập nhật...)')}
+                {renderField(formatCurrency(staff?.salary) || '(Đang cập nhật...)')}
               </Stack>
             </Grid.Col>
           </Grid>
