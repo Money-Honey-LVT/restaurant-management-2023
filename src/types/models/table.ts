@@ -6,4 +6,8 @@ export interface Table extends BaseModel {
   status: TableStatus;
 }
 
-export type TableStatus = 0 | 1 | 2;
+export enum TableStatus {
+  FREE = 'FREE',
+  BLOCKED = 'BLOCKED',
+  BOOKED = 'BOOKED',
+}

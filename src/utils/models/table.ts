@@ -1,13 +1,15 @@
+import { TableStatus } from '../../types/models/table';
+
 export const TableDict = {
-  0: {
+  [TableStatus.FREE]: {
     badgeColor: 'green',
     localeStatus: 'Trống',
   },
-  1: {
+  [TableStatus.BOOKED]: {
     badgeColor: 'orange',
     localeStatus: 'Đã đặt',
   },
-  2: {
+  [TableStatus.BLOCKED]: {
     badgeColor: 'red',
     localeStatus: 'Bị khoá',
   },

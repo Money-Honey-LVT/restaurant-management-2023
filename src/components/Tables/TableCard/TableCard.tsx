@@ -69,12 +69,8 @@ const TableCard: React.FC<Props> = ({ item }) => {
 
         <Group position="apart" mt="md" mb="xs">
           <Text>{item?.capacity} chỗ ngồi</Text>
-          <Badge
-            color={item && !isNaN(item.status) ? (TableDict[item.status].badgeColor as any) : undefined}
-            size="lg"
-            variant="light"
-          >
-            {item && !isNaN(item.status) ? TableDict[item.status].localeStatus : null}
+          <Badge color={item ? (TableDict[item.status].badgeColor as any) : undefined} size="lg" variant="light">
+            {item ? TableDict[item.status].localeStatus : null}
           </Badge>
         </Group>
       </Card>
