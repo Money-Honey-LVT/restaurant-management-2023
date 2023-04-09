@@ -1,24 +1,11 @@
-import {
-  BackgroundImage,
-  Box,
-  Button,
-  Card,
-  Center,
-  Grid,
-  Image,
-  MediaQuery,
-  Stack,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { BackgroundImage, Box, Button, Card, Center, Grid, MediaQuery, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconLock } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { authActions } from '../../reducers/auth/auth.action';
-import { useNavigate } from 'react-router-dom';
 import { LoginValues } from '../../reducers/auth/auth.types';
-import { FormEventHandler } from 'react';
-import { FormEvent } from 'react';
+import bg from '../../assets/img/haidilao-bg.jpeg';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -47,11 +34,7 @@ const Login = () => {
     <Grid style={{ height: '100vh' }} align="center" justify="center">
       <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
         <Grid.Col p={0} md={7}>
-          <BackgroundImage
-            src={
-              'https://images.unsplash.com/photo-1543286386-2e659306cd6c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-            }
-          >
+          <BackgroundImage src={bg}>
             <Box
               sx={{
                 minHeight: '100vh',
