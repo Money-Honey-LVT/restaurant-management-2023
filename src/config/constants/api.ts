@@ -82,4 +82,27 @@ export const API_URLS = {
       headers: HEADERS.authHeader(),
     }),
   },
+  CUSTOMER: {
+    addCustomer: () => ({
+      endPoint: `${Schemas.CustomersSchema}`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+    getAllCustomers: () => ({
+      endPoint: `${Schemas.CustomersSchema}`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
+    editCustomer: (id: number) => ({
+      endPoint: `${Schemas.CustomersSchema}/${id}`,
+      method: 'PUT',
+      headers: HEADERS.authHeader(),
+    }),
+
+    deleteCustomer: (id: number) => ({
+      endPoint: `${Schemas.CustomersSchema}/${id}`,
+      method: 'DELETE',
+      headers: HEADERS.authHeader(),
+    }),
+  },
 };

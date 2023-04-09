@@ -68,11 +68,8 @@ export default function AppLayout() {
                 <Anchor href={ROUTER.HOME.INDEX}>
                   <Image src={logo} height={32} width={32} />
                 </Anchor>
-                <Text fw={600} fz="lg">
-                  <Text color="red" span inherit>
-                    HAIDILAO HOT POT
-                  </Text>{' '}
-                  - Hệ Thống Quản Lý Nhà Hàng
+                <Text fw={700} color="red" span inherit>
+                  HAIDILAO HOT POT
                 </Text>
               </Group>
               <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
