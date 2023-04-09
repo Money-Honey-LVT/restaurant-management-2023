@@ -1,6 +1,17 @@
 import React, { forwardRef } from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-import { Avatar, Button, Flex, Group, MultiSelect, Select, Text, TextInput, useMantineTheme } from '@mantine/core';
+import {
+  Avatar,
+  Button,
+  Flex,
+  Group,
+  MultiSelect,
+  Select,
+  Space,
+  Text,
+  TextInput,
+  useMantineTheme,
+} from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { OrderStatus } from '../../../types/models/order';
 import { decodeToken } from '../../../utils/helpers';
@@ -92,6 +103,8 @@ const AddOrderModal: React.FC<Props> = ({ close }) => {
         />
 
         <TextInput label="Nhân viên nhận đơn" disabled value={fullname ? fullname : username} />
+
+        <Space h={72} />
 
         <Group mt="sm" position="right">
           <Button variant="light" onClick={close}>
