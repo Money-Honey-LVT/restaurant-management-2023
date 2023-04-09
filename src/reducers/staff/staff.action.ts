@@ -49,4 +49,26 @@ const getAllStaffs =
     }
   };
 
-export const staffActions = { getAllStaffs };
+const deleteStaff =
+  (payload: number, cb?: Callback): StaffThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: StaffActionType.DELETE_STAFF_PENDING });
+
+    const api = API_URLS.STAFF.deleteStaff(payload);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: StaffActionType.DELETE_STAFF_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Xoá thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: StaffActionType.DELETE_STAFF_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const staffActions = { getAllStaffs, deleteStaff };

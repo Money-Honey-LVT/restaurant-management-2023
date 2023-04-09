@@ -20,6 +20,8 @@ import { Staff } from '../../../types/models/staff';
 import { formatCurrency, formatDateFromISOString, getColorByRole, parserRole } from '../../../utils/helpers';
 import EditStaffModal from '../EditStaffModal/EditStaffModal';
 import { useDisclosure } from '@mantine/hooks';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { staffActions } from '../../../reducers/staff/staff.action';
 
 interface Props {
   staff: Staff | null;
@@ -34,17 +36,17 @@ const renderLabel = (string: string) => (
 const renderField = (children: string) => <Text fz="md">{children}</Text>;
 
 const StaffCard: React.FC<Props> = ({ staff }) => {
+  const dispatch = useAppDispatch();
   const [editOpened, { close: closeEditModal, open: openEditModal }] = useDisclosure();
 
-  const handleClickDeleteStaff = () =>
-    modals.openConfirmModal({
-      title: `Xác nhận xoá nhân viên`,
-      centered: true,
-      children: <Text c={'red'}>Xác nhận xoá nhân viên {staff?.fullname}</Text>,
-      labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
-      onCancel: () => console.log('Cancel'),
-      onConfirm: () => console.log('Xoa nhan vien', staff?.id),
-    });
+  const handleClickDeleteStaff = () => {
+    if (!staff) return;
+    dispatch(
+      staffActions.deleteStaff(staff?.id, {
+        onSuccess: () => dispatch(staffActions.getAllStaffs()),
+      })
+    );
+  };
 
   return (
     <>
@@ -72,7 +74,7 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
         </Card.Section>
 
         <Group mt="md" mb="xs">
-          <Avatar src={staff?.imgSrc || ''} size={150} />
+          <Avatar src={staff?.image || ''} size={150} />
 
           <Grid m="xs" gutter={32} style={{ flex: '1' }}>
             <Grid.Col span={5}>
