@@ -1,40 +1,25 @@
-import React, { forwardRef } from 'react';
-import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-import {
-  Avatar,
-  Button,
-  Flex,
-  Group,
-  MultiSelect,
-  Select,
-  Space,
-  Text,
-  TextInput,
-  useMantineTheme,
-} from '@mantine/core';
+import { Box, Button, Flex, Group, MultiSelect, Select, SelectItemProps, Space, Text, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { OrderStatus } from '../../../types/models/order';
+import React, { forwardRef, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { RootState } from '../../../redux/reducer';
+import { Customer } from '../../../types/models/customer';
+import { Table } from '../../../types/models/table';
 import { decodeToken } from '../../../utils/helpers';
+import { orderActions } from '../../../reducers/order/order.action';
 
 interface Props {
   close: () => void;
 }
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  image: string;
-  label: string;
-  description: string;
-}
-
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ image, label, description, ...others }: ItemProps, ref) => (
-  <div ref={ref} {...others}>
+const SelectItem = forwardRef<HTMLDivElement, Customer & { value: string }>(({ name, phone, value }, ref) => (
+  <div ref={ref}>
     <Group noWrap>
-      <Avatar src={image} />
-
       <div>
-        <Text size="sm">{label}</Text>
+        <Text size="sm">{name}</Text>
         <Text size="xs" opacity={0.65}>
-          {description}
+          {phone}
         </Text>
       </div>
     </Group>
@@ -42,106 +27,105 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ image, label, descri
 ));
 
 const AddOrderModal: React.FC<Props> = ({ close }) => {
-  const theme = useMantineTheme();
   const dispatch = useAppDispatch();
+  const { tables, isFetching: isFetchingTable } = useSelector((state: RootState) => state.table);
+
+  const tableData = useMemo(() => tables.map((table) => ({ value: table.id.toString(), label: table.name })), [tables]);
 
   const decodedToken = decodeToken();
   const { fullname, username } = decodedToken;
 
   const form = useForm({
     initialValues: {
-      customerId: 0,
-      staffId: 0,
-      status: OrderStatus.pending,
-      isVoucher: false,
-      orderTables: [],
+      name: '',
+      phone: '',
+      address: '',
+      tableIDS: [],
     },
     validate: {
-      customerId: isNotEmpty('Khách hàng không thể bỏ trống!'),
-      orderTables: isNotEmpty('Bạn chưa chọn bàn cho khách hàng!'),
+      name: isNotEmpty('Tên khách hàng không thể bỏ trống!'),
+      phone: isNotEmpty('Số điệnthoại khách hàng không thể bỏ trống!'),
+      address: isNotEmpty('Địa chỉ khách hàng không thể bỏ trống!'),
+      tableIDS: isNotEmpty('Bạn chưa chọn bàn cho khách hàng!'),
     },
   });
 
+  const ItemTable = forwardRef<HTMLDivElement, SelectItemProps & Partial<Table>>(
+    ({ label, value, capacity, ...others }, ref) => {
+      return (
+        <div ref={ref} {...others}>
+          <Flex align="center">
+            <div>{label}</div>
+            <div>{capacity}</div>
+          </Flex>
+        </div>
+      );
+    }
+  );
+
   return (
-    <form id="form-add-modal">
-      <Flex direction="column" gap="sm">
-        <Select
-          zIndex={1000}
-          label="Khách hàng"
-          placeholder="Chọn hoặc khách hàng"
-          itemComponent={SelectItem}
-          data={data}
-          searchable
-          nothingFound="Nobody here"
-          filter={(value, item) =>
-            item?.label?.toLowerCase().includes(value.toLowerCase().trim()) ||
-            item?.description?.toLowerCase().includes(value.toLowerCase().trim())
-          }
-          creatable
-          getCreateLabel={(query) => `+ Tạo khách hàng ${query}`}
-          onCreate={(query) => {
-            console.log(query);
-            return null;
-            // const item = { value: query, label: query };
-            // setData((current) => [...current, item]);
-            // return item;
-          }}
-          {...form.getInputProps('customerId')}
-        />
+    <>
+      <form
+        id="form-add-modal"
+        onSubmit={form.onSubmit((values) => {
+          const { address, name, phone, tableIDS } = values;
+          const ids = tableIDS.map((id) => Number(id));
+          dispatch(
+            orderActions.addOrder({
+              customer: {
+                address,
+                name,
+                phone,
+              },
+              tableIDS: ids,
+            })
+          );
+        })}
+      >
+        <Flex direction="column" gap="sm">
+          <TextInput
+            withAsterisk
+            label="Tên khách hàng"
+            placeholder="Nhập tên khách hàng"
+            {...form.getInputProps('name')}
+          />
 
-        <MultiSelect
-          zIndex={100000}
-          label="Bàn"
-          placeholder="Chọn bàn đặt"
-          data={[
-            { value: '1', label: '1' },
-            { value: '2', label: '2' },
-            { value: '3', label: '3' },
-            { value: '4', label: '4' },
-          ]}
-          {...form.getInputProps('orderTables')}
-        />
+          <TextInput
+            withAsterisk
+            label="Số điện thoại"
+            placeholder="Nhập số điện thoại khách hàng"
+            {...form.getInputProps('phone')}
+          />
 
-        <TextInput label="Nhân viên nhận đơn" disabled value={fullname ? fullname : username} />
+          <TextInput
+            withAsterisk
+            label="Địa chỉ"
+            placeholder="Nhập dịa chỉ khách hàng"
+            {...form.getInputProps('address')}
+          />
 
-        <Space h={72} />
+          <MultiSelect
+            withAsterisk
+            zIndex={100000}
+            label="Bàn"
+            placeholder="Chọn bàn đặt"
+            data={tableData}
+            itemComponent={ItemTable}
+            {...form.getInputProps('tableIDS')}
+          />
 
-        <Group mt="sm" position="right">
-          <Button variant="light" onClick={close}>
-            Huỷ bỏ
-          </Button>
-          <Button type="submit">Lên đơn</Button>
-        </Group>
-      </Flex>
-    </form>
+          <TextInput withAsterisk label="Nhân viên nhận đơn" disabled value={fullname ? fullname : username} />
+
+          <Group mt="sm" position="right">
+            <Button variant="light" onClick={close}>
+              Huỷ bỏ
+            </Button>
+            <Button type="submit">Lên đơn</Button>
+          </Group>
+        </Flex>
+      </form>
+    </>
   );
 };
 
 export default AddOrderModal;
-
-const data = [
-  {
-    image: 'https://img.icons8.com/clouds/256/000000/futurama-bender.png',
-    label: 'Nguyễn Ngọc Quý',
-    value: '0918322965',
-    description: '0918322965',
-  },
-  {
-    image: 'https://img.icons8.com/clouds/256/000000/futurama-bender.png',
-    label: 'Nguyễn Ngọc Quý',
-    value: '0918322965',
-    description: '0918322965',
-  },
-  {
-    image: 'https://img.icons8.com/clouds/256/000000/futurama-bender.png',
-    label: 'Nguyễn Ngọc Quý',
-    value: '0918322965',
-    description: '0918322965',
-  },
-  {
-    image: 'https://img.icons8.com/clouds/256/000000/futurama-bender.png',
-    label: 'Nguyễn Ngọc Quý',
-    value: '0918322965',
-    description: '0918322965',
-  },
-];

@@ -27,4 +27,24 @@ const addCustomer =
     }
   };
 
-export const customerActions = { addCustomer };
+const getAllCustomers =
+  (cb?: Callback): CustomerThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: CustomerActionType.GET_ALL_CUSTOMERS_PENDING });
+
+    const api = API_URLS.CUSTOMER.getAllCustomers();
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: CustomerActionType.GET_ALL_CUSTOMERS_SUCCESS,
+        payload: response.data,
+      });
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: CustomerActionType.GET_ALL_CUSTOMERS_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const customerActions = { addCustomer, getAllCustomers };

@@ -3,4 +3,5 @@ export enum Schemas {
   TablesSchema = 'Tables',
   FoodsSchema = 'Foods',
   CustomersSchema = 'Customers',
+  OrdersSchema = 'Orders',
 }

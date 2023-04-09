@@ -11,15 +11,17 @@ const orderReducer: Reducer<OrderState, OrderAction> = (state = initialState, ac
     case OrderActionType.ADD_ORDER_PENDING:
     case OrderActionType.DELETE_ORDER_PENDING:
     case OrderActionType.GET_ALL_ORDERS_PENDING:
-    case OrderActionType.EDIT_ORDER_PENDING:
-    case OrderActionType.GET_ORDER_BY_ID_PENDING:
+    case OrderActionType.CANCEL_ORDER_PENDING:
+    case OrderActionType.ORDER_FOOD_PENDING:
+    case OrderActionType.MAKE_PAYMENT_PENDING:
       return { ...state, isFetching: true };
 
     case OrderActionType.ADD_ORDER_FAILURE:
     case OrderActionType.DELETE_ORDER_FAILURE:
     case OrderActionType.GET_ALL_ORDERS_FAILURE:
-    case OrderActionType.EDIT_ORDER_FAILURE:
-    case OrderActionType.GET_ORDER_BY_ID_FAILURE:
+    case OrderActionType.CANCEL_ORDER_FAILURE:
+    case OrderActionType.ORDER_FOOD_FAILURE:
+    case OrderActionType.MAKE_PAYMENT_FAILURE:
       return { ...state, isFetching: false };
 
     case OrderActionType.ADD_ORDER_SUCCESS:
@@ -28,11 +30,12 @@ const orderReducer: Reducer<OrderState, OrderAction> = (state = initialState, ac
       return { ...state, isFetching: false };
     case OrderActionType.GET_ALL_ORDERS_SUCCESS:
       return { ...state, isFetching: false, orders: action.payload };
-    case OrderActionType.EDIT_ORDER_SUCCESS:
+    case OrderActionType.CANCEL_ORDER_SUCCESS:
       return { ...state, isFetching: false };
-    case OrderActionType.GET_ORDER_BY_ID_SUCCESS:
+    case OrderActionType.ORDER_FOOD_SUCCESS:
       return { ...state, isFetching: false };
-
+    case OrderActionType.MAKE_PAYMENT_SUCCESS:
+      return { ...state, isFetching: false };
     default:
       return state;
   }

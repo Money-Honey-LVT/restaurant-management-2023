@@ -12,9 +12,8 @@ const addFood =
     dispatch({ type: FoodActionType.ADD_FOOD_PENDING });
 
     const api = API_URLS.FOOD.addFood();
-
     const { response, error } = await useCallApi({ ...api, payload });
-    console.log(response);
+
     if (!error && response?.status === 200) {
       dispatch({
         type: FoodActionType.ADD_FOOD_SUCCESS,

@@ -16,17 +16,21 @@ export enum OrderActionType {
   GET_ALL_ORDERS_SUCCESS = 'GET_ALL_ORDERS_SUCCESS',
   GET_ALL_ORDERS_FAILURE = 'GET_ALL_ORDERS_FAILURE',
 
-  EDIT_ORDER_PENDING = 'EDIT_ORDER_PENDING',
-  EDIT_ORDER_SUCCESS = 'EDIT_ORDER_SUCCESS',
-  EDIT_ORDER_FAILURE = 'EDIT_ORDER_FAILURE',
-
   DELETE_ORDER_PENDING = 'DELETE_ORDER_PENDING',
   DELETE_ORDER_SUCCESS = 'DELETE_ORDER_SUCCESS',
   DELETE_ORDER_FAILURE = 'DELETE_ORDER_FAILURE',
 
-  GET_ORDER_BY_ID_PENDING = 'GET_ORDER_BY_ID_PENDING',
-  GET_ORDER_BY_ID_SUCCESS = ' GET_ORDER_BY_ID_SUCCESS',
-  GET_ORDER_BY_ID_FAILURE = 'GET_ORDER_BY_ID_FAILURE',
+  CANCEL_ORDER_PENDING = 'CANCEL_ORDER_PENDING',
+  CANCEL_ORDER_SUCCESS = 'CANCEL_ORDER_SUCCESS',
+  CANCEL_ORDER_FAILURE = 'CANCEL_ORDER_FAILURE',
+
+  ORDER_FOOD_PENDING = 'ORDER_FOOD_PENDING',
+  ORDER_FOOD_SUCCESS = 'ORDER_FOOD_SUCCESS',
+  ORDER_FOOD_FAILURE = 'ORDER_FOOD_FAILURE',
+
+  MAKE_PAYMENT_PENDING = 'MAKE_PAYMENT_PENDING',
+  MAKE_PAYMENT_SUCCESS = 'MAKE_PAYMENT_SUCCESS',
+  MAKE_PAYMENT_FAILURE = 'MAKE_PAYMENT_FAILURE',
 }
 
 //
@@ -53,18 +57,6 @@ export interface GetAllOrdersFailure {
 }
 
 //
-export interface EditOrderPending {
-  type: OrderActionType.EDIT_ORDER_PENDING;
-}
-export interface EditOrderSuccess {
-  type: OrderActionType.EDIT_ORDER_SUCCESS;
-  payload: Order;
-}
-export interface EditOrderFailure {
-  type: OrderActionType.EDIT_ORDER_FAILURE;
-}
-
-//
 export interface DeleteOrderPending {
   type: OrderActionType.DELETE_ORDER_PENDING;
 }
@@ -76,15 +68,36 @@ export interface DeleteOrderFailure {
 }
 
 //
-export interface GetOrderByIdPending {
-  type: OrderActionType.GET_ORDER_BY_ID_PENDING;
+export interface CancelOrderPending {
+  type: OrderActionType.CANCEL_ORDER_PENDING;
 }
-export interface GetOrderByIdSuccess {
-  type: OrderActionType.GET_ORDER_BY_ID_SUCCESS;
-  payload: Order;
+export interface CancelOrderSuccess {
+  type: OrderActionType.CANCEL_ORDER_SUCCESS;
 }
-export interface GetOrderByIdFailure {
-  type: OrderActionType.GET_ORDER_BY_ID_FAILURE;
+export interface CancelOrderFailure {
+  type: OrderActionType.CANCEL_ORDER_FAILURE;
+}
+
+//
+export interface OrderFoodPending {
+  type: OrderActionType.ORDER_FOOD_PENDING;
+}
+export interface OrderFoodSuccess {
+  type: OrderActionType.ORDER_FOOD_SUCCESS;
+}
+export interface OrderFoodFailure {
+  type: OrderActionType.ORDER_FOOD_FAILURE;
+}
+
+//
+export interface MakePaymentPending {
+  type: OrderActionType.MAKE_PAYMENT_PENDING;
+}
+export interface MakePaymentSuccess {
+  type: OrderActionType.MAKE_PAYMENT_SUCCESS;
+}
+export interface MakePaymentFailure {
+  type: OrderActionType.MAKE_PAYMENT_FAILURE;
 }
 
 export type OrderAction =
@@ -94,14 +107,17 @@ export type OrderAction =
   | GetAllOrdersFailure
   | GetAllOrdersPending
   | GetAllOrdersSuccess
-  | EditOrderFailure
-  | EditOrderPending
-  | EditOrderSuccess
-  | GetOrderByIdFailure
-  | GetOrderByIdPending
-  | GetOrderByIdSuccess
   | DeleteOrderFailure
   | DeleteOrderPending
-  | DeleteOrderSuccess;
+  | DeleteOrderSuccess
+  | CancelOrderPending
+  | CancelOrderFailure
+  | CancelOrderSuccess
+  | OrderFoodFailure
+  | OrderFoodPending
+  | OrderFoodSuccess
+  | MakePaymentFailure
+  | MakePaymentPending
+  | MakePaymentSuccess;
 
 export type OrderThunkAction = ThunkAction<void, RootState, any, OrderAction>;

@@ -23,7 +23,7 @@ const customerReducer: Reducer<CustomerState, CustomerAction> = (state = initial
     case CustomerActionType.ADD_CUSTOMER_SUCCESS:
       return { ...state, isFetching: false };
     case CustomerActionType.GET_ALL_CUSTOMERS_SUCCESS:
-      return { ...state, isFetching: false, foods: action.payload };
+      return { ...state, isFetching: false, customers: action.payload };
     case CustomerActionType.EDIT_CUSTOMER_SUCCESS:
       return { ...state, isFetching: false };
     case CustomerActionType.DELETE_CUSTOMER_SUCCESS:

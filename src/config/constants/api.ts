@@ -103,7 +103,6 @@ export const API_URLS = {
       method: 'PUT',
       headers: HEADERS.authHeader(),
     }),
-
     deleteCustomer: (id: number) => ({
       endPoint: `${Schemas.CustomersSchema}/${id}`,
       method: 'DELETE',
@@ -124,6 +123,33 @@ export const API_URLS = {
     deleteStaff: (id: number) => ({
       endPoint: `${Schemas.StaffsSchema}/${id}`,
       method: 'DELETE',
+      headers: HEADERS.authHeader(),
+    }),
+  },
+  ORDER: {
+    addOrder: () => ({
+      endPoint: `${Schemas.OrdersSchema}`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+    getAllOrders: () => ({
+      endPoint: `${Schemas.OrdersSchema}`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
+    cancelOrder: (id: number) => ({
+      endPoint: `${Schemas.OrdersSchema}/${id}/cancel`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+    orderFood: (id: number) => ({
+      endPoint: `${Schemas.OrdersSchema}/${id}/order-food`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+    makePayment: (id: number) => ({
+      endPoint: `${Schemas.OrdersSchema}/${id}/payment`,
+      method: 'POST',
       headers: HEADERS.authHeader(),
     }),
   },

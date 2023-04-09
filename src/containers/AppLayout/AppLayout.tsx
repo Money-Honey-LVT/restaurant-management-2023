@@ -13,6 +13,8 @@ import User from '../User';
 import { tableActions } from '../../reducers/table/table.action';
 import { foodActions } from '../../reducers/food/food.action';
 import { staffActions } from '../../reducers/staff/staff.action';
+import { customerActions } from '../../reducers/customer/customer.action';
+import { orderActions } from '../../reducers/order/order.action';
 
 export default function AppLayout() {
   const navigate = useNavigate();
@@ -23,6 +25,8 @@ export default function AppLayout() {
     dispatch(foodActions.getAllFoods());
     dispatch(tableActions.getAllTables());
     dispatch(staffActions.getAllStaffs());
+    dispatch(customerActions.getAllCustomers());
+    dispatch(orderActions.getAllOrders());
   }, []);
 
   const handleLogout = () => {
