@@ -16,6 +16,7 @@ import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { foodActions } from '../../../reducers/food/food.action';
 import { FoodType, foodTypeOptions } from '../../../types/models/food';
+import { handleUploadImageOnFirebase } from '../../../utils/helpers';
 
 interface Props {
   close: () => void;
@@ -45,17 +46,22 @@ const AddFoodModal: React.FC<Props> = ({ close }) => {
       id="form-add-food"
       onSubmit={form.onSubmit((values) => {
         const { name, description, image, price, type } = values;
-        dispatch(
-          foodActions.addFood(
-            { name, description, image: '', price, type, isBuffet: true },
-            {
-              onSuccess: () => {
-                close();
-                dispatch(foodActions.getAllFoods());
-              },
-            }
-          )
-        );
+        console.log(values);
+        handleUploadImageOnFirebase(image[0], {
+          onSuccess: (url) => {
+            dispatch(
+              foodActions.addFood(
+                { name, description, image: url, price, type, isBuffet: true },
+                {
+                  onSuccess: () => {
+                    close();
+                    dispatch(foodActions.getAllFoods());
+                  },
+                }
+              )
+            );
+          },
+        });
       })}
     >
       <Flex direction="column" gap="sm">

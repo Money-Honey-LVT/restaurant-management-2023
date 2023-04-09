@@ -1,18 +1,14 @@
-import { faker } from '@faker-js/faker/locale/vi';
 import { ActionIcon, Affix, Button, Card, Grid, Group, Modal, Stack, Text, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus, IconShoppingCart, IconTrash } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
-import { Food } from '../../types/models/food';
-import { randomArray } from '../../utils/helpers';
-import AddFoodModal from './AddFoodModal';
-import FoodCard from './FoodCard';
-import { useCartContext } from '../../hooks/use-cart-context';
-import { FoodType } from '../../types/models/food';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ROUTER from '../../config/router';
+import { useCartContext } from '../../hooks/use-cart-context';
 import { RootState } from '../../redux/reducer';
-import { useSelector } from 'react-redux';
+import AddFoodModal from './AddFoodModal';
+import FoodCard from './FoodCard';
 
 const Menu = () => {
   const navigate = useNavigate();
