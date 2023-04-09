@@ -1,13 +1,12 @@
 import { NavigateFunction } from 'react-router-dom';
-import { AuthActionType, AuthThunkAction, LoginValues } from './auth.types';
-import { AppDispatch } from '../../redux/store';
 import { API_URLS } from '../../config/constants/api';
-import { errorHandler, useCallApi } from '../../utils/api';
-import { data } from '../../components/Home/Home';
 import ROUTER from '../../config/router';
-import consts from '../../config/constants';
-import { notiType, renderNotification } from '../../utils/helpers';
+import { AppDispatch } from '../../redux/store';
+import { Callback } from '../../types/helpers/callback';
 import { Staff } from '../../types/models/staff';
+import { errorHandler, useCallApi } from '../../utils/api';
+import { notiType, renderNotification } from '../../utils/helpers';
+import { AuthActionType, AuthThunkAction, LoginValues } from './auth.types';
 
 const setUser = (data: any) => {
   localStorage.setItem('token', data.token);
@@ -46,7 +45,7 @@ const Login =
   };
 
 const signUp =
-  (payload: Partial<Staff>): AuthThunkAction =>
+  (payload: Partial<Staff>, cb?: Callback): AuthThunkAction =>
   async (dispatch: AppDispatch) => {
     dispatch({ type: AuthActionType.SIGNUP_PENDING });
 
@@ -59,7 +58,8 @@ const signUp =
         type: AuthActionType.SIGNUP_SUCCESS,
         payload: data,
       });
-      renderNotification('Thông báo', 'Đăng nhập thành công', notiType.SUCCESS);
+      cb?.onSuccess?.(data);
+      renderNotification('Thông báo', 'Đăng ký thành công', notiType.SUCCESS);
     } else {
       dispatch({
         type: AuthActionType.SIGNUP_FAILURE,

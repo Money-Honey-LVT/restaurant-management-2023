@@ -43,7 +43,10 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
     if (!staff) return;
     dispatch(
       staffActions.deleteStaff(staff?.id, {
-        onSuccess: () => dispatch(staffActions.getAllStaffs()),
+        onSuccess: () => {
+          dispatch(staffActions.getAllStaffs());
+          close();
+        },
       })
     );
   };

@@ -6,6 +6,7 @@ import { Modify } from '../../../types/helpers';
 import { Staff } from '../../../types/models/staff';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { authActions } from '../../../reducers/auth/auth.action';
+import { staffActions } from '../../../reducers/staff/staff.action';
 
 interface Props {
   close: () => void;
@@ -37,11 +38,18 @@ const AddStaffModal: React.FC<Props> = ({ close }) => {
 
   const handleAddNewStaff = (values: Partial<Staff>) => {
     console.log(values);
-    dispatch(authActions.signUp(values));
+    dispatch(
+      authActions.signUp(values, {
+        onSuccess: () => {
+          dispatch(staffActions.getAllStaffs());
+          close();
+        },
+      })
+    );
   };
 
   return (
-    <form onSubmit={form.onSubmit((values) => handleAddNewStaff(values))}>
+    <form id="add-staff-form" onSubmit={form.onSubmit((values) => handleAddNewStaff(values))}>
       <Flex direction={'column'} gap="sm">
         <TextInput
           withAsterisk
