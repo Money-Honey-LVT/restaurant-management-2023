@@ -1,12 +1,25 @@
-import { Button, Flex, Group, NumberInput, Select, TextInput, Textarea } from '@mantine/core';
+import {
+  Button,
+  Flex,
+  Group,
+  NumberInput,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  Textarea,
+  useMantineTheme,
+} from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import React from 'react';
 import { Food, foodTypeOptions } from '../../../types/models/food';
 import lodash from 'lodash';
 import { notifications } from '@mantine/notifications';
-import { IconX } from '@tabler/icons-react';
+import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { foodActions } from '../../../reducers/food/food.action';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { handleUploadImageOnFirebase } from '../../../utils/helpers';
 
 interface Props {
   item: Food;
@@ -14,17 +27,12 @@ interface Props {
 }
 
 const EditFoodModal: React.FC<Props> = ({ close, item }) => {
-  const { description, id, image, isBuffet, name, price, type } = item;
+  const { description, image, name, price, type } = item;
 
+  const theme = useMantineTheme();
   const dispatch = useAppDispatch();
 
-  const initialValues = {
-    name,
-    type,
-    description,
-    image: '',
-    price,
-  };
+  const initialValues: Partial<Food> = { name, type, description, image, price };
 
   const form = useForm({
     initialValues,
@@ -39,6 +47,7 @@ const EditFoodModal: React.FC<Props> = ({ close, item }) => {
     <form
       id="form-edit-food"
       onSubmit={form.onSubmit((values) => {
+        if (!values.image) return;
         if (lodash.isEqual(values, initialValues)) {
           notifications.show({
             withCloseButton: true,
@@ -87,29 +96,25 @@ const EditFoodModal: React.FC<Props> = ({ close, item }) => {
           />
         </Group>
 
-        {/* <Stack spacing={0}>
+        <Stack spacing={0}>
           <Text fw={600} fz="sm">
             Ảnh món ăn
           </Text>
           <Dropzone
-            onDrop={(files) => form.setFieldValue('image', files)}
+            onDrop={(files) => {
+              handleUploadImageOnFirebase(files[0], {
+                onSuccess: (url) => form.setFieldValue('image', url),
+              });
+            }}
             onReject={(files) => console.log('rejected files', files)}
             maxSize={3 * 1024 ** 2}
             accept={IMAGE_MIME_TYPE}
             multiple={false}
             {...form.getInputProps('image')}
           >
-            <Group
-              position="center"
-              spacing="xs"
-              style={{ pointerEvents: 'none' }}
-            >
+            <Group position="center" spacing="xs" style={{ pointerEvents: 'none' }}>
               <Dropzone.Accept>
-                <IconUpload
-                  size="2rem"
-                  stroke={1.5}
-                  color={theme.colors[theme.primaryColor][6]}
-                />
+                <IconUpload size="2rem" stroke={1.5} color={theme.colors[theme.primaryColor][6]} />
               </Dropzone.Accept>
               <Dropzone.Reject>
                 <IconX size="2rem" stroke={1.5} color={theme.colors.red[6]} />
@@ -128,7 +133,7 @@ const EditFoodModal: React.FC<Props> = ({ close, item }) => {
               </Stack>
             </Group>
           </Dropzone>
-        </Stack> */}
+        </Stack>
 
         <Textarea placeholder="Nhập mô tả..." label="Mô tả món ăn" {...form.getInputProps('description')} minRows={4} />
 

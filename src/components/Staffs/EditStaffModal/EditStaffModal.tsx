@@ -20,12 +20,10 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
   const theme = useMantineTheme();
   const dispatch = useAppDispatch();
 
-  const initialValues: Partial<Modify<Staff, { image: FileWithPath[] }>> = {
-    fullname: staff.fullname,
-    salary: staff.salary,
-    hiredDate: staff.hiredDate,
-    image: [],
-  };
+  const { fullname, salary, image, username } = staff;
+
+  const initialValues: Partial<Staff> = { fullname, salary, image };
+
   const form = useForm({
     initialValues,
     validate: {
@@ -33,7 +31,8 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
       salary: isNotEmpty('Bạn chưa nhập lương!'),
     },
   });
-  const handleUpdateStaff = (values: Partial<Modify<Staff, { image: FileWithPath[] }>>) => {
+
+  const handleUpdateStaff = (values: Partial<Staff>) => {
     if (!values.image) return;
     if (lodash.isEqual(values, initialValues)) {
       notifications.show({
@@ -46,30 +45,26 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
       });
       return;
     }
-    handleUploadImageOnFirebase(values.image[0], {
-      onSuccess: (url) => {
-        dispatch(
-          staffActions.editStaff(
-            {
-              username: staff.username,
-              fullname: values.fullname,
-              salary: values.salary,
-              image: url,
-            },
-            {
-              onSuccess: () => {
-                dispatch(staffActions.getAllStaffs());
-                close();
-              },
-            }
-          )
-        );
-      },
-    });
+    dispatch(
+      staffActions.editStaff(
+        {
+          username,
+          fullname: values.fullname,
+          salary: values.salary,
+          image: values.image,
+        },
+        {
+          onSuccess: () => {
+            dispatch(staffActions.getAllStaffs());
+            close();
+          },
+        }
+      )
+    );
   };
 
   return (
-    <form onSubmit={form.onSubmit((values) => handleUpdateStaff(values))}>
+    <form id="form-edit-staff" onSubmit={form.onSubmit((values) => handleUpdateStaff(values))}>
       <Flex direction={'column'} gap="sm">
         <TextInput
           withAsterisk
@@ -92,7 +87,11 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
             Ảnh đại điện
           </Text>
           <Dropzone
-            onDrop={(files) => form.setFieldValue('image', files)}
+            onDrop={(files) => {
+              handleUploadImageOnFirebase(files[0], {
+                onSuccess: (url) => form.setFieldValue('image', url),
+              });
+            }}
             onReject={(files) => console.log('rejected files', files)}
             maxSize={3 * 1024 ** 2}
             accept={IMAGE_MIME_TYPE}
