@@ -34,7 +34,6 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
     },
   });
   const handleUpdateStaff = (values: Partial<Modify<Staff, { image: FileWithPath[] }>>) => {
-    console.log(values);
     if (!values.image) return;
     if (lodash.isEqual(values, initialValues)) {
       notifications.show({
@@ -52,12 +51,16 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
         dispatch(
           staffActions.editStaff(
             {
+              username: staff.username,
               fullname: values.fullname,
               salary: values.salary,
               image: url,
             },
             {
-              onSuccess: () => dispatch(staffActions.getAllStaffs()),
+              onSuccess: () => {
+                dispatch(staffActions.getAllStaffs());
+                close();
+              },
             }
           )
         );

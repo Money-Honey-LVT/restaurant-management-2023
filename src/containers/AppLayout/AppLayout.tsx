@@ -71,7 +71,7 @@ export default function AppLayout() {
                   <Image src={logo} height={32} width={32} />
                 </Anchor>
                 <Text fw={700} color="red" span inherit>
-                  HAIDILAO HOT POT
+                  HAIDILAO HOTPOT
                 </Text>
               </Group>
               <Button onClick={handleLogout} variant="subtle" color="red" leftIcon={<IconLogout size={20} />}>
