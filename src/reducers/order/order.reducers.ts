@@ -9,6 +9,7 @@ const initialState: OrderState = {
 const orderReducer: Reducer<OrderState, OrderAction> = (state = initialState, action) => {
   switch (action.type) {
     case OrderActionType.ADD_ORDER_PENDING:
+    case OrderActionType.GET_VOUCHER_PENDING:
     case OrderActionType.DETAIL_FOOD_PENDING:
     case OrderActionType.DELETE_ORDER_PENDING:
     case OrderActionType.GET_ALL_ORDERS_PENDING:
@@ -18,6 +19,7 @@ const orderReducer: Reducer<OrderState, OrderAction> = (state = initialState, ac
       return { ...state, isFetching: true };
 
     case OrderActionType.ADD_ORDER_FAILURE:
+    case OrderActionType.GET_VOUCHER_FAILURE:
     case OrderActionType.DELETE_ORDER_FAILURE:
     case OrderActionType.GET_ALL_ORDERS_FAILURE:
     case OrderActionType.CANCEL_ORDER_FAILURE:
@@ -26,6 +28,8 @@ const orderReducer: Reducer<OrderState, OrderAction> = (state = initialState, ac
     case OrderActionType.DETAIL_FOOD_FAILURE:
       return { ...state, isFetching: false };
 
+    case OrderActionType.GET_VOUCHER_SUCCESS:
+      return { ...state, isFetching: false };
     case OrderActionType.ADD_ORDER_SUCCESS:
       return { ...state, isFetching: false };
     case OrderActionType.DETAIL_FOOD_SUCCESS:

@@ -157,5 +157,10 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader(),
     }),
+    voucher: (id: number) => ({
+      endPoint: `Vouchers/${id}`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
   },
 };

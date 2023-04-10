@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { IconCheck, IconInfoCircle, IconPlus, IconTrash } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
-import { DataTableColumn } from 'mantine-datatable/dist/types';
+import { DataTableColumn, DataTableSortStatus } from 'mantine-datatable/dist/types';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { orderActions } from '../../reducers/order/order.action';
@@ -13,12 +13,14 @@ import AddOrderModal from './AddOrderModal';
 import AddFoodToOrderModal from './AddFoodToOrderModal/AddFoodToOrderModal';
 import { useState } from 'react';
 import OrderFoodDetailModal from './OrderFoodDetailModal/OrderFoodDetailModal';
+import PaymentModal from './PaymentModal/PaymentModal';
 
 const Orders = () => {
   const dispatch = useAppDispatch();
   const [opened, { open, close }] = useDisclosure(false);
   const [openedAddFoodToOrder, { open: openAddFoodToOrder, close: closeAddFoodToOrder }] = useDisclosure(false);
   const [openedOrderFoodDetail, { open: openOrderFoodDetail, close: closeOrderFoodDetail }] = useDisclosure(false);
+  const [openedPayment, { open: openPayment, close: closePayment }] = useDisclosure(false);
   const { isFetching, orders } = useSelector((state: RootState) => state.order);
   const [selectedOrderId, setSelectedOrderId] = useState(0);
 
@@ -45,7 +47,7 @@ const Orders = () => {
       accessor: 'actions',
       title: <Text mr="xs">Hành động</Text>,
       render: (record) => {
-        if (record.status === OrderStatus.cancelled) return <Box h={28} />;
+        if (record.status !== OrderStatus.pending) return <Box h={28} />;
         return (
           <Group spacing={0} position="left" noWrap>
             <Tooltip label="Xem chi tiết">
@@ -71,8 +73,20 @@ const Orders = () => {
               </ActionIcon>
             </Tooltip>
             <Tooltip label="Thanh toán">
-              <ActionIcon color="green" onClick={() => {}}>
-                <IconCheck size={16} />
+              <ActionIcon
+                color="green"
+                onClick={() => {
+                  // TODO: GHÉP API VOUCHER CHO NGƯỜI VÀO ĐÂY
+                  console.log(record);
+                }}
+              >
+                <IconCheck
+                  size={16}
+                  onClick={() => {
+                    setSelectedOrderId(record.id);
+                    openPayment();
+                  }}
+                />
               </ActionIcon>
             </Tooltip>
             <ActionIcon
@@ -146,6 +160,10 @@ const Orders = () => {
         title="Danh Sách Đồ Ăn Trong Đơn Hàng"
       >
         <OrderFoodDetailModal selectedOrderId={selectedOrderId} />
+      </Modal>
+
+      <Modal size="lg" zIndex={100} centered opened={openedPayment} onClose={closePayment} title="Thanh Toán">
+        <PaymentModal close={closePayment} selectedOrderId={selectedOrderId} />
       </Modal>
     </>
   );

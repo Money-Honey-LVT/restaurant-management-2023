@@ -115,4 +115,44 @@ const detailFood =
     }
   };
 
-export const orderActions = { addOrder, getAllOrders, cancelOrder, orderFood, detailFood };
+const makePayment =
+  (payload: number, cb?: Callback): OrderThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: OrderActionType.MAKE_PAYMENT_PENDING });
+
+    const api = API_URLS.ORDER.makePayment(payload);
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: OrderActionType.ORDER_FOOD_SUCCESS,
+        payload: response.data,
+      });
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: OrderActionType.ORDER_FOOD_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+const getVoucher =
+  (payload: number, cb?: Callback): OrderThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: OrderActionType.GET_VOUCHER_PENDING });
+
+    const api = API_URLS.ORDER.voucher(payload);
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: OrderActionType.GET_VOUCHER_SUCCESS,
+        payload: response.data,
+      });
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: OrderActionType.GET_VOUCHER_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const orderActions = { addOrder, getAllOrders, cancelOrder, orderFood, detailFood, makePayment, getVoucher };

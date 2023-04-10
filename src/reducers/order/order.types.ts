@@ -35,6 +35,10 @@ export enum OrderActionType {
   DETAIL_FOOD_PENDING = 'DETAIL_FOOD_PENDING',
   DETAIL_FOOD_SUCCESS = 'DETAIL_FOOD_SUCCESS',
   DETAIL_FOOD_FAILURE = 'DETAIL_FOOD_FAILURE',
+
+  GET_VOUCHER_PENDING = 'GET_VOUCHER_PENDING',
+  GET_VOUCHER_SUCCESS = 'GET_VOUCHER_SUCCESS',
+  GET_VOUCHER_FAILURE = 'GET_VOUCHER_FAILURE',
 }
 
 //
@@ -115,6 +119,17 @@ export interface DetailFoodFailure {
   type: OrderActionType.DETAIL_FOOD_FAILURE;
 }
 
+//
+export interface GetVoucherPending {
+  type: OrderActionType.GET_VOUCHER_PENDING;
+}
+export interface GetVoucherSuccess {
+  type: OrderActionType.GET_VOUCHER_SUCCESS;
+}
+export interface GetVoucherFailure {
+  type: OrderActionType.GET_VOUCHER_FAILURE;
+}
+
 export type OrderAction =
   | AddOrderPending
   | AddOrderFailure
@@ -134,6 +149,9 @@ export type OrderAction =
   | MakePaymentFailure
   | MakePaymentPending
   | MakePaymentSuccess
+  | GetVoucherFailure
+  | GetVoucherPending
+  | GetVoucherSuccess
   | DetailFoodFailure
   | DetailFoodPending
   | DetailFoodSuccess;
