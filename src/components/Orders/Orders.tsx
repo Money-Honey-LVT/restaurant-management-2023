@@ -1,20 +1,24 @@
+import { ActionIcon, Badge, Box, Button, Group, Modal, Stack, Text, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
+import { IconCheck, IconPlus, IconTrash } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
 import { DataTableColumn } from 'mantine-datatable/dist/types';
-import { ActionIcon, Badge, Button, Group, Modal, Stack, Text, Tooltip } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { Order, OrderStatus } from '../../types/models/order';
-import { IconCheck, IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
-import AddOrderModal from './AddOrderModal';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducer';
-import { IconEye } from '@tabler/icons-react';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { orderActions } from '../../reducers/order/order.action';
+import { RootState } from '../../redux/reducer';
+import { Order, OrderStatus } from '../../types/models/order';
+import AddOrderModal from './AddOrderModal';
+import AddFoodToOrderModal from './AddFoodToOrderModal/AddFoodToOrderModal';
+import { useState } from 'react';
 
 const Orders = () => {
   const dispatch = useAppDispatch();
   const [opened, { open, close }] = useDisclosure(false);
+  const [openedAddFoodToOrder, { open: openAddFoodToOrder, close: closeAddFoodToOrder }] = useDisclosure(false);
   const { isFetching, orders } = useSelector((state: RootState) => state.order);
+  const [selectedOrderId, setSelectedOrderId] = useState(0);
 
   const columns: DataTableColumn<Order>[] = [
     { accessor: 'id', title: 'Mã Đơn' },
@@ -39,10 +43,17 @@ const Orders = () => {
       accessor: 'actions',
       title: <Text mr="xs">Hành động</Text>,
       render: (record) => {
+        if (record.status === OrderStatus.cancelled) return <Box h={28} />;
         return (
           <Group spacing={0} position="left" noWrap>
             <Tooltip label="Thêm món">
-              <ActionIcon color="blue" onClick={() => {}}>
+              <ActionIcon
+                color="blue"
+                onClick={() => {
+                  setSelectedOrderId(record.id);
+                  openAddFoodToOrder();
+                }}
+              >
                 <IconPlus size={16} />
               </ActionIcon>
             </Tooltip>
@@ -51,21 +62,28 @@ const Orders = () => {
                 <IconCheck size={16} />
               </ActionIcon>
             </Tooltip>
-
-            {record.status !== OrderStatus.cancelled ? (
-              <ActionIcon
-                color="red"
-                onClick={() =>
-                  dispatch(
-                    orderActions.cancelOrder(record.id, {
-                      onSuccess: () => dispatch(orderActions.getAllOrders()),
-                    })
-                  )
-                }
-              >
-                <IconTrash size={16} />
-              </ActionIcon>
-            ) : null}
+            <ActionIcon
+              color="red"
+              onClick={() =>
+                modals.openConfirmModal({
+                  title: 'Xác Nhận Xoá Món Ăn',
+                  centered: true,
+                  children: <Text size="sm">Bạn có chắc muốn xoá đơn hàng này không?</Text>,
+                  labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
+                  confirmProps: { color: 'red' },
+                  onCancel: () => {},
+                  onConfirm: () => {
+                    dispatch(
+                      orderActions.cancelOrder(record.id, {
+                        onSuccess: () => dispatch(orderActions.getAllOrders()),
+                      })
+                    );
+                  },
+                })
+              }
+            >
+              <IconTrash size={16} />
+            </ActionIcon>
           </Group>
         );
       },
@@ -95,6 +113,16 @@ const Orders = () => {
       </Stack>
       <Modal zIndex={100} centered opened={opened} onClose={close} title="Thêm Đơn Hàng Mới">
         <AddOrderModal close={close} />
+      </Modal>
+      <Modal
+        size="lg"
+        zIndex={100}
+        centered
+        opened={openedAddFoodToOrder}
+        onClose={closeAddFoodToOrder}
+        title="Gọi Món"
+      >
+        <AddFoodToOrderModal selectedOrderId={selectedOrderId} close={closeAddFoodToOrder} />
       </Modal>
     </>
   );

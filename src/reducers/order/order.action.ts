@@ -69,4 +69,29 @@ const cancelOrder =
     }
   };
 
-export const orderActions = { addOrder, getAllOrders, cancelOrder };
+export interface OrderFoodPayload {
+  orderId: number;
+  foodOrdered: { id: number; quantity: number }[];
+}
+
+const orderFood =
+  (payload: OrderFoodPayload, cb?: Callback): OrderThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: OrderActionType.ORDER_FOOD_PENDING });
+
+    const api = API_URLS.ORDER.orderFood(payload.orderId);
+    const { response, error } = await useCallApi({ ...api, payload: payload.foodOrdered });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: OrderActionType.ORDER_FOOD_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Thêm các món ăn vào đơn hàng thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: OrderActionType.ORDER_FOOD_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+export const orderActions = { addOrder, getAllOrders, cancelOrder, orderFood };

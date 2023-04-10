@@ -108,7 +108,7 @@ const AddOrderModal: React.FC<Props> = ({ close }) => {
           <TextInput
             withAsterisk
             label="Địa chỉ"
-            placeholder="Nhập dịa chỉ khách hàng"
+            placeholder="Nhập địa chỉ khách hàng"
             {...form.getInputProps('address')}
           />
 
