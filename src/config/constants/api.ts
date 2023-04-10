@@ -152,5 +152,10 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader(),
     }),
+    detailFood: (id: number) => ({
+      endPoint: `${Schemas.OrdersSchema}/${id}/detail-food`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
   },
 };

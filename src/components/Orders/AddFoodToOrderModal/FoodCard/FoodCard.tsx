@@ -1,4 +1,4 @@
-import { ActionIcon, Card, Group, Image, Text } from '@mantine/core';
+import { ActionIcon, Card, Grid, Group, Image, Text } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Food } from '../../../../types/models/food';
@@ -32,21 +32,28 @@ const FoodCard: React.FC<Props> = ({ item, setOrderedFoods, orderedFoods }) => {
 
   return (
     <Card shadow="xs">
-      <Group position="apart">
-        <Group spacing="xl">
-          <Image width={56} height={56} src={item.image} />
-          <Text lineClamp={1}>{item.name}</Text>
-        </Group>
-        <Group grow>
-          <ActionIcon disabled={quantity <= 0} onClick={() => setQuantity((prev) => prev - 1)}>
-            <IconMinus />
-          </ActionIcon>
-          <Text align="center">{quantity}</Text>
-          <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
-            <IconPlus />
-          </ActionIcon>
-        </Group>
-      </Group>
+      <Grid align="center">
+        <Grid.Col span={8}>
+          <Group spacing="xl">
+            <Image width={56} height={56} src={item.image} />
+            <Text lineClamp={1}>{item.name}</Text>
+          </Group>
+        </Grid.Col>
+        <Grid.Col span={2}>
+          <Text lineClamp={1}>{item.price * quantity} đ</Text>
+        </Grid.Col>
+        <Grid.Col span={2}>
+          <Group grow>
+            <ActionIcon disabled={quantity <= 0} onClick={() => setQuantity((prev) => prev - 1)}>
+              <IconMinus />
+            </ActionIcon>
+            <Text align="center">{quantity}</Text>
+            <ActionIcon onClick={() => setQuantity((prev) => prev + 1)}>
+              <IconPlus />
+            </ActionIcon>
+          </Group>
+        </Grid.Col>
+      </Grid>
     </Card>
   );
 };

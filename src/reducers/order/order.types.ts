@@ -31,6 +31,10 @@ export enum OrderActionType {
   MAKE_PAYMENT_PENDING = 'MAKE_PAYMENT_PENDING',
   MAKE_PAYMENT_SUCCESS = 'MAKE_PAYMENT_SUCCESS',
   MAKE_PAYMENT_FAILURE = 'MAKE_PAYMENT_FAILURE',
+
+  DETAIL_FOOD_PENDING = 'DETAIL_FOOD_PENDING',
+  DETAIL_FOOD_SUCCESS = 'DETAIL_FOOD_SUCCESS',
+  DETAIL_FOOD_FAILURE = 'DETAIL_FOOD_FAILURE',
 }
 
 //
@@ -100,6 +104,17 @@ export interface MakePaymentFailure {
   type: OrderActionType.MAKE_PAYMENT_FAILURE;
 }
 
+//
+export interface DetailFoodPending {
+  type: OrderActionType.DETAIL_FOOD_PENDING;
+}
+export interface DetailFoodSuccess {
+  type: OrderActionType.DETAIL_FOOD_SUCCESS;
+}
+export interface DetailFoodFailure {
+  type: OrderActionType.DETAIL_FOOD_FAILURE;
+}
+
 export type OrderAction =
   | AddOrderPending
   | AddOrderFailure
@@ -118,6 +133,9 @@ export type OrderAction =
   | OrderFoodSuccess
   | MakePaymentFailure
   | MakePaymentPending
-  | MakePaymentSuccess;
+  | MakePaymentSuccess
+  | DetailFoodFailure
+  | DetailFoodPending
+  | DetailFoodSuccess;
 
 export type OrderThunkAction = ThunkAction<void, RootState, any, OrderAction>;

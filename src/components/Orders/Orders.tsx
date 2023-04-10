@@ -1,7 +1,7 @@
 import { ActionIcon, Badge, Box, Button, Group, Modal, Stack, Text, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { IconCheck, IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconInfoCircle, IconPlus, IconTrash } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
 import { DataTableColumn } from 'mantine-datatable/dist/types';
 import { useSelector } from 'react-redux';
@@ -12,11 +12,13 @@ import { Order, OrderStatus } from '../../types/models/order';
 import AddOrderModal from './AddOrderModal';
 import AddFoodToOrderModal from './AddFoodToOrderModal/AddFoodToOrderModal';
 import { useState } from 'react';
+import OrderFoodDetailModal from './OrderFoodDetailModal/OrderFoodDetailModal';
 
 const Orders = () => {
   const dispatch = useAppDispatch();
   const [opened, { open, close }] = useDisclosure(false);
   const [openedAddFoodToOrder, { open: openAddFoodToOrder, close: closeAddFoodToOrder }] = useDisclosure(false);
+  const [openedOrderFoodDetail, { open: openOrderFoodDetail, close: closeOrderFoodDetail }] = useDisclosure(false);
   const { isFetching, orders } = useSelector((state: RootState) => state.order);
   const [selectedOrderId, setSelectedOrderId] = useState(0);
 
@@ -46,6 +48,17 @@ const Orders = () => {
         if (record.status === OrderStatus.cancelled) return <Box h={28} />;
         return (
           <Group spacing={0} position="left" noWrap>
+            <Tooltip label="Xem chi tiết">
+              <ActionIcon
+                color="orange"
+                onClick={() => {
+                  openOrderFoodDetail();
+                  setSelectedOrderId(record.id);
+                }}
+              >
+                <IconInfoCircle size={16} />
+              </ActionIcon>
+            </Tooltip>
             <Tooltip label="Thêm món">
               <ActionIcon
                 color="blue"
@@ -115,7 +128,7 @@ const Orders = () => {
         <AddOrderModal close={close} />
       </Modal>
       <Modal
-        size="lg"
+        size="xl"
         zIndex={100}
         centered
         opened={openedAddFoodToOrder}
@@ -123,6 +136,16 @@ const Orders = () => {
         title="Gọi Món"
       >
         <AddFoodToOrderModal selectedOrderId={selectedOrderId} close={closeAddFoodToOrder} />
+      </Modal>
+      <Modal
+        size="lg"
+        zIndex={100}
+        centered
+        opened={openedOrderFoodDetail}
+        onClose={closeOrderFoodDetail}
+        title="Danh Sách Đồ Ăn Trong Đơn Hàng"
+      >
+        <OrderFoodDetailModal selectedOrderId={selectedOrderId} />
       </Modal>
     </>
   );

@@ -94,4 +94,25 @@ const orderFood =
       renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
     }
   };
-export const orderActions = { addOrder, getAllOrders, cancelOrder, orderFood };
+
+const detailFood =
+  (payload: number, cb?: Callback): OrderThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: OrderActionType.ORDER_FOOD_PENDING });
+
+    const api = API_URLS.ORDER.detailFood(payload);
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: OrderActionType.ORDER_FOOD_SUCCESS,
+        payload: response.data,
+      });
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: OrderActionType.ORDER_FOOD_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const orderActions = { addOrder, getAllOrders, cancelOrder, orderFood, detailFood };

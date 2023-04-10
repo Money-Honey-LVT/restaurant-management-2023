@@ -33,10 +33,6 @@ const AddFoodToOrderModal: React.FC<Props> = ({ close, selectedOrderId }) => {
     close();
   };
 
-  useEffect(() => {
-    console.log(orderedFoods);
-  }, [orderedFoods]);
-
   return (
     <>
       <Stack>
