@@ -15,11 +15,14 @@ import { foodActions } from '../../reducers/food/food.action';
 import { staffActions } from '../../reducers/staff/staff.action';
 import { customerActions } from '../../reducers/customer/customer.action';
 import { orderActions } from '../../reducers/order/order.action';
+import { profileAction } from '../../reducers/profile/profile.action';
+import { decodeToken } from '../../utils/helpers';
 
 export default function AppLayout() {
   const navigate = useNavigate();
   const [opened, setOpened] = useState(false);
   const dispatch = useAppDispatch();
+  const decodedToken = decodeToken();
 
   useEffect(() => {
     dispatch(foodActions.getAllFoods());
@@ -27,6 +30,9 @@ export default function AppLayout() {
     dispatch(staffActions.getAllStaffs());
     dispatch(customerActions.getAllCustomers());
     dispatch(orderActions.getAllOrders());
+    if (decodedToken.username) {
+      dispatch(profileAction.getProfileByUsername(decodedToken.username));
+    }
   }, []);
 
   const handleLogout = () => {

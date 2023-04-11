@@ -5,6 +5,7 @@ import foodReducer from '../reducers/food/food.reducers';
 import orderReducer from '../reducers/order/order.reducers';
 import customerReducer from '../reducers/customer/customer.reducers';
 import staffReducer from '../reducers/staff/staff.reducers';
+import profileReducer from '../reducers/profile/profile.reducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   order: orderReducer,
   staff: staffReducer,
   customer: customerReducer,
+  profile: profileReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
