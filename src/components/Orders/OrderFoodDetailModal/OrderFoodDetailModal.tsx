@@ -2,6 +2,7 @@ import { Card, Grid, Group, Stack, Text } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { orderActions } from '../../../reducers/order/order.action';
+import { tableActions } from '../../../reducers/table/table.action';
 
 interface Props {
   selectedOrderId: number;
@@ -17,6 +18,7 @@ const OrderFoodDetailModal: React.FC<Props> = ({ selectedOrderId }) => {
       orderActions.detailFood(selectedOrderId, {
         onSuccess: (data) => {
           setData(data);
+          dispatch(tableActions.getAllTables());
         },
       })
     );
@@ -26,7 +28,7 @@ const OrderFoodDetailModal: React.FC<Props> = ({ selectedOrderId }) => {
     <Stack>
       {data.map((item, index) => {
         return (
-          <Card shadow="xs">
+          <Card key={`${index}-food-detail`} shadow="xs">
             <Grid align="center">
               <Grid.Col span={9}>
                 <Group spacing="xl">
@@ -35,7 +37,7 @@ const OrderFoodDetailModal: React.FC<Props> = ({ selectedOrderId }) => {
               </Grid.Col>
               <Grid.Col span={3}>
                 <Text align="right" lineClamp={1}>
-                  {item.price * item.quantity} đ
+                  {item.price} đ
                 </Text>
               </Grid.Col>
             </Grid>

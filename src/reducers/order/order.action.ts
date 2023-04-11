@@ -116,7 +116,7 @@ const detailFood =
   };
 
 const makePayment =
-  (payload: number, cb?: Callback): OrderThunkAction =>
+  (payload: { id: number; voucher: number | undefined }, cb?: Callback): OrderThunkAction =>
   async (dispatch: AppDispatch) => {
     dispatch({ type: OrderActionType.MAKE_PAYMENT_PENDING });
 
@@ -129,6 +129,7 @@ const makePayment =
         payload: response.data,
       });
       cb?.onSuccess?.(response.data);
+      renderNotification('Thông báo', 'Thanh toán thành công', notiType.SUCCESS);
     } else {
       dispatch({ type: OrderActionType.ORDER_FOOD_FAILURE });
       renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);

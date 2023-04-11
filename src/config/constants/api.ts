@@ -147,8 +147,10 @@ export const API_URLS = {
       method: 'POST',
       headers: HEADERS.authHeader(),
     }),
-    makePayment: (id: number) => ({
-      endPoint: `${Schemas.OrdersSchema}/${id}/payment`,
+    makePayment: (payload: { id: number; voucher: number | undefined }) => ({
+      endPoint: !payload.voucher
+        ? `${Schemas.OrdersSchema}/${payload.id}/payment`
+        : `${Schemas.OrdersSchema}/${payload.id}/payment?voucher=${payload.voucher}`,
       method: 'POST',
       headers: HEADERS.authHeader(),
     }),

@@ -27,8 +27,6 @@ const Orders = () => {
   const columns: DataTableColumn<Order>[] = [
     { accessor: 'id', title: 'Mã Đơn' },
     { accessor: 'customerName', title: 'Tên Khách Hàng' },
-    { accessor: 'staffName', title: 'Nhân Viên Xác Nhận' },
-    { accessor: 'status', title: 'Trạng Thái' },
     {
       accessor: 'orderTables',
       title: 'Danh Sách Bàn Đặt',
@@ -43,6 +41,15 @@ const Orders = () => {
         );
       },
     },
+    {
+      accessor: 'voucher',
+      title: 'Voucher (%)',
+      render: (record) => {
+        return <Group>{record.vouchers[0]?.value || ''}</Group>;
+      },
+    },
+    { accessor: 'staffName', title: 'Nhân Viên Xác Nhận' },
+    { accessor: 'status', title: 'Trạng Thái' },
     {
       accessor: 'actions',
       title: <Text mr="xs">Hành động</Text>,
@@ -76,17 +83,11 @@ const Orders = () => {
               <ActionIcon
                 color="green"
                 onClick={() => {
-                  // TODO: GHÉP API VOUCHER CHO NGƯỜI VÀO ĐÂY
-                  console.log(record);
+                  setSelectedOrderId(record.id);
+                  openPayment();
                 }}
               >
-                <IconCheck
-                  size={16}
-                  onClick={() => {
-                    setSelectedOrderId(record.id);
-                    openPayment();
-                  }}
-                />
+                <IconCheck size={16} />
               </ActionIcon>
             </Tooltip>
             <ActionIcon
