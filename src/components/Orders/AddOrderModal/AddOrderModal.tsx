@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { RootState } from '../../../redux/reducer';
 import { Customer } from '../../../types/models/customer';
-import { Table } from '../../../types/models/table';
+import { Table, TableStatus } from '../../../types/models/table';
 import { decodeToken } from '../../../utils/helpers';
 import { orderActions } from '../../../reducers/order/order.action';
 
@@ -30,7 +30,13 @@ const AddOrderModal: React.FC<Props> = ({ close }) => {
   const dispatch = useAppDispatch();
   const { tables, isFetching: isFetchingTable } = useSelector((state: RootState) => state.table);
 
-  const tableData = useMemo(() => tables.map((table) => ({ value: table.id.toString(), label: table.name })), [tables]);
+  const tableData = useMemo(
+    () =>
+      tables
+        .filter((table) => table.status === TableStatus.FREE)
+        .map((table) => ({ value: table.id.toString(), label: table.name })),
+    [tables]
+  );
 
   const decodedToken = decodeToken();
   const { fullname, username } = decodedToken;
