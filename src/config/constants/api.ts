@@ -163,4 +163,17 @@ export const API_URLS = {
       headers: HEADERS.authHeader(),
     }),
   },
+
+  PROFILE: {
+    getProfileByUsername: (username: string) => ({
+      endPoint: `${Schemas.StaffsSchema}/${username}/profile`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
+    updateProfile: (username: string) => ({
+      endPoint: `${Schemas.StaffsSchema}/${username}/profile`,
+      method: 'POST',
+      headers: HEADERS.authHeader(),
+    }),
+  },
 };

@@ -1,38 +1,38 @@
-import { Button, Flex, Group, NumberInput, Select, Stack, Text, TextInput, useMantineTheme } from '@mantine/core';
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Button, Flex, Group, Stack, Text, TextInput, useMantineTheme } from '@mantine/core';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
-import React from 'react';
-import { Staff, StaffRole } from '../../../types/models/staff';
-import { Modify } from '../../../types/helpers';
-import { handleUploadImageOnFirebase } from '../../../utils/helpers';
-import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-import { staffActions } from '../../../reducers/staff/staff.action';
 import lodash from 'lodash';
+import React from 'react';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { Profile } from '../../types/models/profile';
+import { decodeToken, handleUploadImageOnFirebase } from '../../utils/helpers';
 import { notifications } from '@mantine/notifications';
+import { profileAction } from '../../reducers/profile/profile.action';
 
 interface Props {
-  staff: Staff;
+  profile: Profile;
   close: () => void;
 }
 
-const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
-  const theme = useMantineTheme();
+const EditProfileModal: React.FC<Props> = ({ profile, close }) => {
   const dispatch = useAppDispatch();
+  const theme = useMantineTheme();
 
-  const { fullname, salary, image, username } = staff;
+  const { fullname, image, Role } = profile;
 
-  const initialValues: Partial<Staff> = { fullname, salary, image };
+  const decodedToken = decodeToken();
 
+  const initialValues: Partial<Profile> = { fullname, image, Role };
   const form = useForm({
     initialValues,
     validate: {
-      fullname: isNotEmpty('Bạn chưa nhập họ tên nhân viên!'),
-      salary: isNotEmpty('Bạn chưa nhập lương!'),
+      fullname: isNotEmpty('Bạn chưa nhập họ tên!'),
     },
   });
 
-  const handleUpdateStaff = (values: Partial<Staff>) => {
+  const handleUpdateProfile = (values: Partial<Profile>) => {
+    console.log(values);
     if (!values.image) return;
     if (lodash.isEqual(values, initialValues)) {
       notifications.show({
@@ -46,17 +46,18 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
       return;
     }
     dispatch(
-      staffActions.editStaff(
+      profileAction.updateProfille(
         {
-          username,
           fullname: values.fullname,
-          salary: values.salary,
           image: values.image,
+          username: decodedToken.username,
         },
         {
           onSuccess: () => {
-            dispatch(staffActions.getAllStaffs());
-            close();
+            if (decodedToken.username) {
+              dispatch(profileAction.getProfileByUsername(decodedToken.username));
+              close();
+            }
           },
         }
       )
@@ -64,27 +65,13 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
   };
 
   return (
-    <form id="form-edit-staff" onSubmit={form.onSubmit((values) => handleUpdateStaff(values))}>
-      <Flex direction={'column'} gap="sm">
-        <TextInput
-          withAsterisk
-          label="Tên nhân viên"
-          placeholder="Nhập tên nhân viên"
-          {...form.getInputProps('fullname')}
-        />
-
-        <NumberInput
-          defaultValue={0}
-          step={10000}
-          withAsterisk
-          label="Mức lương"
-          placeholder="Nhập mức lương"
-          {...form.getInputProps('salary')}
-        />
+    <form id="form-edit-profile" onSubmit={form.onSubmit((values) => handleUpdateProfile(values))}>
+      <Flex direction={'column'} gap={'sm'}>
+        <TextInput withAsterisk label="Họ tên" placeholder="Nhập họ tên" {...form.getInputProps('fullname')} />
 
         <Stack spacing={0}>
-          <Text fw={600} fz="sm">
-            Ảnh đại điện
+          <Text fw={600} fz={'sm'}>
+            Ảnh đại diện
           </Text>
           <Dropzone
             onDrop={(files) => {
@@ -132,4 +119,4 @@ const EditStaffModal: React.FC<Props> = ({ staff, close }) => {
   );
 };
 
-export default EditStaffModal;
+export default EditProfileModal;
