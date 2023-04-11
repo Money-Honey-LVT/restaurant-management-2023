@@ -3,17 +3,19 @@ import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { IconCheck, IconInfoCircle, IconPlus, IconTrash } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
-import { DataTableColumn, DataTableSortStatus } from 'mantine-datatable/dist/types';
+import { DataTableColumn } from 'mantine-datatable/dist/types';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { orderActions } from '../../reducers/order/order.action';
 import { RootState } from '../../redux/reducer';
 import { Order, OrderStatus } from '../../types/models/order';
-import AddOrderModal from './AddOrderModal';
 import AddFoodToOrderModal from './AddFoodToOrderModal/AddFoodToOrderModal';
-import { useState } from 'react';
+import AddOrderModal from './AddOrderModal';
 import OrderFoodDetailModal from './OrderFoodDetailModal/OrderFoodDetailModal';
 import PaymentModal from './PaymentModal/PaymentModal';
+
+const PAGE_SIZE = 10;
 
 const Orders = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,15 @@ const Orders = () => {
   const [openedPayment, { open: openPayment, close: closePayment }] = useDisclosure(false);
   const { isFetching, orders } = useSelector((state: RootState) => state.order);
   const [selectedOrderId, setSelectedOrderId] = useState(0);
+
+  const [page, setPage] = useState(1);
+  const [records, setRecords] = useState(orders.slice(0, PAGE_SIZE));
+
+  useEffect(() => {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE;
+    setRecords(orders.slice(from, to));
+  }, [page, orders]);
 
   const columns: DataTableColumn<Order>[] = [
     { accessor: 'id', title: 'Mã Đơn' },
@@ -136,7 +147,11 @@ const Orders = () => {
           striped
           highlightOnHover
           columns={columns}
-          records={orders}
+          records={records}
+          totalRecords={orders.length}
+          recordsPerPage={PAGE_SIZE}
+          page={page}
+          onPageChange={(p) => setPage(p)}
         />
       </Stack>
       <Modal zIndex={100} centered opened={opened} onClose={close} title="Thêm Đơn Hàng Mới">

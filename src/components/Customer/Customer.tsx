@@ -1,15 +1,26 @@
-import { Button, Group, Stack, Text } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconPlus } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
 import { DataTableColumn } from 'mantine-datatable/dist/types';
-import { Customer } from '../../types/models/customer';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducer';
+import { Customer } from '../../types/models/customer';
+import { useEffect, useState } from 'react';
+
+const PAGE_SIZE = 15;
 
 const Customers = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { customers, isFetching } = useSelector((state: RootState) => state.customer);
+
+  const [page, setPage] = useState(1);
+  const [records, setRecords] = useState(customers.slice(0, PAGE_SIZE));
+
+  useEffect(() => {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE;
+    setRecords(customers.slice(from, to));
+  }, [page, customers]);
 
   const columns: DataTableColumn<Customer>[] = [
     { accessor: 'id', title: 'Mã Khách Hàng' },
@@ -33,7 +44,11 @@ const Customers = () => {
           striped
           highlightOnHover
           columns={columns}
-          records={customers}
+          records={records}
+          totalRecords={customers.length}
+          recordsPerPage={PAGE_SIZE}
+          page={page}
+          onPageChange={(p) => setPage(p)}
         />
       </Stack>
     </>

@@ -22,7 +22,11 @@ const PaymentModal: React.FC<Props> = ({ selectedOrderId, close }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setVoucher(orders.find((order) => order.id === selectedOrderId)?.vouchers[0]);
+    const foundOrders = orders.find((order) => order.id === selectedOrderId);
+    if (foundOrders) {
+      setVoucher(foundOrders.vouchers[foundOrders.vouchers.length - 1]);
+    }
+
     dispatch(
       orderActions.detailFood(selectedOrderId, {
         onSuccess: (data: any[]) => {
