@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import { CartProvider } from './contexts/CartContext';
 import './index.css';
 import AppRoutes from './pages/routers';
 import store from './redux/store';
@@ -22,10 +21,8 @@ function App() {
           <BrowserRouter>
             <MantineProvider theme={customTheme}>
               <ModalsProvider>
-                <CartProvider>
-                  <Notifications position="top-right" />
-                  <AppRoutes />
-                </CartProvider>
+                <Notifications position="top-right" />
+                <AppRoutes />
               </ModalsProvider>
             </MantineProvider>
           </BrowserRouter>

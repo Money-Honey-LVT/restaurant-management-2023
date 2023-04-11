@@ -1,33 +1,19 @@
-import { ActionIcon, Badge, Button, Card, Group, Image, Indicator, Menu, Modal, Text, rem } from '@mantine/core';
+import { ActionIcon, Badge, Button, Card, Group, Image, Menu, Modal, Text, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import {
-  IconCheck,
-  IconDots,
-  IconEdit,
-  IconMinus,
-  IconPlus,
-  IconShoppingCartPlus,
-  IconTrash,
-} from '@tabler/icons-react';
+import { IconCheck, IconDots, IconEdit, IconMinus, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
-import { useCartContext } from '../../../hooks/use-cart-context';
-import { Food, foodTypeDict } from '../../../types/models/food';
-import EditFoodModal from '../EditFoodModal';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { foodActions } from '../../../reducers/food/food.action';
+import { Food, foodTypeDict } from '../../../types/models/food';
+import EditFoodModal from '../EditFoodModal';
 
 interface Props {
   item: Food | null;
 }
 
 const FoodCard: React.FC<Props> = ({ item }) => {
-  const {
-    addCartItem,
-    state: { items },
-  } = useCartContext();
-
   const [quantity, setQuantity] = useState(0);
   const dispatch = useAppDispatch();
   const [opened, { open, close }] = useDisclosure(false);
@@ -98,18 +84,6 @@ const FoodCard: React.FC<Props> = ({ item }) => {
         <Text size="sm" color="dimmed" lineClamp={2}>
           {item?.description}
         </Text>
-
-        <Group mt="md" position={'right'} align="center">
-          <Button
-            onClick={open}
-            leftIcon={<IconShoppingCartPlus size={16} />}
-            variant="filled"
-            color="green"
-            radius="md"
-          >
-            Thêm vào giỏ hàng
-          </Button>
-        </Group>
       </Card>
 
       <Modal centered opened={opened} onClose={close} title="Nhập số lượng">
@@ -126,7 +100,6 @@ const FoodCard: React.FC<Props> = ({ item }) => {
           <Button
             disabled={quantity <= 0}
             onClick={() => {
-              addCartItem({ quantity, name: item ? item.name : '', image: '', price: item ? item.price : 0 });
               notifications.show({
                 withCloseButton: true,
                 title: 'Thông báo',

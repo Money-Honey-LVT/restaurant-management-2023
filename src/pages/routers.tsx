@@ -5,7 +5,6 @@ import ROUTER from '../config/router';
 import AppLayout from '../containers/AppLayout';
 
 const Login = React.lazy(() => import('./Login'));
-const Checkout = React.lazy(() => import('./Checkout'));
 const Profile = React.lazy(() => import('./Profile'));
 const Home = React.lazy(() => import('../components/Home'));
 const Menu = React.lazy(() => import('../components/Menu'));
@@ -36,14 +35,6 @@ const AppRoutes: React.FC = () => {
         <Route path={ROUTER.NAV.TABLES.INDEX} element={<Tables />} />
         <Route path={ROUTER.NAV.CUSTOMERS.INDEX} element={<Customers />} />
         <Route path={ROUTER.NAV.STAFFS.INDEX} element={<Staffs />} />
-        <Route
-          path={ROUTER.HOME.CHECKOUT}
-          element={
-            <Suspense fallback={<LoadingOverlay visible />}>
-              <Checkout />
-            </Suspense>
-          }
-        />
         <Route
           path={ROUTER.AUTH.PROFILE}
           element={
