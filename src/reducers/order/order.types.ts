@@ -39,6 +39,10 @@ export enum OrderActionType {
   GET_VOUCHER_PENDING = 'GET_VOUCHER_PENDING',
   GET_VOUCHER_SUCCESS = 'GET_VOUCHER_SUCCESS',
   GET_VOUCHER_FAILURE = 'GET_VOUCHER_FAILURE',
+
+  GET_STATISTICS_PENDING = 'GET_STATISTICS_PENDING',
+  GET_STATISTICS_SUCCESS = 'GET_STATISTICS_SUCCESS',
+  GET_STATISTICS_FAILURE = 'GET_STATISTICS_FAILURE',
 }
 
 //
@@ -130,6 +134,18 @@ export interface GetVoucherFailure {
   type: OrderActionType.GET_VOUCHER_FAILURE;
 }
 
+//
+export interface GetStatisticsPending {
+  type: OrderActionType.GET_STATISTICS_PENDING;
+}
+export interface GetStatisticsSuccess {
+  type: OrderActionType.GET_STATISTICS_SUCCESS;
+  payload: Statistics[];
+}
+export interface GetStatisticsFailure {
+  type: OrderActionType.GET_STATISTICS_FAILURE;
+}
+
 export type OrderAction =
   | AddOrderPending
   | AddOrderFailure
@@ -152,8 +168,17 @@ export type OrderAction =
   | GetVoucherFailure
   | GetVoucherPending
   | GetVoucherSuccess
+  | GetStatisticsFailure
+  | GetStatisticsPending
+  | GetStatisticsSuccess
   | DetailFoodFailure
   | DetailFoodPending
   | DetailFoodSuccess;
 
 export type OrderThunkAction = ThunkAction<void, RootState, any, OrderAction>;
+
+export interface Statistics {
+  date: string;
+  amount: number;
+  orders: number;
+}

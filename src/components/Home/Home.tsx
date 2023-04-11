@@ -10,48 +10,19 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducer';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { orderActions } from '../../reducers/order/order.action';
+import { Statistics } from '../../reducers/order/order.types';
 import CustomerStats from './CustomerStats';
+import FoodsStats from './FoodsStats';
 import OrderStats from './OrderStats';
 import TableStats from './TableStats';
-import FoodsStats from './FoodsStats';
+import { isManager } from '../../utils/helpers';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'SỐ LIỆU NHÀ HÀNG THEO NGÀY',
-    },
-  },
-};
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Doanh thu (Đơn vị: triệu đồng)',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 200 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Tổng số đơn hàng',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 200 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
 
 export enum CountType {
   foods = 'foods',
@@ -75,11 +46,51 @@ export const countRenderDictionary = {
 };
 
 const Home = () => {
-  const { customers, foods, orders } = useSelector((state: RootState) => ({
-    foods: state.food.foods,
-    customers: state.customer.customers,
-    orders: state.order.orders,
-  }));
+  const dispatch = useAppDispatch();
+
+  const [statistics, setStatistics] = useState<Statistics[]>([]);
+
+  useEffect(() => {
+    if (!isManager()) return;
+    dispatch(
+      orderActions.getStatistics({
+        onSuccess: (res: Statistics[]) => setStatistics(res),
+      })
+    );
+  }, []);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'SỐ LIỆU NHÀ HÀNG THEO NGÀY',
+      },
+    },
+  };
+
+  const data = {
+    labels: statistics.map((statistic) => dayjs(statistic.date).format('DD/MM/YYYY')),
+    datasets: [
+      {
+        label: 'Doanh thu (Đơn vị: triệu đồng)',
+        data: statistics.map((statistics) => statistics.amount / 10000000),
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Tổng số đơn hàng',
+        data: statistics.map((statistics) => statistics.orders),
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  };
+
+  if (!isManager()) return null;
 
   return (
     <Stack>

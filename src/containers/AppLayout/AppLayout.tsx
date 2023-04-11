@@ -2,33 +2,36 @@ import { Anchor, AppShell, Button, Group, Header, Image, LoadingOverlay, Navbar,
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconLogout } from '@tabler/icons-react';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';
 import ROUTER from '../../config/router';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import AuthRoutes from '../../pages/AuthRoutes/AuthRoutes';
-import MainLinks from '../MainLinks';
-import User from '../User';
-import { tableActions } from '../../reducers/table/table.action';
-import { foodActions } from '../../reducers/food/food.action';
-import { staffActions } from '../../reducers/staff/staff.action';
 import { customerActions } from '../../reducers/customer/customer.action';
+import { foodActions } from '../../reducers/food/food.action';
 import { orderActions } from '../../reducers/order/order.action';
 import { profileAction } from '../../reducers/profile/profile.action';
-import { decodeToken } from '../../utils/helpers';
+import { staffActions } from '../../reducers/staff/staff.action';
+import { tableActions } from '../../reducers/table/table.action';
+import { decodeToken, isManager } from '../../utils/helpers';
+import MainLinks from '../MainLinks';
+import User from '../User';
 
 export default function AppLayout() {
   const navigate = useNavigate();
-  const [opened, setOpened] = useState(false);
   const dispatch = useAppDispatch();
   const decodedToken = decodeToken();
 
   useEffect(() => {
     dispatch(foodActions.getAllFoods());
     dispatch(tableActions.getAllTables());
-    dispatch(staffActions.getAllStaffs());
-    dispatch(customerActions.getAllCustomers());
+
+    if (isManager()) {
+      dispatch(staffActions.getAllStaffs());
+      dispatch(customerActions.getAllCustomers());
+    }
+
     dispatch(orderActions.getAllOrders());
     if (decodedToken.username) {
       dispatch(profileAction.getProfileByUsername(decodedToken.username));
@@ -64,7 +67,7 @@ export default function AppLayout() {
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
         navbar={
-          <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
+          <Navbar p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
             <Navbar.Section grow mt="0">
               <MainLinks />
             </Navbar.Section>

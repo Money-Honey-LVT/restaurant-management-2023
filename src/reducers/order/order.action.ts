@@ -156,4 +156,33 @@ const getVoucher =
     }
   };
 
-export const orderActions = { addOrder, getAllOrders, cancelOrder, orderFood, detailFood, makePayment, getVoucher };
+const getStatistics =
+  (cb?: Callback): OrderThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: OrderActionType.GET_STATISTICS_PENDING });
+
+    const api = API_URLS.ORDER.getStatistics();
+    const { response, error } = await useCallApi({ ...api });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: OrderActionType.GET_STATISTICS_SUCCESS,
+        payload: response.data,
+      });
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: OrderActionType.GET_STATISTICS_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const orderActions = {
+  addOrder,
+  getAllOrders,
+  cancelOrder,
+  orderFood,
+  detailFood,
+  makePayment,
+  getVoucher,
+  getStatistics,
+};

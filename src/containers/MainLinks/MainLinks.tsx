@@ -77,7 +77,7 @@ const data = [
     color: 'red',
     label: 'Quản Lý Khách Hàng',
     to: ROUTER.NAV.CUSTOMERS.INDEX,
-    managerOnly: false,
+    managerOnly: true,
   },
   {
     icon: <IconUsers size="1rem" />,

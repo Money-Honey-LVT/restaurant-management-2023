@@ -164,6 +164,11 @@ export const API_URLS = {
       method: 'GET',
       headers: HEADERS.authHeader(),
     }),
+    getStatistics: () => ({
+      endPoint: `Statistics`,
+      method: 'GET',
+      headers: HEADERS.authHeader(),
+    }),
   },
 
   PROFILE: {
