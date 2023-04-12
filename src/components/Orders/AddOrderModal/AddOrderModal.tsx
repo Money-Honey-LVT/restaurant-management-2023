@@ -8,6 +8,7 @@ import { Customer } from '../../../types/models/customer';
 import { Table, TableStatus } from '../../../types/models/table';
 import { decodeToken } from '../../../utils/helpers';
 import { orderActions } from '../../../reducers/order/order.action';
+import { tableActions } from '../../../reducers/table/table.action';
 
 interface Props {
   close: () => void;
@@ -89,6 +90,7 @@ const AddOrderModal: React.FC<Props> = ({ close }) => {
               {
                 onSuccess: () => {
                   dispatch(orderActions.getAllOrders());
+                  dispatch(tableActions.getAllTables());
                   close();
                 },
               }

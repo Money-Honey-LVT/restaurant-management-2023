@@ -36,7 +36,13 @@ const Orders = () => {
   }, [page, orders]);
 
   const columns: DataTableColumn<Order>[] = [
-    { accessor: 'id', title: 'Mã Đơn' },
+    {
+      accessor: 'index',
+      title: '#',
+      textAlignment: 'center',
+      render: (record) => records.indexOf(record) + 1,
+    },
+    { accessor: 'id', title: 'Mã Đơn', textAlignment: 'right', titleStyle: { textAlign: 'center' } },
     { accessor: 'customerName', title: 'Tên Khách Hàng' },
     {
       accessor: 'orderTables',
@@ -168,17 +174,17 @@ const Orders = () => {
         <AddFoodToOrderModal selectedOrderId={selectedOrderId} close={closeAddFoodToOrder} />
       </Modal>
       <Modal
-        size="lg"
+        size="xl"
         zIndex={100}
         centered
         opened={openedOrderFoodDetail}
         onClose={closeOrderFoodDetail}
-        title="Danh Sách Đồ Ăn Trong Đơn Hàng"
+        title="Chi Tiết Đơn Hàng"
       >
         <OrderFoodDetailModal selectedOrderId={selectedOrderId} />
       </Modal>
 
-      <Modal size="lg" zIndex={100} centered opened={openedPayment} onClose={closePayment} title="Thanh Toán">
+      <Modal size="xl" zIndex={100} centered opened={openedPayment} onClose={closePayment} title="Thanh Toán">
         <PaymentModal close={closePayment} selectedOrderId={selectedOrderId} />
       </Modal>
     </>

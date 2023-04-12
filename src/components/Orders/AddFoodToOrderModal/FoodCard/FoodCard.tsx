@@ -33,7 +33,7 @@ const FoodCard: React.FC<Props> = ({ item, setOrderedFoods, orderedFoods }) => {
   return (
     <Card shadow="xs">
       <Grid align="center">
-        <Grid.Col span={8}>
+        <Grid.Col span={7}>
           <Group spacing="xl">
             <Image width={56} height={56} src={item.image} />
             <Text lineClamp={1}>{item.name}</Text>
@@ -42,7 +42,7 @@ const FoodCard: React.FC<Props> = ({ item, setOrderedFoods, orderedFoods }) => {
         <Grid.Col span={2}>
           <Text lineClamp={1}>{item.price * quantity} đ</Text>
         </Grid.Col>
-        <Grid.Col span={2}>
+        <Grid.Col span={3}>
           <Group grow>
             <ActionIcon disabled={quantity <= 0} onClick={() => setQuantity((prev) => prev - 1)}>
               <IconMinus />
