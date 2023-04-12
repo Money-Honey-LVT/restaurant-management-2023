@@ -45,7 +45,6 @@ const StaffCard: React.FC<Props> = ({ staff }) => {
       staffActions.deleteStaff(staff?.id, {
         onSuccess: () => {
           dispatch(staffActions.getAllStaffs());
-          close();
         },
       })
     );
