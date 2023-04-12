@@ -48,7 +48,6 @@ const FoodCard: React.FC<Props> = ({ item }) => {
           <Group position="apart">
             <Text weight={500}>{item?.name}</Text>
             <Group>
-              {item && item.isBuffet ? <Badge color="red">Buffet</Badge> : null}
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon>

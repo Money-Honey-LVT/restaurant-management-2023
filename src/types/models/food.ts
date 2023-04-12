@@ -18,11 +18,11 @@ export enum FoodType {
 
 export const foodTypeDict: Record<FoodType, { label: string; color: string }> = {
   [FoodType.hotpot]: {
-    label: 'Lẩu',
+    label: 'Nước lẩu',
     color: 'orange',
   },
   [FoodType.grill]: {
-    label: 'Nướng',
+    label: 'Đồ ăn',
     color: 'red',
   },
   [FoodType.drink]: {
@@ -30,7 +30,7 @@ export const foodTypeDict: Record<FoodType, { label: string; color: string }> = 
     color: 'blue',
   },
   [FoodType.dessert]: {
-    label: 'Tráng miệng',
+    label: 'Khác',
     color: 'yellow',
   },
 };

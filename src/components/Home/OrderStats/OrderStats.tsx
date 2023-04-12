@@ -99,7 +99,7 @@ const OrderStats = () => {
                   {((completed / total) * 100).toFixed(0)}%
                 </Text>
                 <Text ta="center" fz="xs" c="dimmed">
-                  Hoàn thành
+                  {completed}/{total} đơn
                 </Text>
               </div>
             }

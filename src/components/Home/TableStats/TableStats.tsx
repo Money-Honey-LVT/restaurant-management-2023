@@ -100,7 +100,7 @@ const TableStats = () => {
                   {((free / total) * 100).toFixed(0)}%
                 </Text>
                 <Text ta="center" fz="xs" c="dimmed">
-                  Còn trống{' '}
+                  {free}/{total} bàn trống
                 </Text>
               </div>
             }
