@@ -12,7 +12,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconLock } from '@tabler/icons-react';
+import { IconLock, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
 import { authActions } from '../../reducers/auth/auth.action';
@@ -75,11 +75,13 @@ const Login = () => {
                   <TextInput
                     label="Tên đăng nhập"
                     placeholder="Nhập tên tài khoản"
+                    icon={<IconUser size={14} />}
                     {...form.getInputProps('username')}
                   />
                   <TextInput
                     label="Mật khẩu"
                     type="password"
+                    placeholder="Nhập mật khẩu"
                     icon={<IconLock size={14} />}
                     {...form.getInputProps('password')}
                   />
