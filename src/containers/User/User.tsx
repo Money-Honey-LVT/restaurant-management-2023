@@ -1,13 +1,15 @@
 import { Avatar, Box, Group, Text, UnstyledButton, rem, useMantineTheme } from '@mantine/core';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ROUTER from '../../config/router';
+import { RootState } from '../../redux/reducer';
 import { decodeToken, parserRole } from '../../utils/helpers';
 
 const User = () => {
   const navigate = useNavigate();
   const theme = useMantineTheme();
-  const decodedToken = decodeToken();
-  const { Role, fullname, id, image, iss, username } = decodedToken;
+  const { profile, isFetching } = useSelector((state: RootState) => state.profile);
+  const { role, fullname, image, username, hiredDate } = profile;
 
   return (
     <Box
@@ -36,7 +38,7 @@ const User = () => {
               {fullname ? fullname : username}
             </Text>
             <Text color="dimmed" size="xs">
-              {parserRole(Role)}
+              {parserRole(role)}
             </Text>
           </Box>
         </Group>
