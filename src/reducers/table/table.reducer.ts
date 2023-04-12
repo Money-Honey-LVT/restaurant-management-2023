@@ -30,6 +30,12 @@ const tableReducer: Reducer<TableState, TableAction> = (state = initialState, ac
       return { ...state, isFetching: false, tables: action.payload };
     case TableActionType.EDIT_TABLE_SUCCESS:
       return { ...state, isFetching: false };
+    case TableActionType.GET_TABLE_BY_ID_SUCCESS:
+      return { ...state, isFetching: false };
+    case TableActionType.UNBLOCK_TABLE_SUCCESS:
+      return { ...state, isFetching: false };
+    case TableActionType.BLOCK_TABLE_SUCCESS:
+      return { ...state, isFetching: false };
     default:
       return state;
   }

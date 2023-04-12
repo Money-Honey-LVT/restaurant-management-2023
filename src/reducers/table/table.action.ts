@@ -71,4 +71,48 @@ const editTable =
     }
   };
 
-export const tableActions = { addTable, getAllTables, editTable };
+const blockTable =
+  (payload: number, cb?: Callback): TableThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: TableActionType.BLOCK_TABLE_PENDING });
+
+    const api = API_URLS.TABLES.blockTable(payload);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: TableActionType.BLOCK_TABLE_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Khoá bàn thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: TableActionType.BLOCK_TABLE_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+const unblockTable =
+  (payload: number, cb?: Callback): TableThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: TableActionType.UNBLOCK_TABLE_PENDING });
+
+    const api = API_URLS.TABLES.unblockTable(payload);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: TableActionType.UNBLOCK_TABLE_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Mở khoá bàn thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: TableActionType.UNBLOCK_TABLE_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const tableActions = { addTable, getAllTables, editTable, blockTable, unblockTable };

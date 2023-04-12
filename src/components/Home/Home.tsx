@@ -54,7 +54,10 @@ const Home = () => {
     if (!isManager()) return;
     dispatch(
       orderActions.getStatistics({
-        onSuccess: (res: Statistics[]) => setStatistics(res),
+        onSuccess: (res: Statistics[]) => {
+          setStatistics(res);
+          console.log(res);
+        },
       })
     );
   }, []);
@@ -77,7 +80,7 @@ const Home = () => {
     datasets: [
       {
         label: 'Doanh thu (Đơn vị: triệu đồng)',
-        data: statistics.map((statistics) => statistics.amount / 10000000),
+        data: statistics.map((statistics) => statistics.amount / 1000000),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },

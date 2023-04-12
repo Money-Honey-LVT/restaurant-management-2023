@@ -71,7 +71,20 @@ const Orders = () => {
       accessor: 'actions',
       title: <Text mr="xs">Hành động</Text>,
       render: (record) => {
-        if (record.status !== OrderStatus.pending) return <Box h={28} />;
+        if (record.status !== OrderStatus.pending)
+          return (
+            <Tooltip label="Xem chi tiết">
+              <ActionIcon
+                color="orange"
+                onClick={() => {
+                  openOrderFoodDetail();
+                  setSelectedOrderId(record.id);
+                }}
+              >
+                <IconInfoCircle size={16} />
+              </ActionIcon>
+            </Tooltip>
+          );
         return (
           <Group spacing={0} position="left" noWrap>
             <Tooltip label="Xem chi tiết">
