@@ -86,6 +86,16 @@ export const API_URLS = {
       method: 'DELETE',
       headers: HEADERS.authHeader(),
     }),
+    activeFood: (id: number) => ({
+      endPoint: `${Schemas.FoodsSchema}/${id}/active`,
+      method: 'PUT',
+      headers: HEADERS.authHeader(),
+    }),
+    inActiveFood: (id: number) => ({
+      endPoint: `${Schemas.FoodsSchema}/${id}/inactive`,
+      method: 'PUT',
+      headers: HEADERS.authHeader(),
+    }),
   },
   CUSTOMER: {
     addCustomer: () => ({

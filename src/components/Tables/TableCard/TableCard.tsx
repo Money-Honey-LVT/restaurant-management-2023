@@ -22,7 +22,7 @@ const TableCard: React.FC<Props> = ({ item }) => {
 
   const openDeleteTableModal = () =>
     modals.openConfirmModal({
-      title: 'Xác Nhận Xoá Bàn',
+      title: 'Thay Đổi Trạng Thái Bàn',
       centered: true,
       children: (
         <Text size="sm">

@@ -124,7 +124,7 @@ const Orders = () => {
               color="red"
               onClick={() =>
                 modals.openConfirmModal({
-                  title: 'Xác Nhận Xoá Món Ăn',
+                  title: 'Xác Nhận Xoá Đơn Hàng',
                   centered: true,
                   children: <Text size="sm">Bạn có chắc muốn xoá đơn hàng này không?</Text>,
                   labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },

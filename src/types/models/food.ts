@@ -7,6 +7,12 @@ export interface Food extends BaseModel {
   image: string;
   type: FoodType;
   isBuffet: boolean;
+  status: FoodStatus;
+}
+
+export enum FoodStatus {
+  active = 'ACTIVE',
+  inactive = 'INACTIVE',
 }
 
 export enum FoodType {

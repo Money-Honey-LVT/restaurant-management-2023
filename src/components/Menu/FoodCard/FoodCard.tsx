@@ -2,11 +2,20 @@ import { ActionIcon, Badge, Button, Card, Group, Image, Menu, Modal, Text, rem }
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconDots, IconEdit, IconMinus, IconPlus, IconTrash } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconDots,
+  IconEdit,
+  IconLock,
+  IconLockOff,
+  IconMinus,
+  IconPlus,
+  IconTrash,
+} from '@tabler/icons-react';
 import { useState } from 'react';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
 import { foodActions } from '../../../reducers/food/food.action';
-import { Food, foodTypeDict } from '../../../types/models/food';
+import { Food, FoodStatus, foodTypeDict } from '../../../types/models/food';
 import EditFoodModal from '../EditFoodModal';
 
 interface Props {
@@ -19,17 +28,19 @@ const FoodCard: React.FC<Props> = ({ item }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [editOpened, { close: closeEditModal, open: openEditModal }] = useDisclosure();
 
+  const isActive = item?.status === FoodStatus.active;
+
   const openDeleteFoodModal = () =>
     modals.openConfirmModal({
-      title: 'Xác Nhận Xoá Món Ăn',
+      title: 'Thay Đổi Trạng Thái Món Ăn',
       centered: true,
       children: (
         <Text size="sm">
-          Bạn có chắc muốn xoá món{' '}
+          Bạn có chắc muốn thay dổi trạng thái trong thực đơn của món{' '}
           <Text color="blue.9" span inherit>
             {item?.name}
           </Text>{' '}
-          ra khỏi thực đơn không?
+          không?
         </Text>
       ),
       labels: { confirm: 'Đồng ý', cancel: 'Huỷ bỏ' },
@@ -37,7 +48,12 @@ const FoodCard: React.FC<Props> = ({ item }) => {
       onCancel: () => {},
       onConfirm: () => {
         if (!item) return;
-        dispatch(foodActions.deleteFood(item.id, { onSuccess: () => dispatch(foodActions.getAllFoods()) }));
+        const refreshFoods = () => dispatch(foodActions.getAllFoods());
+        if (isActive) {
+          dispatch(foodActions.inActiveFood(item.id, { onSuccess: refreshFoods }));
+          return;
+        }
+        dispatch(foodActions.activeFood(item.id, { onSuccess: refreshFoods }));
       },
     });
 
@@ -59,8 +75,12 @@ const FoodCard: React.FC<Props> = ({ item }) => {
                   <Menu.Item onClick={openEditModal} icon={<IconEdit size={rem(14)} />}>
                     Sửa thông tin
                   </Menu.Item>
-                  <Menu.Item onClick={openDeleteFoodModal} icon={<IconTrash size={rem(14)} />} color="red">
-                    Xoá món ăn
+                  <Menu.Item
+                    onClick={openDeleteFoodModal}
+                    icon={isActive ? <IconLock size={rem(14)} /> : <IconLockOff size={rem(14)} />}
+                    color={!isActive ? 'green' : 'red'}
+                  >
+                    {isActive ? 'Bỏ món ăn' : 'Đưa về lại thực đơn'}
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
@@ -75,9 +95,13 @@ const FoodCard: React.FC<Props> = ({ item }) => {
           <Text color={item ? foodTypeDict[item.type].color : undefined} weight={500}>
             {item ? foodTypeDict[item.type].label : null}
           </Text>
-          <Badge color="pink" size="lg" variant="light">
-            {item?.price}
-          </Badge>
+          {item && item.status === FoodStatus.inactive ? (
+            <Text c={'red'}>Không Hoạt Động</Text>
+          ) : (
+            <Badge color="pink" size="lg" variant="light">
+              {item?.price}
+            </Badge>
+          )}
         </Group>
 
         <Text size="sm" color="dimmed" lineClamp={2}>

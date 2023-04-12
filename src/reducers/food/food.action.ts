@@ -91,4 +91,48 @@ const editFood =
     }
   };
 
-export const foodActions = { addFood, getAllFoods, deleteFood, editFood };
+const activeFood =
+  (payload: number, cb?: Callback): FoodThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: FoodActionType.ACTIVE_FOOD_PENDING });
+
+    const api = API_URLS.FOOD.activeFood(payload);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: FoodActionType.ACTIVE_FOOD_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Thay đổi trạng thái thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: FoodActionType.ACTIVE_FOOD_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+const inActiveFood =
+  (payload: number, cb?: Callback): FoodThunkAction =>
+  async (dispatch: AppDispatch) => {
+    dispatch({ type: FoodActionType.INACTIVE_FOOD_PENDING });
+
+    const api = API_URLS.FOOD.inActiveFood(payload);
+
+    const { response, error } = await useCallApi({ ...api, payload });
+
+    if (!error && response?.status === 200) {
+      dispatch({
+        type: FoodActionType.INACTIVE_FOOD_SUCCESS,
+        payload: response.data,
+      });
+      renderNotification('Thông báo', 'Thay đổi trạng thái thành công!', notiType.SUCCESS);
+      cb?.onSuccess?.(response.data);
+    } else {
+      dispatch({ type: FoodActionType.INACTIVE_FOOD_FAILURE });
+      renderNotification('Thông báo', error.response.data.devMsg, notiType.ERROR);
+    }
+  };
+
+export const foodActions = { addFood, getAllFoods, deleteFood, editFood, activeFood, inActiveFood };

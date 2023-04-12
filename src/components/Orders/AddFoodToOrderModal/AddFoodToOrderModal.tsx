@@ -5,6 +5,7 @@ import { RootState } from '../../../redux/reducer';
 import FoodCard from './FoodCard/FoodCard';
 import { OrderFoodPayload, orderActions } from '../../../reducers/order/order.action';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
+import { FoodStatus } from '../../../types/models/food';
 
 interface Props {
   close: () => void;
@@ -36,14 +37,16 @@ const AddFoodToOrderModal: React.FC<Props> = ({ close, selectedOrderId }) => {
   return (
     <>
       <Stack>
-        {foods.map((item, index) => (
-          <FoodCard
-            setOrderedFoods={setOrderedFoods}
-            orderedFoods={orderedFoods}
-            key={`food-card-${index}`}
-            item={item}
-          />
-        ))}
+        {foods
+          .filter((food) => food.status === FoodStatus.active)
+          .map((item, index) => (
+            <FoodCard
+              setOrderedFoods={setOrderedFoods}
+              orderedFoods={orderedFoods}
+              key={`food-card-${index}`}
+              item={item}
+            />
+          ))}
       </Stack>
       <Group mt="sm" position="right">
         <Button variant="light" onClick={handleCancel}>

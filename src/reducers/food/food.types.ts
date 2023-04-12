@@ -25,8 +25,16 @@ export enum FoodActionType {
   EDIT_FOOD_FAILURE = 'EDIT_FOOD_FAILURE',
 
   GET_FOOD_BY_ID_PENDING = 'GET_FOOD_BY_ID_PENDING',
-  GET_FOOD_BY_ID_SUCCESS = ' GET_FOOD_BY_ID_SUCCESS',
+  GET_FOOD_BY_ID_SUCCESS = 'GET_FOOD_BY_ID_SUCCESS',
   GET_FOOD_BY_ID_FAILURE = 'GET_FOOD_BY_ID_FAILURE',
+
+  ACTIVE_FOOD_PENDING = 'ACTIVE_FOOD_PENDING',
+  ACTIVE_FOOD_SUCCESS = 'ACTIVE_FOOD_SUCCESS',
+  ACTIVE_FOOD_FAILURE = 'ACTIVE_FOOD_FAILURE',
+
+  INACTIVE_FOOD_PENDING = 'INACTIVE_FOOD_PENDING',
+  INACTIVE_FOOD_SUCCESS = 'INACTIVE_FOOD_SUCCESS',
+  INACTIVE_FOOD_FAILURE = 'INACTIVE_FOOD_FAILURE',
 }
 
 //
@@ -87,6 +95,28 @@ export interface GetFoodByIdFailure {
   type: FoodActionType.GET_FOOD_BY_ID_FAILURE;
 }
 
+//
+export interface ActiveFoodPending {
+  type: FoodActionType.ACTIVE_FOOD_PENDING;
+}
+export interface ActiveFoodSuccess {
+  type: FoodActionType.ACTIVE_FOOD_SUCCESS;
+}
+export interface ActiveFoodFailure {
+  type: FoodActionType.ACTIVE_FOOD_FAILURE;
+}
+
+//
+export interface InactiveFoodPending {
+  type: FoodActionType.INACTIVE_FOOD_PENDING;
+}
+export interface InactiveFoodSuccess {
+  type: FoodActionType.INACTIVE_FOOD_SUCCESS;
+}
+export interface InactiveFoodFailure {
+  type: FoodActionType.INACTIVE_FOOD_FAILURE;
+}
+
 export type FoodAction =
   | AddFoodFailure
   | AddFoodPending
@@ -100,6 +130,12 @@ export type FoodAction =
   | GetFoodByIdFailure
   | GetFoodByIdPending
   | GetFoodByIdSuccess
+  | ActiveFoodFailure
+  | ActiveFoodPending
+  | ActiveFoodSuccess
+  | InactiveFoodFailure
+  | InactiveFoodPending
+  | InactiveFoodSuccess
   | DeleteFoodFailure
   | DeleteFoodPending
   | DeleteFoodSuccess;
