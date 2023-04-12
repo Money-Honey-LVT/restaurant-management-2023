@@ -6,6 +6,7 @@ import { useDisclosure } from '@mantine/hooks';
 import EditProfileModal from './EditProfileModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducer';
+import dayjs from 'dayjs';
 
 const renderHeading = (children: string) => (
   <Text fz="md" fw={600}>
@@ -39,7 +40,7 @@ const Profile = () => {
           <Grid.Col span="auto">
             <Grid gutter={32}>
               <Grid.Col span={5}>
-                <Stack h={300} justify="space-between" spacing="sm">
+                <Stack justify="space-between" spacing="sm">
                   {renderHeading('Họ và tên')}
                   {renderHeading('Ngày bắt đầu làm việc')}
                   {renderHeading('Tên tài khoản')}
@@ -47,9 +48,9 @@ const Profile = () => {
                 </Stack>
               </Grid.Col>
               <Grid.Col span={7}>
-                <Stack h={300} justify="space-between" spacing="sm">
+                <Stack justify="space-between" spacing="sm">
                   {renderField(fullname ? fullname : 'Đang cập nhật...')}
-                  {renderField(hiredDate ? hiredDate : 'Đang cập nhật...')}
+                  {renderField(hiredDate ? dayjs(hiredDate).format('DD/MM/YYYY') : 'Đang cập nhật...')}
                   {renderField(username ? username : 'Đang cập nhật...')}
                   {renderField(role ? parserRole(role) : 'Đang cập nhật...')}
                 </Stack>
