@@ -5,6 +5,7 @@ import { Voucher } from './voucher';
 export interface Order extends BaseModel {
   customerId: number;
   customerName: string;
+  customerPhone: string;
   staffId: number;
   staffName: string;
   status: OrderStatus;

@@ -6,21 +6,17 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducer';
 import { Customer } from '../../types/models/customer';
 import { useEffect, useState } from 'react';
-
-const PAGE_SIZE = 15;
+import usePagination from '../../hooks/use-pagination';
 
 const Customers = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { customers, isFetching } = useSelector((state: RootState) => state.customer);
 
-  const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(customers.slice(0, PAGE_SIZE));
+  const [_records, setRecords] = useState(customers);
 
   useEffect(() => {
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    setRecords(customers.slice(from, to));
-  }, [page, customers]);
+    setRecords(customers);
+  }, [customers]);
 
   const columns: DataTableColumn<Customer>[] = [
     { accessor: 'id', title: 'Mã Khách Hàng' },
@@ -29,6 +25,18 @@ const Customers = () => {
     { accessor: 'address', title: 'Địa Chỉ' },
   ];
 
+  const {
+    data: records,
+    page,
+    pageSize,
+    changePage,
+  } = usePagination({
+    data: _records,
+    defaultPaging: {
+      page: 1,
+      pageSize: 10,
+    },
+  });
   return (
     <>
       <Stack>
@@ -45,10 +53,11 @@ const Customers = () => {
           highlightOnHover
           columns={columns}
           records={records}
-          totalRecords={customers.length}
-          recordsPerPage={PAGE_SIZE}
+          totalRecords={_records.length}
           page={page}
-          onPageChange={(p) => setPage(p)}
+          onPageChange={changePage}
+          recordsPerPage={pageSize}
+          paginationText={() => null}
         />
       </Stack>
     </>

@@ -1,12 +1,13 @@
-import { ActionIcon, Badge, Box, Button, Group, Modal, Stack, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, Badge, Button, Group, Input, Modal, Stack, Text, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { IconCheck, IconInfoCircle, IconPlus, IconTrash } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
 import { DataTableColumn } from 'mantine-datatable/dist/types';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import usePagination from '../../hooks/use-pagination';
 import { orderActions } from '../../reducers/order/order.action';
 import { RootState } from '../../redux/reducer';
 import { Order, OrderStatus } from '../../types/models/order';
@@ -14,8 +15,6 @@ import AddFoodToOrderModal from './AddFoodToOrderModal/AddFoodToOrderModal';
 import AddOrderModal from './AddOrderModal';
 import OrderFoodDetailModal from './OrderFoodDetailModal/OrderFoodDetailModal';
 import PaymentModal from './PaymentModal/PaymentModal';
-
-const PAGE_SIZE = 10;
 
 const Orders = () => {
   const dispatch = useAppDispatch();
@@ -26,24 +25,24 @@ const Orders = () => {
   const { isFetching, orders } = useSelector((state: RootState) => state.order);
   const [selectedOrderId, setSelectedOrderId] = useState(0);
 
-  const [page, setPage] = useState(1);
-  const [records, setRecords] = useState(orders.slice(0, PAGE_SIZE));
+  const [_record, setRecords] = useState(orders);
 
   useEffect(() => {
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    setRecords(orders.slice(from, to));
-  }, [page, orders]);
+    setRecords(orders);
+  }, [orders]);
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredRecords = _record.filter(
+    (record) =>
+      record.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      record.customerPhone.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const columns: DataTableColumn<Order>[] = [
-    {
-      accessor: 'index',
-      title: '#',
-      textAlignment: 'center',
-      render: (record) => records.indexOf(record) + 1,
-    },
     { accessor: 'id', title: 'Mã Đơn', textAlignment: 'right', titleStyle: { textAlign: 'center' } },
     { accessor: 'customerName', title: 'Tên Khách Hàng' },
+    { accessor: 'customerPhone', title: 'Số điện thoại' },
     {
       accessor: 'orderTables',
       title: 'Danh Sách Bàn Đặt',
@@ -148,13 +147,31 @@ const Orders = () => {
     },
   ];
 
+  const {
+    data: records,
+    page,
+    pageSize,
+    changePage,
+  } = usePagination({
+    data: filteredRecords,
+    defaultPaging: {
+      page: 1,
+      pageSize: 10,
+    },
+  });
   return (
     <>
       <Stack>
+        <Text fw={700} fz="xl">
+          Danh sách đơn
+        </Text>
         <Group position="apart">
-          <Text fw={700} fz="xl">
-            Danh sách đơn
-          </Text>
+          <Input
+            sx={{ width: '500px' }}
+            placeholder="Tìm kiếm theo tên hoặc số điện thoại khách hàng"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.currentTarget.value)}
+          />
           <Button leftIcon={<IconPlus />} onClick={open}>
             Thêm đơn hàng
           </Button>
@@ -167,10 +184,11 @@ const Orders = () => {
           highlightOnHover
           columns={columns}
           records={records}
-          totalRecords={orders.length}
-          recordsPerPage={PAGE_SIZE}
+          totalRecords={filteredRecords.length}
           page={page}
-          onPageChange={(p) => setPage(p)}
+          onPageChange={changePage}
+          recordsPerPage={pageSize}
+          paginationText={() => null}
         />
       </Stack>
       <Modal zIndex={100} centered opened={opened} onClose={close} title="Thêm Đơn Hàng Mới">
